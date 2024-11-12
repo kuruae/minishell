@@ -19,6 +19,10 @@ CFLAGS = -Wall -Wextra -Werror -g3
 SANITIZE_FLAGS = -fsanitize=address,undefined -fno-omit-frame-pointer
 LIBFT_PATH = libft
 
+ifeq ($(shell uname), Darwin)
+	READLINE_FLAGS = -lreadline -L$(shell brew --prefix readline)/lib -I$(shell brew --prefix readline)/include
+endif
+
 ######### DIRECTORIES ########
 
 SRC_DIR = srcs
@@ -62,7 +66,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ_FILES) $(LIBFT)
 	@printf "$(YELLOW)$(ARROW) Linking objects...$(RESET)\n"
-	@$(CC) $(CFLAGS) -o $@ $^ -L$(LIBFT_PATH) -lft 2>/dev/null
+	@$(CC) $(CFLAGS) -o $@ $^ -L$(LIBFT_PATH) -lft 2>/dev/null $(READLINE_FLAGS)
 	@printf "$(GREEN)$(CHECK) $(NAME) successfully compiled!$(RESET)\n"
 
 # Sanitized build target
@@ -71,7 +75,7 @@ sanitize: $(NAME_SANITIZE)
 
 $(NAME_SANITIZE): $(OBJ_FILES) $(LIBFT)
 	@printf "$(YELLOW)$(ARROW) Linking objects with sanitizer...$(RESET)\n"
-	@$(CC) $(CFLAGS) $(SANITIZE_FLAGS) -o $@ $^ -L$(LIBFT_PATH) -lft 2>/dev/null
+	@$(CC) $(CFLAGS) $(SANITIZE_FLAGS) -o $@ $^ -L$(LIBFT_PATH) -lft 2>/dev/null $(READLINE_FLAGS)
 	@printf "$(GREEN)$(CHECK) $(NAME) with sanitizer successfully compiled!$(RESET)\n"
 	@printf "$(YELLOW)$(ARROW) Run with: ./$(NAME_SANITIZE)$(RESET)\n"
 
