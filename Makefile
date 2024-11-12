@@ -19,8 +19,12 @@ CFLAGS = -Wall -Wextra -Werror -g3
 SANITIZE_FLAGS = -fsanitize=address,undefined -fno-omit-frame-pointer
 LIBFT_PATH = libft
 
+
 ifeq ($(shell uname), Darwin)
 	READLINE_FLAGS = -lreadline -L$(shell brew --prefix readline)/lib -I$(shell brew --prefix readline)/include
+else
+
+    READLINE_FLAGS = -lreadline -ltermcap
 endif
 
 ######### DIRECTORIES ########
