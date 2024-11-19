@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/12 02:02:14 by enzo             ###   ########.fr       */
+/*   Updated: 2024/11/15 23:46:16 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,13 @@ int	parse_line(t_shell *shell)
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
+	t_env env;
 
 	(void)argc;
 	(void)argv;
-	shell.env = envp;
+	// env = init_env(envp); // envp is an array of strings btw (and i didnt know the p stands for pointer)
 	shell.exit_status = 0;
+	shell.envp = envp;
 	shell.line = NULL;
 	shell.line = readline("minishell$ ");
 	while (shell.line)
