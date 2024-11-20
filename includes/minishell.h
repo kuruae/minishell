@@ -8,6 +8,7 @@
 
 # include "lexer.h"
 # include "ast.h"
+# include "colors.h"
 
 // typedef enum e_token
 // {

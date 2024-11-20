@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/15 23:46:16 by enzo             ###   ########.fr       */
+/*   Updated: 2024/11/20 14:18:28 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	parse_line(t_shell *shell)
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
-	t_env env;
+	// t_env env;
 
 	(void)argc;
 	(void)argv;
@@ -38,7 +38,7 @@ int	main(int argc, char **argv, char **envp)
 	shell.exit_status = 0;
 	shell.envp = envp;
 	shell.line = NULL;
-	shell.line = readline("minishell$ ");
+	shell.line = readline(cyan"petit total"magenta" > "reset);
 	while (shell.line)
 	{
 		if (shell.line[0] != '\0')
@@ -47,7 +47,7 @@ int	main(int argc, char **argv, char **envp)
 			parse_line(&shell);
 		}
 		free(shell.line);
-		shell.line = readline("minishell$ ");
+		shell.line = readline(cyan"petit total"magenta" > "reset);
 	}
 	return (0);
 }
