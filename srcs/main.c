@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/20 14:18:28 by emagnani         ###   ########.fr       */
+/*   Updated: 2024/11/20 16:40:05 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		if (shell.line[0] != '\0')
 		{
+			ast(lexing(shell.line));
 			// add_history(shell.line);
 			parse_line(&shell);
 		}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:10:53 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/15 16:53:01 by enzo             ###   ########.fr       */
+/*   Updated: 2024/11/20 16:32:55 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ typedef enum e_quote_state
 /* Token structure */
 typedef struct s_token
 {
-    t_token_type    type;
     char            *value;
+    t_token_type    type;
     struct s_token  *next;
 } t_token;
 
@@ -53,5 +53,9 @@ typedef struct s_word_props
     char    *original;        // Original word before expansion
     char    *expanded;        // Word after expansion
 } t_word_props;
+
+/* Lexer functions */
+
+t_token *lexing(char *line);
 
 #endif
