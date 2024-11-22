@@ -37,8 +37,6 @@ INCLUDE_DIRS = -I$(INCLUDE_DIR) -I$(LIBFT_PATH)/includes
 ######### FILES ########
 
 SRC_FILES = $(SRC_DIR)/main.c \
-SRC_FILES = $(SRC_DIR)/lexer.c \
-SRC_FILES = $(SRC_DIR)/ast.c \
 
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
 TOTAL_FILES := $(words $(SRC_FILES))

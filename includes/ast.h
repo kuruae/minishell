@@ -47,26 +47,4 @@ typedef struct s_ast_node
     t_redirection       *redir;     // Redirection data (if type == NODE_REDIR)
 } t_ast_node;
 
-/* Function prototypes */
-/* AST operations */
-// t_ast_node      *create_node(t_node_type type);
-// t_command       *create_command(char **args, int argc);
-// t_redirection   *create_redirection(t_redir_type type, char *file);
-// void            free_ast(t_ast_node *node);
-
-// /* Token operations */
-// t_token         *create_token(t_token_type type, char *value);
-// void            free_token(t_token *token);
-// void            free_token_list(t_token *head);
-
-// /* Word properties operations */
-// t_word_props    *create_word_props(char *word);
-// void            free_word_props(t_word_props *props);
-
-// /* Lexer/Parser helpers */
-// bool            is_quote(char c);
-// bool            is_operator(char *str);
-// bool            is_redirection(char *str);
-// t_quote_state   update_quote_state(t_quote_state current, char c);
-
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:10:53 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/20 16:32:55 by emagnani         ###   ########.fr       */
+/*   Updated: 2024/11/22 16:08:48 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ typedef enum e_token_type
 {
     TOK_WORD,       // Regular word or command
     TOK_OPERATOR,   // |, ||, &, &&, etc.
-    TOK_REDIR,      // <, >, >>, <<
+    TOK_REDIR_IN,   // <
+    TOK_REDIR_OUT,  // >
+    TOK_HEREDOC,    // << (heredoc)
+    TOK_APPEND,     // >> (append)
     TOK_PIPE,       // |
     TOK_AND,        // &&
     TOK_OR,         // ||
