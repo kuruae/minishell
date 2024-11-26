@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 23:56:06 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/21 17:11:16 by enzo             ###   ########.fr       */
+/*   Updated: 2024/11/26 17:54:19 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,38 @@
 t_token *lexing(char *line)
 {
 	t_token *tokens;
-	
+	t_token *current;
+
+	tokens = NULL;
 	while(*line)
 	{
 		if (ft_isspace(*line))
 			line++;
 		else
-			tokens->type = get_token(line);
+			current = get_all_tokens_from_word(line);
 	}
 	return (tokens);
 }
 
+t_token	*get_all_tokens_from_word(char *line)
+{
+	int token_len;
+
+	token_len = get_token_len(line, get_token(line));
+}
+
+int get_token_len(char *line, t_token_type type)
+{
+	int len;
+
+	len = 0;
+	if (type == TOK_PIPE || type == TOK_REDIR_IN || type == TOK_REDIR_OUT)
+	len = 1;
+	else if (type == TOK_APPEND || type == TOK_HEREDOC || type == TOK_OR || type == TOK_AND)
+		len = 2;
+	else
+		
+}
 t_token_type get_token(char *line)
 {
 	if (*line == "<")
