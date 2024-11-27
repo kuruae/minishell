@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 23:56:06 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/27 16:06:35 by enzo             ###   ########.fr       */
+/*   Updated: 2024/11/26 17:54:19 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,59 @@ t_token	*get_all_tokens_from_word(char *line)
 
 	token_type = get_token(line);
 	token_len = get_token_len(line, token_type);
-	return (create_token(line, token_len, token_type));
+	return (create_token(str, token_len, token_type));
+}
+
+int	handle_quotes_len(char *line)
+{
+	char	quote_type;
+	int		i;
+	
+	i = 1;
+
+	quote_type = line[0];
+	while (line[i] && line[i] != quote_type)
+		i++;
+	return (i);
 }
 
 int	get_token_len(char *line, t_token_type type)
 {
+	int len;
+
 	len = 0;
 	if (type == TOK_PIPE || type == TOK_REDIR_IN || type == TOK_REDIR_OUT)
 	len = 1;
 	else if (type == TOK_APPEND || type == TOK_HEREDOC || type == TOK_OR || type == TOK_AND)
 		len = 2;
 	else
-		// vsy je suis fatigué je vois demain 
+		len = get_str_len(line);
+	return (len);
+}
+
+int	get_str_len(char *line)
+{
+	int len;
+	int	i;
+
+	len = ft_strlen(line);
+	i = 0;
+	while (i < len)
+	{
+		if (line[i] == '\'' || line[i] == '\"')
+			i += handle_quotes_len(line + i);
+		if (!is_metacharacter(line[i]) && !ft_isspace(line[i]))
+			break ;
+		i++;
+	}
+	return (i);
+}
+
+bool	is_metacharacter(char c)
+{
+	if (c == '|' || c == '<' || c == '>' || c == '&') 
+		return (true);
+	return (false);
 }
 
 t_token_type get_token(char *line)
