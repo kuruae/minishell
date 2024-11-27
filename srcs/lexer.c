@@ -31,22 +31,24 @@ t_token *lexing(char *line)
 t_token	*get_all_tokens_from_word(char *line)
 {
 	int token_len;
+	t_token_type token_type;
 
-	token_len = get_token_len(line, get_token(line));
+	token_type = get_token(line);
+	token_len = get_token_len(line, token_type);
+	return (create_token(str, token_len, token_type));
 }
 
-int get_token_len(char *line, t_token_type type)
+int	get_token_len(char *line, t_token_type type)
 {
-	int len;
-
 	len = 0;
 	if (type == TOK_PIPE || type == TOK_REDIR_IN || type == TOK_REDIR_OUT)
 	len = 1;
 	else if (type == TOK_APPEND || type == TOK_HEREDOC || type == TOK_OR || type == TOK_AND)
 		len = 2;
 	else
-		
+		// vsy je suis fatigué je vois demain 
 }
+
 t_token_type get_token(char *line)
 {
 	if (*line == "<")
