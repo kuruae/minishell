@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 23:56:06 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/26 17:54:19 by enzo             ###   ########.fr       */
+/*   Updated: 2024/11/27 16:06:35 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_token	*get_all_tokens_from_word(char *line)
 
 	token_type = get_token(line);
 	token_len = get_token_len(line, token_type);
-	return (create_token(str, token_len, token_type));
+	return (create_token(line, token_len, token_type));
 }
 
 int	get_token_len(char *line, t_token_type type)
