@@ -61,7 +61,7 @@ int	get_token_len(char *line, t_token_type type)
 	else if (type == TOK_APPEND || type == TOK_HEREDOC || type == TOK_OR || type == TOK_AND)
 		len = 2;
 	else
-		len = get_str_len(line);
+		len = get_tok_word_len(line);
 	return (len);
 }
 
@@ -72,12 +72,10 @@ int	get_str_len(char *line)
 
 	len = ft_strlen(line);
 	i = 0;
-	while (i < len)
+	while (i < len && !is_metacharacter(line[i]) && !ft_isspace(line[i]))
 	{
 		if (line[i] == '\'' || line[i] == '\"')
 			i += handle_quotes_len(line + i);
-		if (!is_metacharacter(line[i]) && !ft_isspace(line[i]))
-			break ;
 		i++;
 	}
 	return (i);
@@ -94,23 +92,23 @@ t_token_type get_token(char *line)
 {
 	if (*line == "<")
 	{
-		if (ft_strncmp(line, "<<", 2) == 0)
+		if (ft_strncmp(line, "<<", 3) == 0)
 			return (TOK_HEREDOC);
 		return (TOK_REDIR_IN);
 	}
 	if (*line == ">")
 	{
-		if (ft_strncmp(line, ">>", 2) == 0)
+		if (ft_strncmp(line, ">>", 3) == 0)
 			return (TOK_APPEND);
 		return (TOK_REDIR_OUT);
 	}
 	if (*line == "|")
 	{
-		if (ft_strncmp(line, "||", 2) == 0)
+		if (ft_strncmp(line, "||", 3) == 0)
 			return (TOK_OR);
 		return (TOK_PIPE);
 	}
-	if (ft_strcmp(line, "&&") == 0)
+	if (ft_strncmp(line, "&&", 3) == 0)
 		return (TOK_AND);
 	else
 		return (TOK_WORD);
