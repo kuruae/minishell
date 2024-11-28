@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   lexing.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:10:53 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/22 16:08:48 by enzo             ###   ########.fr       */
+/*   Updated: 2024/11/28 02:42:35 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#ifndef LEXING_H
+# define LEXING_H
 
 # include "minishell.h"
 
@@ -60,5 +60,12 @@ typedef struct s_word_props
 /* Lexer functions */
 
 t_token *lexing(char *line);
+t_token *get_all_tokens_from_word(char *line);
+t_token *create_token(char *value, size_t len, t_token_type type);
+size_t	get_token_len(char *line, t_token_type type);
+void	free_tokens(t_token *tokens);
+void	add_new_token(t_token **tokens, t_token *new_token);
+int     get_tok_word_len(char *line);
+
 
 #endif
