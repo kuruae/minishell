@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 00:41:04 by kuru              #+#    #+#             */
-/*   Updated: 2024/11/28 01:27:49 by kuru             ###   ########.fr       */
+/*   Updated: 2024/11/28 02:05:43 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,18 @@ t_token *create_token(char *value, size_t len, t_token_type type)
     token->type = type;
     token->next = NULL;
     return token;
+}
+
+void	free_tokens(t_token *tokens)
+{
+	t_token *tmp;
+
+	while (tokens)
+	{
+		tmp = tokens;
+		tokens = tokens->next;
+		if (tmp->value)
+			free(tmp->value);
+		free(tmp);
+	}
 }

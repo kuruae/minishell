@@ -10,6 +10,7 @@
 # include "ast.h"
 # include "colors.h"
 
+# define PROMPT cyan"petit total"magenta" > "reset
 typedef struct s_env
 {
 	char			*id;

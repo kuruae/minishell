@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/27 16:21:40 by enzo             ###   ########.fr       */
+/*   Updated: 2024/11/28 02:14:49 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,23 @@ int	parse_line(t_shell *shell)
 	return (0);
 }
 
+void	readline_loop(t_shell *shell)
+{
+	shell.line = readline(PROMPT);
+	readline_loop(&shell);
+	while (shell.line)
+	{
+		if (shell.line[0] != '\0')
+		{
+			// ast(lexing(shell.line));
+			// add_history(shell.line);
+			parse_line(&shell);
+		}
+		free(shell.line);
+		shell.line = readline(PROMPT);
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
@@ -38,17 +55,6 @@ int	main(int argc, char **argv, char **envp)
 	shell.exit_status = 0;
 	shell.envp = envp;
 	shell.line = NULL;
-	shell.line = readline(cyan"petit total"magenta" > "reset);
-	while (shell.line)
-	{
-		if (shell.line[0] != '\0')
-		{
-			// ast(lexing(shell.line));
-			// add_history(shell.line);
-			parse_line(&shell);
-		}
-		free(shell.line);
-		shell.line = readline(cyan"petit total"magenta" > "reset);
-	}
+	readline_loop(&shell);
 	return (0);
 }

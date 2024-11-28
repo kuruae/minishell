@@ -6,12 +6,12 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:10:53 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/28 01:33:04 by kuru             ###   ########.fr       */
+/*   Updated: 2024/11/28 02:06:10 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#ifndef LEXING_H
+# define LEXING_H
 
 # include "minishell.h"
 
@@ -63,6 +63,7 @@ t_token *lexing(char *line);
 t_token *get_all_tokens_from_word(char *line);
 t_token *create_token(char *value, size_t len, t_token_type type);
 size_t	get_token_len(char *line, t_token_type type);
+void	free_tokens(t_token *tokens);
 int     get_tok_word_len(char *line);
 
 
