@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/28 03:20:11 by kuru             ###   ########.fr       */
+/*   Updated: 2024/11/28 15:32:26 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ static const char *get_token_type_str(t_token_type type)
         case TOK_APPEND: return "APPEND";
         case TOK_OR: return "OR";
         case TOK_AND: return "AND";
+		case TOK_PAR_OPEN: return "OPEN PARENTHESE";
+		case TOK_PAR_CLOSE: return "CLOSE PARENTHESE";
         default: return "UNKNOWN";
     }
 }

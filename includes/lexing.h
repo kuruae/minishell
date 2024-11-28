@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:10:53 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/28 02:42:35 by kuru             ###   ########.fr       */
+/*   Updated: 2024/11/28 15:26:55 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ typedef enum e_token_type
     TOK_PIPE,       // |
     TOK_AND,        // &&
     TOK_OR,         // ||
+    TOK_PAR_OPEN,   // (
+    TOK_PAR_CLOSE,  // )
     TOK_NEWLINE,    // \n
     TOK_EOF         // End of input
 } t_token_type;

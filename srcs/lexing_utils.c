@@ -3,18 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   lexing_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 00:41:04 by kuru              #+#    #+#             */
-/*   Updated: 2024/11/28 02:41:51 by kuru             ###   ########.fr       */
+/*   Updated: 2024/11/28 16:07:55 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static bool	is_metacharacter(char c)
+static bool	is_metacharacter(char *str)
 {
-	if (c == '|' || c == '<' || c == '>' || c == '&') 
+	if (ft_strncmp(str, "&&", 2) == 0)
+		return (true);
+	if (str[0] == '|' || str[0] == '<' || str[0] == '>' || str[0] == '(' || str[0] == ')')
 		return (true);
 	return (false);
 }
@@ -43,7 +45,7 @@ int	get_tok_word_len(char *line)
 
 	len = ft_strlen(line);
 	i = 0;
-	while (i < len && !is_metacharacter(line[i]) && !ft_isspace(line[i]))
+	while (i < len && !is_metacharacter(line + i) && !ft_isspace(line[i]))
 	{
 		if (line[i] == '\'' || line[i] == '\"')
 			i += handle_quotes_len(line + i);

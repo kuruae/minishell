@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 23:56:06 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/28 02:51:12 by kuru             ###   ########.fr       */
+/*   Updated: 2024/11/28 16:02:51 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,12 @@ static t_token_type get_token(char *line)
 			return (TOK_OR);
 		return (TOK_PIPE);
 	}
-	if (*line == '&')
-	{
-		if (ft_strncmp(line, "&&", 2) == 0)
-			return (TOK_AND);
-	}
 	if (ft_strncmp(line, "&&", 2) == 0)
-		return (TOK_AND);
+			return (TOK_AND);
+	if (*line == '(')
+		return (TOK_PAR_OPEN);
+	if (*line == ')')
+		return (TOK_PAR_CLOSE);
 	else
 		return (TOK_WORD);
 }
@@ -47,7 +46,8 @@ size_t	get_token_len(char *line, t_token_type type)
 {
 	int len;
 
-	if (type == TOK_PIPE || type == TOK_REDIR_IN || type == TOK_REDIR_OUT)
+	if (type == TOK_PIPE || type == TOK_REDIR_IN || type == TOK_REDIR_OUT 
+				|| type == TOK_PAR_CLOSE || type == TOK_PAR_OPEN)
 		len = 1;
 	else if (type == TOK_APPEND || type == TOK_HEREDOC || type == TOK_OR || type == TOK_AND)
 		len = 2;
