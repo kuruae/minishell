@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:10:53 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/28 02:06:10 by kuru             ###   ########.fr       */
+/*   Updated: 2024/11/28 02:42:35 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ t_token *get_all_tokens_from_word(char *line);
 t_token *create_token(char *value, size_t len, t_token_type type);
 size_t	get_token_len(char *line, t_token_type type);
 void	free_tokens(t_token *tokens);
+void	add_new_token(t_token **tokens, t_token *new_token);
 int     get_tok_word_len(char *line);
 
 

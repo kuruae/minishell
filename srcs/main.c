@@ -6,41 +6,83 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/28 02:14:49 by kuru             ###   ########.fr       */
+/*   Updated: 2024/11/28 03:20:11 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	parse_line(t_shell *shell)
-{
-	char	**args;
-	int		i;
+// int	parse_line(t_shell *shell)
+// {
+// 	char	**args;
+// 	int		i;
 
-	args = ft_split(shell->line, ' ');
-	i = 0;
-	while (args[i])
-	{
-		printf("args[%d] = %s\n", i, args[i]);
-		i++;
-	}
-	return (0);
+// 	args = ft_split(shell->line, ' ');
+// 	i = 0;
+// 	while (args[i])
+// 	{
+// 		printf("args[%d] = %s\n", i, args[i]);
+// 		i++;
+// 	}
+// 	return (0);
+// }
+
+static const char *get_token_type_str(t_token_type type)
+{
+    switch (type)
+    {
+        case TOK_WORD: return "COMMAND";
+        case TOK_PIPE: return "PIPE";
+        case TOK_REDIR_IN: return "REDIR_IN";
+        case TOK_REDIR_OUT: return "REDIR_OUT";
+        case TOK_HEREDOC: return "HEREDOC";
+        case TOK_APPEND: return "APPEND";
+        case TOK_OR: return "OR";
+        case TOK_AND: return "AND";
+        default: return "UNKNOWN";
+    }
+}
+
+int test_lexing(char *line)
+{
+    t_token *tokens;
+    t_token *current;
+    int     i;
+
+    tokens = lexing(line);
+    if (!tokens)
+        return (1);
+    
+    current = tokens;
+    i = 0;
+    while (current)
+    {
+        printf("token[%d] = { type: %s, value: '%s' }\n", 
+               i, 
+               get_token_type_str(current->type),
+               current->value);
+        current = current->next;
+        i++;
+    }
+    
+    free_tokens(tokens);
+    return (0);
 }
 
 void	readline_loop(t_shell *shell)
 {
-	shell.line = readline(PROMPT);
-	readline_loop(&shell);
-	while (shell.line)
+	shell->line = readline(PROMPT);
+	while (shell->line)
 	{
-		if (shell.line[0] != '\0')
+		if (shell->line[0] != '\0')
 		{
-			// ast(lexing(shell.line));
-			// add_history(shell.line);
-			parse_line(&shell);
+			// ast(lexing(shell->line));
+			// add_history(shell->line);
+			// parse_line(shell);
+			test_lexing(shell->line);
 		}
-		free(shell.line);
-		shell.line = readline(PROMPT);
+		free(shell->line);
+		shell->line = readline(PROMPT);
 	}
 }
 

@@ -37,8 +37,8 @@ INCLUDE_DIRS = -I$(INCLUDE_DIR) -I$(LIBFT_PATH)/includes
 ######### FILES ########
 ## source files
 SRC_FILES = $(SRC_DIR)/main.c \
-SRC_FILES = $(SRC_DIR)/lexing.c \
-SRC_FILES = $(SRC_DIR)/lexing_utils.c \
+			$(SRC_DIR)/lexing.c \
+			$(SRC_DIR)/lexing_utils.c \
 
 ## object files
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
@@ -59,14 +59,11 @@ NAME_SANITIZE = $(NAME)_sanitize
 ######### PROGRESS BAR ########
 
 define progress_bar
-	@printf "\r$(BLUE)Building$(RESET) [$(GREEN)"
-	@for i in `seq 1 $(shell echo "$(1) * 30 / 100" | bc)`; do \
-		printf "█"; \
-	done
-	@for i in `seq 1 $(shell echo "30 - ($(1) * 30 / 100)" | bc)`; do \
-		printf "▒"; \
-	done
-	@printf "$(RESET)] $(1)%%\n"
+    @printf "\r$(BLUE)Building [$(GREEN)"; \
+    for p in "~o~" "-o-" "~o~" "°o°"; do \
+        printf "\r$(BLUE)Building [$(GREEN)%s$(RESET)]" "$$p"; \
+        sleep 0.1; \
+    done
 endef
 
 ######### COMMANDS ########
@@ -75,7 +72,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ_FILES) $(LIBFT)
 	@printf "$(YELLOW)$(ARROW) Linking objects...$(RESET)\n"
-	@$(CC) $(CFLAGS) -o $@ $^ -L$(LIBFT_PATH) -lft 2>/dev/null $(READLINE_FLAGS)
+	@$(CC) $(CFLAGS) -o $@ $^ -L$(LIBFT_PATH) -lft $(READLINE_FLAGS)
 	@printf "$(GREEN)$(CHECK) $(NAME) successfully compiled!$(RESET)\n"
 
 # Sanitized build target
@@ -84,16 +81,14 @@ sanitize: $(NAME_SANITIZE)
 
 $(NAME_SANITIZE): $(OBJ_FILES) $(LIBFT)
 	@printf "$(YELLOW)$(ARROW) Linking objects with sanitizer...$(RESET)\n"
-	@$(CC) $(CFLAGS) $(SANITIZE_FLAGS) -o $@ $^ -L$(LIBFT_PATH) -lft 2>/dev/null $(READLINE_FLAGS)
+	@$(CC) $(CFLAGS) $(SANITIZE_FLAGS) -o $@ $^ -L$(LIBFT_PATH) -lft  $(READLINE_FLAGS)
 	@printf "$(GREEN)$(CHECK) $(NAME) with sanitizer successfully compiled!$(RESET)\n"
 	@printf "$(YELLOW)$(ARROW) Run with: ./$(NAME_SANITIZE)$(RESET)\n"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(dir $@) 2>/dev/null
-	@$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c -o $@ $< 2>/dev/null
-	@$(eval PROGRESS=$(shell echo "$(CURRENT_FILE) * 100 / $(TOTAL_FILES)" | bc))
-	@$(call progress_bar,$(PROGRESS))
-	@$(eval CURRENT_FILE=$(shell echo "$(CURRENT_FILE) + 1" | bc))
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c -o $@ $<
+	@$(call progress_bar)
 
 $(LIBFT):
 	@printf "$(YELLOW)$(ARROW) Building libft...$(RESET)\n"

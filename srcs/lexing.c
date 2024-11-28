@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 23:56:06 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/28 02:07:09 by kuru             ###   ########.fr       */
+/*   Updated: 2024/11/28 02:51:12 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_token	*get_all_tokens_from_word(char *line)
 
 	token_type = get_token(line);
 	token_len = get_token_len(line, token_type);
-	return (create_token(str, token_len, token_type));
+	return (create_token(line, token_len, token_type));
 }
 
 t_token *lexing(char *line)
@@ -80,7 +80,7 @@ t_token *lexing(char *line)
 			i++;
 		else
 		{
-			current = get_all_tokens_from_word(line);
+			current = get_all_tokens_from_word(line + i);
 			if (!current)
 			{
 				free_tokens(tokens);
