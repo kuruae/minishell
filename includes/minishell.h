@@ -2,15 +2,17 @@
 # define MINISHELL_H
 
 # include "libft.h"
-# include <stdio.h>
+# include <stdio.h> 
 # include <readline/readline.h>
 # include <readline/history.h>
 
 # include "lexing.h"
 # include "ast.h"
 # include "colors.h"
+# include "signal.h"
 
 # define PROMPT cyan"petit total"magenta" > "reset
+
 typedef struct s_env
 {
 	char			*id;
@@ -33,5 +35,4 @@ typedef enum e_error
 }	t_error;
 
 int	parse_line(t_shell *shell);
-
 #endif

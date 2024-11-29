@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/28 03:20:11 by kuru             ###   ########.fr       */
+/*   Updated: 2024/11/29 13:13:38 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	readline_loop(t_shell *shell)
 	shell->line = readline(PROMPT);
 	while (shell->line)
 	{
+        get_signal();
 		if (shell->line[0] != '\0')
 		{
 			// ast(lexing(shell->line));

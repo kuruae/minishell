@@ -15,7 +15,7 @@ ARROW := "➜"
 ######### FLAGS ########
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -std=c11 -Wall -Wextra -Werror -g3
 SANITIZE_FLAGS = -fsanitize=address,undefined -fno-omit-frame-pointer
 LIBFT_PATH = libft
 
@@ -39,6 +39,7 @@ INCLUDE_DIRS = -I$(INCLUDE_DIR) -I$(LIBFT_PATH)/includes
 SRC_FILES = $(SRC_DIR)/main.c \
 			$(SRC_DIR)/lexing.c \
 			$(SRC_DIR)/lexing_utils.c \
+			$(SRC_DIR)/signal.c \
 
 ## object files
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
