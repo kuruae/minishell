@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 23:56:06 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/28 16:02:51 by enzo             ###   ########.fr       */
+/*   Updated: 2024/11/29 15:29:05 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_token_type get_token(char *line)
+static t_token_type get_token_type(char *line)
 {
 	if (*line == '<')
 	{
@@ -61,7 +61,7 @@ t_token	*get_all_tokens_from_word(char *line)
 	size_t		token_len;
 	t_token_type token_type;
 
-	token_type = get_token(line);
+	token_type = get_token_type(line);
 	token_len = get_token_len(line, token_type);
 	return (create_token(line, token_len, token_type));
 }
