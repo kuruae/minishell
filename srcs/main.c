@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/29 13:13:38 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:28:21 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void	readline_loop(t_shell *shell)
 	shell->line = readline(PROMPT);
 	while (shell->line)
 	{
-        get_signal();
 		if (shell->line[0] != '\0')
 		{
 			// ast(lexing(shell->line));
@@ -98,6 +97,7 @@ int	main(int argc, char **argv, char **envp)
 	shell.exit_status = 0;
 	shell.envp = envp;
 	shell.line = NULL;
+    get_signal();
 	readline_loop(&shell);
 	return (0);
 }

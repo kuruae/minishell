@@ -39,7 +39,7 @@ INCLUDE_DIRS = -I$(INCLUDE_DIR) -I$(LIBFT_PATH)/includes
 SRC_FILES = $(SRC_DIR)/main.c \
 			$(SRC_DIR)/lexing.c \
 			$(SRC_DIR)/lexing_utils.c \
-			$(SRC_DIR)/signal.c \
+			$(SRC_DIR)/get_signal.c \
 
 ## object files
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))

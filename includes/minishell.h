@@ -9,7 +9,7 @@
 # include "lexing.h"
 # include "ast.h"
 # include "colors.h"
-# include "signal.h"
+# include "get_signal.h"
 
 # define PROMPT cyan"petit total"magenta" > "reset
 
