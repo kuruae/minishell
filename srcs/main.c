@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/29 16:28:21 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/01 19:23:38 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,19 @@ int test_lexing(char *line)
     tokens = lexing(line);
     if (!tokens)
         return (1);
-    
+
     current = tokens;
     i = 0;
     while (current)
     {
-        printf("token[%d] = { type: %s, value: '%s' }\n", 
-               i, 
+        printf("token[%d] = { type: %s, value: '%s' }\n",
+               i,
                get_token_type_str(current->type),
                current->value);
         current = current->next;
         i++;
     }
-    
+
     free_tokens(tokens);
     return (0);
 }
@@ -97,7 +97,7 @@ int	main(int argc, char **argv, char **envp)
 	shell.exit_status = 0;
 	shell.envp = envp;
 	shell.line = NULL;
-    get_signal();
+	get_signal();
 	readline_loop(&shell);
 	return (0);
 }

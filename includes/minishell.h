@@ -2,7 +2,7 @@
 # define MINISHELL_H
 
 # include "libft.h"
-# include <stdio.h> 
+# include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -20,6 +20,7 @@ typedef struct s_env
 	char			*raw;
 	struct s_env	*next;
 }	t_env;
+
 typedef struct s_shell
 {
 	char	**envp;

@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 14:55:12 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/11/29 18:53:40 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/01 19:33:25 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,9 @@
 # include <features.h>
 # define _POSIX_C_SOURCE 199309L
 # include <signal.h>
-// extern int	g_signal = 0;
 
 int		get_signal(void);
 void	ctl_c_handler(int sig);
 void	ctl_d_handler(int sig);
 // int ctl_backslash_handler(int sig);
-
-
 #endif
