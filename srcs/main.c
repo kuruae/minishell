@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/02 15:47:10 by emagnani         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:44:18 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ t_error readline_loop(t_shell *shell)
 			// parse_line(shell);
 			test_lexing(shell->line);
 		}
+		add_history(shell->line);
 		free(shell->line);
 		shell->line = readline(PROMPT);
 	}

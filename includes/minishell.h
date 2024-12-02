@@ -41,7 +41,7 @@ typedef enum e_error
 	FAILURE
 }	t_error;
 
-// functions
+// gobal functions
 int		parse_line(t_shell *shell);
 void	clean_up(t_shell *shell);
 
