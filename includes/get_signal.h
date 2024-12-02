@@ -3,17 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   get_signal.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 14:55:12 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/01 19:33:25 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:35:13 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_SIGNAL_H
 # define GET_SIGNAL_H
 # include <features.h>
-# define _POSIX_C_SOURCE 199309L
+// # ifndef _POSIX_C_SOURCE
+// #  define _POSIX_C_SOURCE 199309L
+// # endif
 # include <signal.h>
 
 int		get_signal(void);
