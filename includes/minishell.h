@@ -9,8 +9,15 @@
 # include "lexing.h"
 # include "ast.h"
 # include "colors.h"
+# include "get_signal.h"
 
+// define readline prompt
 # define PROMPT cyan"petit total"magenta" > "reset
+
+// global variable
+extern int	g_sig_offset;
+
+// structs
 typedef struct s_env
 {
 	char			*id;
@@ -18,6 +25,7 @@ typedef struct s_env
 	char			*raw;
 	struct s_env	*next;
 }	t_env;
+
 typedef struct s_shell
 {
 	char	**envp;
@@ -32,6 +40,8 @@ typedef enum e_error
 	FAILURE
 }	t_error;
 
-int	parse_line(t_shell *shell);
+// functions
+int		parse_line(t_shell *shell);
+void	clean_up(t_shell *shell);
 
 #endif

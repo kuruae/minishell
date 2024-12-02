@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/28 15:32:26 by enzo             ###   ########.fr       */
+/*   Updated: 2024/12/02 15:25:48 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_sig_offset = 0;
 
 // int	parse_line(t_shell *shell)
 // {
@@ -54,24 +56,24 @@ int test_lexing(char *line)
     tokens = lexing(line);
     if (!tokens)
         return (1);
-    
+
     current = tokens;
     i = 0;
     while (current)
     {
-        printf("token[%d] = { type: %s, value: '%s' }\n", 
-               i, 
+        printf("token[%d] = { type: %s, value: '%s' }\n",
+               i,
                get_token_type_str(current->type),
                current->value);
         current = current->next;
         i++;
     }
-    
+
     free_tokens(tokens);
     return (0);
 }
 
-void	readline_loop(t_shell *shell)
+int	readline_loop(t_shell *shell)
 {
 	shell->line = readline(PROMPT);
 	while (shell->line)
@@ -86,12 +88,14 @@ void	readline_loop(t_shell *shell)
 		free(shell->line);
 		shell->line = readline(PROMPT);
 	}
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
 	// t_env env;
+	// int	g_sig_offset;
 
 	(void)argc;
 	(void)argv;
@@ -99,6 +103,9 @@ int	main(int argc, char **argv, char **envp)
 	shell.exit_status = 0;
 	shell.envp = envp;
 	shell.line = NULL;
-	readline_loop(&shell);
+	get_signal();
+	if (readline_loop(&shell) == 0)
+		g_sig_offset = 0;
+	clean_up(&shell);
 	return (0);
 }
