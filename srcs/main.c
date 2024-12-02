@@ -6,11 +6,13 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/01 19:23:38 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/02 14:24:44 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_sig_offset = 0;
 
 // int	parse_line(t_shell *shell)
 // {
@@ -69,7 +71,7 @@ int test_lexing(char *line)
     return (0);
 }
 
-void	readline_loop(t_shell *shell)
+int	readline_loop(t_shell *shell)
 {
 	shell->line = readline(PROMPT);
 	while (shell->line)
@@ -84,12 +86,14 @@ void	readline_loop(t_shell *shell)
 		free(shell->line);
 		shell->line = readline(PROMPT);
 	}
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
 	// t_env env;
+	// int	g_sig_offset;
 
 	(void)argc;
 	(void)argv;
@@ -98,6 +102,8 @@ int	main(int argc, char **argv, char **envp)
 	shell.envp = envp;
 	shell.line = NULL;
 	get_signal();
-	readline_loop(&shell);
+	if (readline_loop(&shell) == 0)
+		g_sig_offset = 0;
+	clean_up(&shell);
 	return (0);
 }

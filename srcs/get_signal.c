@@ -6,17 +6,15 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 11:57:23 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/01 19:35:05 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/02 14:44:36 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 int     get_signal();
 void    ctl_c_handler(int sig);
-void    ctl_d_handler(int sig);
-// int  ctl_backslash_handler(int sig);
-
+void    ctl_back_handler(int sig);
 
 int get_signal()
 {
@@ -31,25 +29,32 @@ int get_signal()
     //     return (1);
 	// }
 	signal(SIGINT, ctl_c_handler);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, ctl_back_handler);
 	return (0);
 }
 
 void  ctl_c_handler(int sig)
 {
+
 	(void)sig;
-	ft_printf("Received Signal ctrl + C\n");
-	// g_exit_status = 130;
+	rl_redisplay();
+	ft_printf("\n");
+	g_sig_offset = 130;
+	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
 	signal(SIGINT, ctl_c_handler);
 }
 
-void  ctl_d_handler(int sig)
+void  ctl_back_handler(int sig)
 {
 	(void)sig;
-	ft_printf("Received Signal + D\n");
-	rl_on_new_line();
+	//ft_printf("Ignored SignalQuit\n");
+	g_sig_offset = 131;
+	//rl_on_new_line();
+	//rl_redisplay();
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, ctl_back_handler);
 }
 
 

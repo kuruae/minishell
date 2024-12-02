@@ -40,7 +40,7 @@ SRC_FILES = $(SRC_DIR)/main.c \
 			$(SRC_DIR)/lexing.c \
 			$(SRC_DIR)/lexing_utils.c \
 			$(SRC_DIR)/get_signal.c \
-
+			$(SRC_DIR)/clean_up.c \
 ## object files
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
 

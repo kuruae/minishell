@@ -13,6 +13,8 @@
 
 # define PROMPT cyan"petit total"magenta" > "reset
 
+extern int	g_sig_offset;
+
 typedef struct s_env
 {
 	char			*id;
@@ -36,4 +38,5 @@ typedef enum e_error
 }	t_error;
 
 int	parse_line(t_shell *shell);
+void	clean_up(t_shell *shell);
 #endif
