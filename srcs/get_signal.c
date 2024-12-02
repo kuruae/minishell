@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_signal.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 11:57:23 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/02 15:47:05 by emagnani         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:04:57 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int get_signal()
     //     return (1);
 	// }
 	signal(SIGINT, ctl_c_handler);
-	signal(SIGQUIT, ctl_back_handler);
+	signal(SIGQUIT, SIG_IGN);
 	return (0);
 }
 
@@ -48,6 +48,8 @@ void  ctl_c_handler(int sig)
 
 void  ctl_back_handler(int sig)
 {
+	// currently we dont use this function as we can ignore the signal directly in the get_signal function
+	// if we need to change the g_sig_offset value to 131 we can use this function and insert it in signal(SIGQUIT, ...)
 	(void)sig;
 	//ft_printf("Ignored SignalQuit\n");
 	g_sig_offset = 131;
