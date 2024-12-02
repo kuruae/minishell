@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/02 15:25:48 by emagnani         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:47:10 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int test_lexing(char *line)
     return (0);
 }
 
-int	readline_loop(t_shell *shell)
+t_error readline_loop(t_shell *shell)
 {
 	shell->line = readline(PROMPT);
 	while (shell->line)
@@ -88,7 +88,7 @@ int	readline_loop(t_shell *shell)
 		free(shell->line);
 		shell->line = readline(PROMPT);
 	}
-	return (0);
+	return (CTRL_D);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -104,7 +104,7 @@ int	main(int argc, char **argv, char **envp)
 	shell.envp = envp;
 	shell.line = NULL;
 	get_signal();
-	if (readline_loop(&shell) == 0)
+	if (readline_loop(&shell) == CTRL_D)
 		g_sig_offset = 0;
 	clean_up(&shell);
 	return (0);

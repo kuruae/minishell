@@ -36,6 +36,7 @@ typedef struct s_shell
 typedef enum e_error
 {
 	SUCCESS,
+	CTRL_D,
 	ERR_MALLOC,
 	FAILURE
 }	t_error;
