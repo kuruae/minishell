@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/03 15:46:39 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/03 16:56:11 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,21 +92,21 @@ t_error readline_loop(t_shell *shell)
 	return (CTRL_D);
 }
 
-int	main(int argc, char **argv, char **envp)
-{
-	t_shell	shell;
-	// t_env env;
-	// int	g_sig_offset;
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_shell	shell;
+// 	// t_env env;
+// 	// int	g_sig_offset;
 
-	(void)argc;
-	(void)argv;
-	// env = init_env(envp); // envp is an array of strings btw (and i didnt know the p stands for pointer)
-	shell.exit_status = 0;
-	shell.envp = envp;
-	shell.line = NULL;
-	get_signal();
-	if (readline_loop(&shell) == CTRL_D)
-		g_sig_offset = 0;
-	clean_up(&shell);
-	return (0);
-}
+// 	(void)argc;
+// 	(void)argv;
+// 	// env = init_env(envp); // envp is an array of strings btw (and i didnt know the p stands for pointer)
+// 	shell.exit_status = 0;
+// 	shell.envp = envp;
+// 	shell.line = NULL;
+// 	get_signal();
+// 	if (readline_loop(&shell) == CTRL_D)
+// 		g_sig_offset = 0;
+// 	clean_up(&shell);
+// 	return (0);
+// }
