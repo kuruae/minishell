@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:02:26 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/03 16:04:24 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/03 18:02:07 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_cd(void)
-{}
+// void	ft_cd(void)
+// {}
 
-int	main(int argc, char argv)
-{
-	ft_cd();
-}
+// int	main(int argc, char argv)
+// {
+// 	ft_cd();
+// }

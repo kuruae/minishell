@@ -3,20 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   get_signal.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 14:55:12 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/02 15:35:13 by emagnani         ###   ########.fr       */
+/*   Updated: 2024/12/03 18:00:30 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_SIGNAL_H
 # define GET_SIGNAL_H
-# include <features.h>
-// # ifndef _POSIX_C_SOURCE
-// #  define _POSIX_C_SOURCE 199309L
-// # endif
-# include <signal.h>
+
+# include "minishell.h"
 
 int		get_signal(void);
 void	ctl_c_handler(int sig);

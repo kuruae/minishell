@@ -3,6 +3,7 @@
 
 # include "libft.h"
 # include <stdio.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -11,6 +12,12 @@
 # include "colors.h"
 # include "get_signal.h"
 # include "exec.h"
+
+// bullshit so i can work on macos
+# ifdef __APPLE__
+    extern void rl_replace_line(const char*, int);
+	extern void rl_clear_history (void);
+# endif
 
 // define readline prompt
 # define PROMPT cyan"petit total"magenta" > "reset
