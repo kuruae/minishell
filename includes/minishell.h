@@ -10,6 +10,7 @@
 # include "ast.h"
 # include "colors.h"
 # include "get_signal.h"
+# include "exec.h"
 
 // define readline prompt
 # define PROMPT cyan"petit total"magenta" > "reset

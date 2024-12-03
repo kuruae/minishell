@@ -19,30 +19,29 @@ CFLAGS = -Wall -Wextra -Werror -g3
 SANITIZE_FLAGS = -fsanitize=address,undefined -fno-omit-frame-pointer
 LIBFT_PATH = libft
 
-
 ifeq ($(shell uname), Darwin)
 	READLINE_FLAGS = -lreadline -L$(shell brew --prefix readline)/lib -I$(shell brew --prefix readline)/include
 else
-
     READLINE_FLAGS = -lreadline -ltermcap
 endif
 
 ######### DIRECTORIES ########
 
-SRC_DIR = srcs
+SRCS_EXEC_DIR = srcs/srcs_exec
+SRCS_PARS_DIR = srcs/srcs_pars
+SRCS_BUILTIN_DIR = srcs/srcs_builtin
 OBJ_DIR = objs
 INCLUDE_DIR = includes
 INCLUDE_DIRS = -I$(INCLUDE_DIR) -I$(LIBFT_PATH)/includes
 
 ######### FILES ########
-## source files
-SRC_FILES = $(SRC_DIR)/main.c \
-			$(SRC_DIR)/lexing.c \
-			$(SRC_DIR)/lexing_utils.c \
-			$(SRC_DIR)/get_signal.c \
-			$(SRC_DIR)/clean_up.c \
+## source files from all directories
+SRC_FILES = $(wildcard $(SRCS_EXEC_DIR)/*.c) \
+            $(wildcard $(SRCS_PARS_DIR)/*.c) \
+            $(wildcard $(SRCS_BUILTIN_DIR)/*.c)
+
 ## object files
-OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
+OBJ_FILES = $(patsubst %.c,$(OBJ_DIR)/%.o,$(notdir $(SRC_FILES)))
 
 ##
 TOTAL_FILES := $(words $(SRC_FILES))
@@ -59,14 +58,29 @@ NAME_SANITIZE = $(NAME)_sanitize
 
 ######### PROGRESS BAR ########
 
-define progress_bar
-    @printf "\r$(BLUE)Building [$(GREEN)"; \
-    for p in "~o~" "-o-" "~o~" "°o°"; do \
-        printf "\r$(BLUE)Building [$(GREEN)%s$(RESET)]" "$$p"; \
-        sleep 0.1; \
+define progress_bar_parsing
+    @printf "\r$(BOLD)$(YELLOW)Parsing Magic 🧙‍♂️ $(GREEN)"; \
+    for p in "✨" "🔍" "🌈" "🚀"; do \
+        printf "\r$(BOLD)$(YELLOW)Parsing [$(GREEN)%s$(YELLOW)] Decoding...$(RESET)" "$$p"; \
+        sleep 0.2; \
     done
 endef
 
+define progress_bar_exec
+    @printf "\r$(BOLD)$(RED)Executing Wizardry 🔮 $(GREEN)"; \
+    for p in "⚡️" "🔥" "💥" "🚀"; do \
+        printf "\r$(BOLD)$(RED)Executing [$(GREEN)%s$(RED)] Transforming...$(RESET)" "$$p"; \
+        sleep 0.2; \
+    done
+endef
+
+define progress_bar_builtin
+    @printf "\r$(BOLD)$(BLUE)Builtin Power 🛠️ $(GREEN)"; \
+    for p in "⚙️" "🔧" "💡" "🚀"; do \
+        printf "\r$(BOLD)$(BLUE)Builtin [$(GREEN)%s$(BLUE)] Optimizing...$(RESET)" "$$p"; \
+        sleep 0.2; \
+    done
+endef
 ######### COMMANDS ########
 
 all: $(NAME)
@@ -86,10 +100,20 @@ $(NAME_SANITIZE): $(OBJ_FILES) $(LIBFT)
 	@printf "$(GREEN)$(CHECK) $(NAME) with sanitizer successfully compiled!$(RESET)\n"
 	@printf "$(YELLOW)$(ARROW) Run with: ./$(NAME_SANITIZE)$(RESET)\n"
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c -o $@ $<
-	@$(call progress_bar)
+$(OBJ_DIR)/%.o: $(SRCS_PARS_DIR)/%.c | $(OBJ_DIR)
+	@$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c $< -o $@
+	@$(call progress_bar_parsing)
+
+$(OBJ_DIR)/%.o: $(SRCS_EXEC_DIR)/%.c | $(OBJ_DIR)
+	@$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c $< -o $@
+	@$(call progress_bar_exec)
+
+$(OBJ_DIR)/%.o: $(SRCS_BUILTIN_DIR)/%.c | $(OBJ_DIR)
+	@$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c $< -o $@
+	@$(call progress_bar_builtin)
+
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
 
 $(LIBFT):
 	@printf "$(YELLOW)$(ARROW) Building libft...$(RESET)\n"
