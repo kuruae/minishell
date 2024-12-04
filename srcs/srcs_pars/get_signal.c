@@ -3,18 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_signal.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 11:57:23 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/02 16:04:57 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:24:51 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int     get_signal();
-void    ctl_c_handler(int sig);
-void    ctl_back_handler(int sig);
 
 int get_signal()
 {
