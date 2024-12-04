@@ -10,6 +10,7 @@
 # include "ast.h"
 # include "colors.h"
 # include "get_signal.h"
+# include "builtin.h"
 # include "exec.h"
 
 // define readline prompt
@@ -32,6 +33,8 @@ typedef struct s_shell
 	char	**envp;
 	int		exit_status;
 	char	*line;
+	//values for builtins
+
 }	t_shell;
 
 typedef enum e_error
