@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:04:43 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/04 15:20:14 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/05 16:58:37 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ typedef struct s_directory
 	char	old_path[MAX_PATH];
 }	t_directory;
 
-int		ft_echo(char *string);
-void	ft_pwd(t_directory *dir, int fd_out);
+int		builtin(char *command, char *arg, int fd_out);
+int		ft_echo(char *string, int fd_out);
+int		ft_pwd(t_directory *dir, int fd_out);
+int		ft_cd(char *path, t_directory *dir);
+int	ft_exit(char *arg);
 #endif

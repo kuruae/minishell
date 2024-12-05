@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 23:56:06 by enzo              #+#    #+#             */
-/*   Updated: 2024/11/29 15:29:05 by emagnani         ###   ########.fr       */
+/*   Updated: 2024/12/05 16:43:04 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ size_t	get_token_len(char *line, t_token_type type)
 {
 	int len;
 
-	if (type == TOK_PIPE || type == TOK_REDIR_IN || type == TOK_REDIR_OUT 
+	if (type == TOK_PIPE || type == TOK_REDIR_IN || type == TOK_REDIR_OUT
 				|| type == TOK_PAR_CLOSE || type == TOK_PAR_OPEN)
 		len = 1;
 	else if (type == TOK_APPEND || type == TOK_HEREDOC || type == TOK_OR || type == TOK_AND)

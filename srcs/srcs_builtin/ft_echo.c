@@ -6,23 +6,48 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:07:48 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/04 15:15:01 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/05 14:55:40 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_echo(char *arg)
+void	echo_putstr_fd(char *s, int fd)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (ft_isprint(s[i]) && s[i] != '\\')
+			write(fd, &s[i], 1);
+		i++;
+	}
+}
+
+void	remove_white_space()
+{
+
+}
+int	ft_echo(char *arg, int fd_out)
 {
 	bool	n_flag;
 
-	while (ft_isspace(*arg) == 1)
+	n_flag = false;
+	while (ft_isspace(*arg) == 1) // skipping the whitespace
 		arg++;
-	if (*arg == '-' && arg[i + 1] == 'n' && ft_isspace(arg[i + 2] == 1))
-		n_flag == true;
+	if (*arg == '-' && *(arg + 1) == 'n' && ft_isspace(*(arg + 2)) == 1) // checking if there is a -n flag (the flag is whitespace sensitive)
+	{
+		n_flag = true;
+		arg += 2;
+	}
+	while (ft_isspace(*arg) == 1) // skipping the whitespace after the flag (like the real minishell)
+		arg++;
 	if (arg)
-		ft_printf("%s", arg);
-	if (n_flag)
-		ft_printf("\n");
+		echo_putstr_fd(arg, fd_out); // using the std_out because as i understand the echo only printd there and cant be send to pipes
+	if (!n_flag) // only adding newline when there is no n_flag
+		ft_putchar_fd('\n', fd_out);
+// If in the argument there are spaces at the end they should not be printed
+// The question is if we already print them before
 	return (EXIT_SUCCESS);
 }
