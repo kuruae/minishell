@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/05 16:58:20 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/06 15:52:49 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,8 @@ t_error readline_loop(t_shell *shell)
 // 	(void)argv;
 // 	// env = init_env(envp); // envp is an array of strings btw (and i didnt know the p stands for pointer)
 // 	shell.exit_status = 0;
-// 	shell.envp = envp;
-// 	shell.line = NULL;
+// 	shell.envp = envp; // i think this could give us problems later when we want to modify the envp with the builtins
+// 	shell.line = NULL; // maybe its better to copy the envp in a new table
 // 	get_signal();
 // 	if (readline_loop(&shell) == CTRL_D)
 // 		g_sig_offset = 0;
@@ -114,7 +114,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)envp;
 	if (argc == 3)
-		builtin(argv[1], argv[2], STDOUT_FILENO);
+		builtin(argv[1], argv[2], STDOUT_FILENO, envp);
 	if (argc == 2)
-		builtin(argv[1], NULL , STDOUT_FILENO);
+		builtin(argv[1], NULL , STDOUT_FILENO, envp);
 }
