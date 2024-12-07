@@ -6,11 +6,23 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:24:56 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/06 15:45:03 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/07 14:07:08 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_all(char **arg)
+{
+	int	i;
+
+	i = 0;
+	if (!arg)
+		return ;
+	while (arg[i])
+		free(arg[i++]);
+	free (arg);
+}
 
 int	builtin(char *command, char *arg, int fd_out, char **envp)
 {

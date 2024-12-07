@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/06 15:52:49 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/07 14:33:41 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,24 @@ t_error readline_loop(t_shell *shell)
 	}
 	return (CTRL_D);
 }
+char **copy_env(char **envp)
+{
+	int		i;
+	char	**env_cpy;
+
+	i = 0;
+	while (envp[i])
+		i++;
+	env_cpy = (char **)malloc((i + 1) * sizeof(char *));
+	i = 0;
+	while (envp[i])
+	{
+		env_cpy[i] = ft_strdup(envp[i]);
+		i++;
+	}
+	return env_cpy;
+}
+
 
 // int	main(int argc, char **argv, char **envp)
 // {
@@ -112,9 +130,14 @@ t_error readline_loop(t_shell *shell)
 
 int	main(int argc, char **argv, char **envp)
 {
-	(void)envp;
+	char **envp_cpy;
+
+	envp_cpy = copy_env(envp);
 	if (argc == 3)
-		builtin(argv[1], argv[2], STDOUT_FILENO, envp);
-	if (argc == 2)
-		builtin(argv[1], NULL , STDOUT_FILENO, envp);
+		builtin(argv[1], argv[2], STDOUT_FILENO, envp_cpy);
+	else if (argc == 2)
+		builtin(argv[1], NULL , STDOUT_FILENO, envp_cpy);
+	else
+		return (1);
+	free_all(envp_cpy);
 }
