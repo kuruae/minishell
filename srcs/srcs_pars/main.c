@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/07 14:33:41 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/08 16:07:06 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ char **copy_env(char **envp)
 		env_cpy[i] = ft_strdup(envp[i]);
 		i++;
 	}
+	env_cpy[i] = NULL;
 	return env_cpy;
 }
 

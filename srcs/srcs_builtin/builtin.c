@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:24:56 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/07 14:07:08 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/08 16:44:33 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int	builtin(char *command, char *arg, int fd_out, char **envp)
 		ft_cd(arg, &dir);
 	else if (ft_strcmp(command, "pwd") == 0)
 		ft_pwd(&dir, fd_out);
-	// else if (ft_strcmp(command, "export") == 0)  // for this we need to know how we handle our child processes
-	// 	ft_export();
+	else if (ft_strcmp(command, "export") == 0)  // for this we need to know how we handle our child processes
+		ft_export();
 	else if (ft_strcmp(command, "unset") == 0)
 		ft_unset(arg, envp);
 	else if (ft_strcmp(command, "env") == 0)

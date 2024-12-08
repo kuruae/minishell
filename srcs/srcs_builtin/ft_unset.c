@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:45:13 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/07 14:01:14 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/08 16:41:39 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,11 @@
 
 void	remove_var(char	*var, char **envp)
 {
-	char	*env_line;
 	int		i;
 	size_t	len;
 
 	i = 0;
-	env_line = getenv(var);
 	len = ft_strlen(var);
-	ft_printf("env_line: %s\n", env_line);
-	if (!env_line)
-		return ;
 	while (envp[i])
 	{
 		if (ft_strncmp(var, envp[i], len) == 0)
@@ -31,10 +26,12 @@ void	remove_var(char	*var, char **envp)
 			free(envp[i]);
 			while (envp[i + 1])
 			{
-				envp[i] = envp[i + 1];
-				free(envp[i]);
+				envp[i] = ft_strdup(envp[i + 1]);
+				free(envp[i + 1]);
 				i++;
 			}
+			envp[i] = NULL;
+			break ;
 		}
 		i++;
 	}
@@ -48,10 +45,13 @@ int	ft_unset(char *arg,char **envp)
 	int		i;
 
 	i = 0;
+	if (!arg)
+		return (EXIT_SUCCESS);
 	variables = ft_split(arg, ' ');
 	if (!variables)
 		return (free_all(variables), EXIT_FAILURE); // i dont know how we handle errors like this when mallocs dont work
 	while (variables[i])
 		remove_var(variables[i++], envp);
+	ft_env(envp, 1);
 	return (free_all(variables), EXIT_SUCCESS);
 }
