@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/09 01:11:40 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:44:57 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,8 +139,6 @@ int	main(int argc, char **argv, char **envp)
 		builtin(argv[1], argv[2], STDOUT_FILENO, envp_cpy);
 	else if (argc == 2)
 		builtin(argv[1], NULL , STDOUT_FILENO, envp_cpy);
-	else
-		return (1);
 	free_all(*envp_cpy);
 	free(envp_cpy);
 }

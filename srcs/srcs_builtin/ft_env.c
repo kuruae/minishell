@@ -6,14 +6,14 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:00:26 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/08 16:43:19 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:36:06 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_env(char **envp, int fd_out)
-{
+int	ft_env(char **envp, int fd_out) // im not sure if envc should work when given with arguments
+{									//or if it should return an error
 	int	i;
 
 	i = 0;

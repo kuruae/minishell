@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:25:20 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/05 17:13:28 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:52:25 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	ft_exit(char *arg)
 {
 	int	arg_n;
 
+	if (!arg)
+		exit(g_sig_offset);
 	if (!ft_is_num(arg))
 		return (ft_putstr_fd("exit: numeric argument required\n", STDERR_FILENO), EXIT_FAILURE);
 	arg_n = ft_atoi(arg);

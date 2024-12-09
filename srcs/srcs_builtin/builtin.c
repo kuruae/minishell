@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:24:56 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/09 17:59:12 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:47:02 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	free_all(char **arg)
 	free (arg);
 }
 
-int	builtin(char *command, char *arg, int fd_out, char ***envp)
+int	builtin(char *command, char *arg, int fd_out, char ***envp) // this function is ment to receive a joined string of all the arguments after the function
 {
 	t_directory dir;
 

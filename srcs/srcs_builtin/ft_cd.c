@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:02:26 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/09 19:57:45 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:43:20 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	ft_cd(char *path, t_directory *dir, char **envp)
 {
 	char	cache[MAX_PATH];
 
+	ft_printf("starting ft_cd\n");
 	if (arg_count(path) > 1)
 	{
 		return(ft_putstr_fd("total error: cd: too many arguments", 2),

@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:07:48 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/05 14:55:40 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/09 20:45:20 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,27 @@ void	echo_putstr_fd(char *s, int fd)
 	}
 }
 
-void	remove_white_space()
+bool check_flag(char *arg)
 {
-
+	if (!(*arg == '-' && *(arg + 1) == 'n')) // checking if there is a -n flag
+		return  (false);
+	if (!(*arg + 2) || ft_isspace(*(arg + 2)) == 1) // n-falg is whitespace sensitive
+		return (true);
+	return (false);
 }
+
+
 int	ft_echo(char *arg, int fd_out)
 {
 	bool	n_flag;
 
-	n_flag = false;
+	if (!arg)
+		return(ft_putchar_fd('\n', fd_out), EXIT_SUCCESS);
+	n_flag = check_flag(arg);
+	if (n_flag)
+		arg += 2;
 	while (ft_isspace(*arg) == 1) // skipping the whitespace
 		arg++;
-	if (*arg == '-' && *(arg + 1) == 'n' && ft_isspace(*(arg + 2)) == 1) // checking if there is a -n flag (the flag is whitespace sensitive)
-	{
-		n_flag = true;
-		arg += 2;
-	}
 	while (ft_isspace(*arg) == 1) // skipping the whitespace after the flag (like the real minishell)
 		arg++;
 	if (arg)
