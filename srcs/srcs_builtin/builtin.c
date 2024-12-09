@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:24:56 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/08 16:44:33 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/09 01:10:16 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	free_all(char **arg)
 	free (arg);
 }
 
-int	builtin(char *command, char *arg, int fd_out, char **envp)
+int	builtin(char *command, char *arg, int fd_out, char ***envp)
 {
 	t_directory dir;
 
@@ -35,11 +35,11 @@ int	builtin(char *command, char *arg, int fd_out, char **envp)
 	else if (ft_strcmp(command, "pwd") == 0)
 		ft_pwd(&dir, fd_out);
 	else if (ft_strcmp(command, "export") == 0)  // for this we need to know how we handle our child processes
-		ft_export();
+		ft_export(arg, envp);
 	else if (ft_strcmp(command, "unset") == 0)
-		ft_unset(arg, envp);
+		ft_unset(arg, *envp);
 	else if (ft_strcmp(command, "env") == 0)
-		ft_env(envp, fd_out);
+		ft_env(*envp, fd_out);
 	else if (ft_strcmp(command, "exit") == 0)
 		ft_exit(arg);
 	else
