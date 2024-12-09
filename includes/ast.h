@@ -1,50 +1,89 @@
 #ifndef AST_H
 # define AST_H
 
+# include "minishell.h"
+
 /* Node types for the AST */
 typedef enum e_node_type
 {
-    NODE_COMMAND,    // Simple command
-    NODE_PIPE,       // Pipe operator (|)
-    NODE_REDIR,      // Redirections (<, >, >>)
-    NODE_AND,        // Logical AND (&&)
-    NODE_OR,         // Logical OR (||)
-    NODE_SEQUENCE    // Command sequence (;)
+	NODE_COMMAND,    // Simple command
+	NODE_PIPE,       // Pipe operator (|)
+	// NODE_REDIR,      // Redirections (<, >, >>)
+	NODE_AND,        // Logical AND (&&)
+	NODE_SUBSHELL,   // Subshell
+	NODE_OR,         // Logical OR (||)
 } t_node_type;
 
 /* Redirection types */
-typedef enum e_redir_type
+typedef struct s_redir
 {
-    REDIR_INPUT,     // <
-    REDIR_OUTPUT,    // >
-    REDIR_APPEND,    // >>
-    REDIR_HEREDOC    // <<
-} t_redir_type;
+	enum
+	{
+		REDIR_INPUT,     // <
+		REDIR_OUTPUT,    // >
+		REDIR_APPEND,    // >>
+		REDIR_HEREDOC    // <<
+	} type;
+	char *file;  // File to redirect to/from
+	struct s_redir *next;  // Next redirection
+} t_redir;
+
+typedef struct s_parser
+{
+    t_token     *current;   // Current token being processed
+    t_token     *tokens;    // All tokens
+    t_error     last_error; // Track parsing errors
+} t_parser;
 
 /* Structure for command arguments */
-typedef struct s_command
+typedef struct s_ast_node 
 {
-    char            **args;      // Array of command arguments (args[0] is the command)
-    t_word_props    *word_props; // Properties for each argument
-    int             argc;        // Number of arguments
-} t_command;
+	t_node_type type;  // Type of the node    
+	t_redir *redirections;  // All nodes can have redirections
+	
+	union
+	{
+		struct
+		{
+			char *command;
+			char **args;
+			int arg_count;
+		} command;
 
-/* Structure for redirections */
-typedef struct s_redirection
-{
-    t_redir_type    type;       // Type of redirection
-    char            *file;       // File name or delimiter for heredoc
-    t_word_props    file_props; // Properties of the file name
-} t_redirection;
+		struct
+		{
+			struct s_ast_node *left;
+			struct s_ast_node *right;
+		} pipe;
 
-/* Main AST node structure */
-typedef struct s_ast_node
-{
-    t_node_type         type;       // Type of the node
-    struct s_ast_node   *left;      // Left child
-    struct s_ast_node   *right;     // Right child
-    t_command           *cmd;       // Command data (if type == NODE_COMMAND)
-    t_redirection       *redir;     // Redirection data (if type == NODE_REDIR)
+		struct
+		{
+			struct s_ast_node *command;
+		} subshell;
+
+		struct
+		{
+			struct s_ast_node *left;
+			struct s_ast_node *right;
+		} logical_op;
+	} data;
 } t_ast_node;
+
+
+bool	_parser_is_token_type_redir(t_token_type type);
+t_redir	*create_redir_node(t_token *token, char *file);
+t_ast_node *create_ast_node(t_node_type type);
+void free_ast(t_ast_node *node);
+void	paser_advance(t_parser *parser);
+void	add_redir(t_ast_node *node, t_redir *redir);
+bool	parse_redir(t_parser *parser, t_ast_node *node);
+t_ast_node	*parse_command(t_parser *parser);
+t_ast_node	*parse_subshell(t_parser *parser);
+int	count_args(t_token *token);
+t_ast_node	*parse_pipe(t_parser *parser);
+t_ast_node	*parse_logic(t_parser *parser);
+void free_ast(t_ast_node *node);
+t_ast_node	*parse_tokens(t_token *tokens);
+void debug_print_ast(t_ast_node *node, int depth);
 
 #endif
