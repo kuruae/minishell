@@ -30,9 +30,9 @@ typedef struct s_redir
 
 typedef struct s_parser
 {
-    t_token     *current;   // Current token being processed
-    t_token     *tokens;    // All tokens
-    t_error     last_error; // Track parsing errors
+	t_token     *current;   // Current token being processed
+	t_token     *tokens;    // All tokens
+	t_error     last_error; // Track parsing errors
 } t_parser;
 
 /* Structure for command arguments */
@@ -45,9 +45,9 @@ typedef struct s_ast_node
 	{
 		struct
 		{
-			char *command;
-			char **args;
-			int arg_count;
+			char	*command;
+			char	**args;
+			int	arg_count;
 		} command;
 
 		struct

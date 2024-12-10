@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/10 00:38:46 by kuru             ###   ########.fr       */
+/*   Updated: 2024/12/10 19:50:31 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,17 +186,26 @@ t_ast_node	*parse_pipe(t_parser *parser)
 	return (left);
 }
 
+static t_error testing_pointer_parse_pipe(t_parser *parser, t_ast_node **left)
+{ 
+    *left = parse_pipe(parser);
+    if (!*left)
+        return (FAILURE);
+    return (SUCCESS);
+}
+
 t_ast_node *parse_logic(t_parser *parser)
 {
     t_ast_node *left;
     t_ast_node *node;
     t_node_type type;
 
-    // First get the leftmost command or subshell
-    left = parse_pipe(parser);
-    if (!left)
-        return NULL;
+    left = NULL;
 
+    // First get the leftmost command or subshell
+    if (testing_pointer_parse_pipe(parser, &left) == FAILURE)
+        return (NULL);
+    
     // Keep processing while we find logical operators
     while (parser->current && (parser->current->type == TOK_AND || 
            parser->current->type == TOK_OR))
@@ -273,6 +282,14 @@ void free_ast(t_ast_node *node)
     free(node);
 }
 
+static t_error  start_ast(t_parser *parser, t_ast_node **root)
+{
+    *root = parse_logic(parser);
+    if (!*root)
+        return (FAILURE);
+    return (SUCCESS);
+}
+
 t_ast_node	*parse_tokens(t_token *tokens)
 {
 	t_parser parser;
@@ -282,7 +299,8 @@ t_ast_node	*parse_tokens(t_token *tokens)
 	parser.current = tokens;
 	parser.last_error = SUCCESS;
 
-	root = parse_logic(&parser);
+	if (start_ast(&parser, &root) == FAILURE)
+        return (NULL);
 
 	return (root);
 }
