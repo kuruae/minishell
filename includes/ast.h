@@ -32,7 +32,7 @@ typedef struct s_parser
 {
 	t_token     *current;   // Current token being processed
 	t_token     *tokens;    // All tokens
-	t_error     last_error; // Track parsing errors
+	t_error     err_status; // Track parsing errors
 } t_parser;
 
 /* Structure for command arguments */
@@ -85,5 +85,6 @@ t_ast_node	*parse_logic(t_parser *parser);
 void free_ast(t_ast_node *node);
 t_ast_node	*parse_tokens(t_token *tokens);
 void debug_print_ast(t_ast_node *node, int depth);
+t_ast_node	*err_free_and_return(t_parser *parser, t_ast_node *node);
 
 #endif

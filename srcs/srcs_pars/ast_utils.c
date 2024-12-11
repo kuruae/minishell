@@ -43,3 +43,76 @@ t_redir	*create_redir_node(t_token *token, char *file)
 	redir->next = NULL;
 	return (redir);
 }
+
+int	count_args(t_token *token)
+{
+	int	count;
+
+	count = 0;
+	while (token && token->type == TOK_WORD)
+	{
+		count++;
+		token = token->next;
+	}
+	return (count);
+}
+
+void	paser_advance(t_parser *parser)
+{
+	if (parser->current->type != TOK_EOF)
+		parser->current = parser->current->next;
+}
+
+void free_ast(t_ast_node *node)
+{
+	t_redir *redir;
+	t_redir *next;
+	
+	if (!node)
+		return ;
+	redir = node->redirections;
+	while (redir)
+	{
+		next = redir->next;
+		free(redir->file);
+		free(redir);
+		redir = next;
+	}
+
+	switch (node->type)
+	   {
+        case NODE_COMMAND:
+            free(node->data.command.command);
+            if (node->data.command.args)
+            {
+                for (int i = 0; i < node->data.command.arg_count; i++)
+                    free(node->data.command.args[i]);
+                free(node->data.command.args);
+            }
+            break;
+            
+        case NODE_PIPE:
+            free_ast(node->data.pipe.left);
+            free_ast(node->data.pipe.right);
+            break;
+            
+        case NODE_SUBSHELL:
+            free_ast(node->data.subshell.command);
+            break;
+            
+        case NODE_AND:
+        case NODE_OR:
+            free_ast(node->data.logical_op.left);
+            free_ast(node->data.logical_op.right);
+            break;
+    }
+    
+    free(node);
+}
+
+t_ast_node	*err_free_and_return(t_parser *parser, t_ast_node *node)
+{
+	free_ast(node);
+	parser->err_status = FAILURE;
+	return (NULL);
+}
