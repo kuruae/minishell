@@ -86,5 +86,6 @@ void free_ast(t_ast_node *node);
 t_ast_node	*parse_tokens(t_token *tokens);
 void debug_print_ast(t_ast_node *node, int depth);
 t_ast_node	*err_free_and_return(t_parser *parser, t_ast_node *node);
+t_node_type	get_node_type(t_token_type token_type);
 
 #endif

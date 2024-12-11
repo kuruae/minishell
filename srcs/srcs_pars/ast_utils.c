@@ -110,6 +110,13 @@ void free_ast(t_ast_node *node)
     free(node);
 }
 
+t_node_type	get_node_type(t_token_type token_type)
+{
+	if (token_type == TOK_AND)
+		return (NODE_AND);
+	return (NODE_OR);
+}
+
 t_ast_node	*err_free_and_return(t_parser *parser, t_ast_node *node)
 {
 	free_ast(node);

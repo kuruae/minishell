@@ -1,5 +1,32 @@
 #include "minishell.h"
 
+// Helper function to convert node type to string
+static const char *node_type_to_string(t_node_type type)
+{
+    switch (type)
+    {
+        case NODE_COMMAND:   return "NODE_COMMAND";
+        case NODE_PIPE:      return "NODE_PIPE";
+        case NODE_AND:       return "NODE_AND";
+        case NODE_SUBSHELL:  return "NODE_SUBSHELL";
+        case NODE_OR:        return "NODE_OR";
+        default:            return "UNKNOWN_NODE_TYPE";
+    }
+}
+
+// Helper function to convert redirection type to string
+static const char *redir_type_to_string(int type)
+{
+    switch (type)
+    {
+        case REDIR_INPUT:    return "REDIR_INPUT";
+        case REDIR_OUTPUT:   return "REDIR_OUTPUT";
+        case REDIR_APPEND:   return "REDIR_APPEND";
+        case REDIR_HEREDOC:  return "REDIR_HEREDOC";
+        default:            return "UNKNOWN_REDIR_TYPE";
+    }
+}
+
 // Helper function to print indentation
 static void print_indent(int depth)
 {
@@ -13,7 +40,7 @@ static void print_redirections(t_redir *redir, int depth)
     while (redir)
     {
         print_indent(depth);
-        printf("└─ Redirection: ");
+        printf("└─ Redirection: %s ", redir_type_to_string(redir->type));
         switch (redir->type)
         {
             case REDIR_INPUT:
@@ -44,7 +71,7 @@ void debug_print_ast(t_ast_node *node, int depth)
     }
 
     print_indent(depth);
-    printf("Node type: %d\n", node->type);
+    printf("Node type: %s\n", node_type_to_string(node->type));
 
     switch (node->type)
     {
@@ -71,10 +98,10 @@ void debug_print_ast(t_ast_node *node, int depth)
             printf("Pipe\n");
             if (node->redirections)
                 print_redirections(node->redirections, depth + 1);
-            print_indent(depth);
+            print_indent(depth);  // These indentations should be adjusted
             printf("└─ Left:\n");
             debug_print_ast(node->data.pipe.left, depth + 2);
-            print_indent(depth);
+            print_indent(depth);  // to maintain consistent visual hierarchy
             printf("└─ Right:\n");
             debug_print_ast(node->data.pipe.right, depth + 2);
             break;

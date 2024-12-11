@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/11 18:14:19 by emagnani         ###   ########.fr       */
+/*   Updated: 2024/12/11 20:18:30 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,7 @@ t_ast_node	*parse_pipe(t_parser *parser)
 static t_error testing_pointer_parse_pipe(t_parser *parser, t_ast_node **left)
 { 
     *left = parse_pipe(parser);
-    if (!*left)
+    if (!*left && parser->err_status == FAILURE)
         return (FAILURE);
     return (SUCCESS);
 }
@@ -258,10 +258,7 @@ t_ast_node *parse_logic(t_parser *parser)
     while (parser->current && (parser->current->type == TOK_AND || 
            parser->current->type == TOK_OR))
     {
-        if (parser->current->type == TOK_AND)
-            type = NODE_AND;
-        else
-            type = NODE_OR;
+        type = get_node_type(parser->current->type);
 
         paser_advance(parser);
 
@@ -272,7 +269,7 @@ t_ast_node *parse_logic(t_parser *parser)
         node->data.logical_op.left = left;
         node->data.logical_op.right = parse_pipe(parser);
         
-        if (!node->data.logical_op.right)
+        if (parser->err_status == FAILURE)
             return (err_free_and_return(parser, node));
 
         left = node;
@@ -284,7 +281,7 @@ t_ast_node *parse_logic(t_parser *parser)
 static t_error  start_ast(t_parser *parser, t_ast_node **root)
 {
     *root = parse_logic(parser);
-    if (!*root)
+    if (!*root || parser->err_status == FAILURE)
         return (FAILURE);
     return (SUCCESS);
 }
