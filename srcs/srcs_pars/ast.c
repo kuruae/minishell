@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/10 19:50:31 by emagnani         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:21:47 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,8 +210,10 @@ t_ast_node *parse_logic(t_parser *parser)
     while (parser->current && (parser->current->type == TOK_AND || 
            parser->current->type == TOK_OR))
     {
-        type = (parser->current->type == TOK_AND) ? NODE_AND : NODE_OR;
-        paser_advance(parser);
+        if (parser->current->type == TOK_AND)
+            type = NODE_AND;
+        else
+            type = NODE_OR;
 
         node = create_ast_node(type);
         if (!node)
