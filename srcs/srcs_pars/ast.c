@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/11 18:02:21 by enzo             ###   ########.fr       */
+/*   Updated: 2024/12/11 18:14:19 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,6 +262,8 @@ t_ast_node *parse_logic(t_parser *parser)
             type = NODE_AND;
         else
             type = NODE_OR;
+
+        paser_advance(parser);
 
         node = create_ast_node(type);
         if (!node)
