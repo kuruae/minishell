@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/11 20:18:30 by enzo             ###   ########.fr       */
+/*   Updated: 2024/12/12 03:33:03 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,34 @@ t_ast_node *parse_subshell(t_parser *parser)
 }
 
 
+static t_error count_and_process_args(t_parser *parser, t_ast_node **node)
+{
+    int args_count;
+    int i;
+
+    args_count = count_args(parser->current);
+    if (args_count > 0)
+    {
+        (*node)->data.command.args = malloc(sizeof(char *) * (args_count + 1));
+        if (!(*node)->data.command.args)
+        {
+            free((*node)->data.command.command);
+            return (ERR_MALLOC);
+        }
+        
+        i = 0;
+        while (parser->current && parser->current->type == TOK_WORD && i < args_count)
+        {
+            (*node)->data.command.args[i] = ft_strdup(parser->current->value);
+            paser_advance(parser);
+            i++;
+        }
+        (*node)->data.command.args[i] = NULL;
+        (*node)->data.command.arg_count = args_count;
+    }
+    return (SUCCESS);
+}
+
 
 /* parse_command: Parses a single command or subshell expression
  * @parser: Current parser state
@@ -124,8 +152,6 @@ t_ast_node *parse_subshell(t_parser *parser)
 t_ast_node *parse_command(t_parser *parser)
 {
     t_ast_node *node;
-    int args_count;
-    int i;
 
     // First check if we're starting a subshell
     if (parser->current->type == TOK_PAR_OPEN)
@@ -139,28 +165,9 @@ t_ast_node *parse_command(t_parser *parser)
     // Store command name and advance
     node->data.command.command = ft_strdup(parser->current->value);
     paser_advance(parser);
-    
-    // Count and process arguments
-    args_count = count_args(parser->current);
-    if (args_count > 0)
-    {
-        node->data.command.args = malloc(sizeof(char *) * (args_count + 1));
-        if (!node->data.command.args)
-        {
-            free(node->data.command.command);
-            return (err_free_and_return(parser, node));
-        }
-        
-        i = 0;
-        while (parser->current && parser->current->type == TOK_WORD && i < args_count)
-        {
-            node->data.command.args[i] = ft_strdup(parser->current->value);
-            paser_advance(parser);
-            i++;
-        }
-        node->data.command.args[i] = NULL;
-        node->data.command.arg_count = args_count;
-    }
+
+    if (count_and_process_args(parser, &node) != SUCCESS)
+        return (err_free_and_return(parser, node));
 
     // Parse any redirections that follow the command
     if (!parse_redir(parser, node))
