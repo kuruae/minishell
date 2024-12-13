@@ -11,6 +11,7 @@
 # include "ast.h"
 # include "colors.h"
 # include "get_signal.h"
+# include "builtin.h"
 # include "exec.h"
 
 // bullshit so i can work on macos
@@ -43,6 +44,9 @@ typedef struct s_shell
 	char	**envp;
 	int		exit_status;
 	char	*line;
+	t_directory	dir;
+	//values for builtins
+
 }	t_shell;
 
 typedef enum e_error
