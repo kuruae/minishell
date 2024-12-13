@@ -22,6 +22,10 @@
 // define readline prompt
 # define PROMPT cyan"petit total"magenta" > "reset
 
+
+# define HISTORY_FILE ".shell_history"
+# define HISTORY_SIZE 500
+
 // global variable
 extern int	g_sig_offset;
 

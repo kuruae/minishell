@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/03 15:46:39 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/13 17:22:13 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,21 @@ int test_lexing(char *line)
     return (0);
 }
 
+static void	init_history(void)
+{
+	int	file;
+
+	file = open(HISTORY_FILE, O_CREAT | O_RDWR, 0644);
+	stifle_history(HISTORY_SIZE);
+	history_truncate_file(HISTORY_FILE, HISTORY_SIZE);
+	read_history(HISTORY_FILE);
+	close(file);
+}
+
 t_error readline_loop(t_shell *shell)
 {
+	init_history();
+	
 	shell->line = readline(PROMPT);
 	while (shell->line)
 	{
@@ -86,6 +99,7 @@ t_error readline_loop(t_shell *shell)
 			test_lexing(shell->line);
 		}
 		add_history(shell->line);
+		append_history(1, HISTORY_FILE);
 		free(shell->line);
 		shell->line = readline(PROMPT);
 	}
