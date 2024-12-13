@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/13 17:22:13 by emagnani         ###   ########.fr       */
+/*   Updated: 2024/12/13 17:42:34 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,17 @@ int test_lexing(char *line)
     return (0);
 }
 
+static bool	is_line_empty(char *line)
+{
+	while (*line)
+	{
+		if (!ft_isspace(*line))
+			return (false);
+		line++;
+	}
+	return (true);
+}
+
 static void	init_history(void)
 {
 	int	file;
@@ -87,19 +98,19 @@ static void	init_history(void)
 t_error readline_loop(t_shell *shell)
 {
 	init_history();
-	
+
 	shell->line = readline(PROMPT);
 	while (shell->line)
 	{
-		if (shell->line[0] != '\0')
+		if (!is_line_empty(shell->line))
 		{
 			// ast(lexing(shell->line));
 			// add_history(shell->line);
 			// parse_line(shell);
 			test_lexing(shell->line);
+			add_history(shell->line);
+			append_history(1, HISTORY_FILE);
 		}
-		add_history(shell->line);
-		append_history(1, HISTORY_FILE);
 		free(shell->line);
 		shell->line = readline(PROMPT);
 	}
