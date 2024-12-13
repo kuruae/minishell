@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:07:48 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/09 20:45:20 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/13 21:25:17 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ bool check_flag(char *arg)
 }
 
 
-int	ft_echo(char *arg, int fd_out)
+t_bi_error	ft_echo(char *arg, int fd_out)
 {
 	bool	n_flag;
 
 	if (!arg)
-		return(ft_putchar_fd('\n', fd_out), EXIT_SUCCESS);
+		return(ft_putchar_fd('\n', fd_out), BI_SUCCESS);
 	n_flag = check_flag(arg);
 	if (n_flag)
 		arg += 2;
@@ -54,5 +54,5 @@ int	ft_echo(char *arg, int fd_out)
 		ft_putchar_fd('\n', fd_out);
 // If in the argument there are spaces at the end they should not be printed
 // The question is if we already print them before
-	return (EXIT_SUCCESS);
+	return (BI_SUCCESS);
 }

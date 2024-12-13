@@ -33,6 +33,7 @@ typedef struct s_shell
 	char	**envp;
 	int		exit_status;
 	char	*line;
+	t_directory	dir;
 	//values for builtins
 
 }	t_shell;

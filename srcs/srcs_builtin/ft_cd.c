@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:02:26 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/09 21:43:20 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/13 21:08:16 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	arg_count(char	*arg)
 	return (counter);
 }
 
-int	ft_cd(char *path, t_directory *dir, char **envp)
+t_bi_error	ft_cd(char *path, t_directory *dir, char **envp)
 {
 	char	cache[MAX_PATH];
 
@@ -62,12 +62,12 @@ int	ft_cd(char *path, t_directory *dir, char **envp)
 	if (arg_count(path) > 1)
 	{
 		return(ft_putstr_fd("total error: cd: too many arguments", 2),
-		ft_putchar_fd('\n', 2), EXIT_FAILURE);
+		ft_putchar_fd('\n', 2), BI_ERR_NON_FATAL);
 	}
 	if (getcwd(cache, MAX_PATH) == NULL) //saving old_path variable in the cache
-		return (perror("total error: cd"), EXIT_FAILURE);
+		return (perror("total error: cd"), BI_ERR_NON_FATAL);
 	if (getcwd(cache, MAX_PATH) == NULL) //saving old_path variable in the cache
-		return (perror("total error: cd"), EXIT_FAILURE);
+		return (perror("total error: cd"), BI_ERR_NON_FATAL);
 	if (arg_count(path) == 0) // when there is only cd written it redirects to the home directory
 	{
 		if(!get_home(envp)) // whe use this sub function to look for the HOME= variable in envp
@@ -76,10 +76,10 @@ int	ft_cd(char *path, t_directory *dir, char **envp)
 		chdir(dir->home_path);
 	}
 	else if (chdir(path) == -1)
-		return (perror("total error: cd"), EXIT_FAILURE);
+		return (perror("total error: cd"), BI_ERR_NON_FATAL);
 	ft_strlcpy(dir->old_path, cache, ft_strlen(cache) + 1); // copying cache to old path after directory was succesfully changed
 	if (getcwd(dir->current_path, MAX_PATH) == NULL) // setting the new current_path variable
-		return (perror("cd error"), (EXIT_FAILURE));
+		return (perror("cd error"), BI_ERR_NON_FATAL);
 	ft_printf("new directory: %s\nold directory: %s\n", dir->current_path, dir->old_path);
-	return (EXIT_SUCCESS);
+	return (BI_SUCCESS);
 }

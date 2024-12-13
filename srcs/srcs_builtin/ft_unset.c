@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:45:13 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/08 16:41:39 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/13 21:37:25 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	remove_var(char	*var, char **envp)
 }
 
 
-int	ft_unset(char *arg,char **envp)
+t_bi_error	ft_unset(char *arg,char **envp)
 {
 	char	**variables;
 	int		i;
@@ -49,9 +49,9 @@ int	ft_unset(char *arg,char **envp)
 		return (EXIT_SUCCESS);
 	variables = ft_split(arg, ' ');
 	if (!variables)
-		return (free_all(variables), EXIT_FAILURE); // i dont know how we handle errors like this when mallocs dont work
+		return (free_all(variables), BI_ERR_MALLOC);
 	while (variables[i])
 		remove_var(variables[i++], envp);
 	ft_env(envp, 1);
-	return (free_all(variables), EXIT_SUCCESS);
+	return (free_all(variables), BI_SUCCESS);
 }

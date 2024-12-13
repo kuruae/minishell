@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 16:45:22 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/09 01:12:55 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/13 21:39:37 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,17 +82,17 @@ int	add_var(char *var, char ***envp)
 	return (EXIT_SUCCESS);
 }
 
-int	ft_export(char *arg,char ***envp)
+t_bi_error	ft_export(char *arg,char ***envp)
 {
 	char	**variables;
 	int		i;
 
 	i = 0;
 	if (!arg)
-		return (EXIT_SUCCESS);
+		return (BI_SUCCESS);
 	variables = ft_split(arg, ' ');
 	if (!variables)
-		return (free_all(variables), EXIT_FAILURE); // i dont know how we handle errors like this when mallocs dont work
+		return (free_all(variables), BI_ERR_MALLOC);
 	while (variables[i])
 	{
 		if (check_var(variables[i]) == -1) // var starts with = -> error message
@@ -106,5 +106,5 @@ int	ft_export(char *arg,char ***envp)
 		i++;
 	}
 	ft_env(*envp, 1);
-	return (free_all(variables), EXIT_SUCCESS);
+	return (free_all(variables), BI_SUCCESS);
 }
