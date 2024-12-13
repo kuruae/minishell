@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/13 22:00:19 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/13 23:48:14 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,19 +73,44 @@ int test_lexing(char *line)
     return (0);
 }
 
+static bool	is_line_empty(char *line)
+{
+	while (*line)
+	{
+		if (!ft_isspace(*line))
+			return (false);
+		line++;
+	}
+	return (true);
+}
+
+static void	init_history(void)
+{
+	int	file;
+
+	file = open(HISTORY_FILE, O_CREAT | O_RDWR, 0644);
+	stifle_history(HISTORY_SIZE);
+	history_truncate_file(HISTORY_FILE, HISTORY_SIZE);
+	read_history(HISTORY_FILE);
+	close(file);
+}
+
 t_error readline_loop(t_shell *shell)
 {
+	init_history();
+
 	shell->line = readline(PROMPT);
 	while (shell->line)
 	{
-		if (shell->line[0] != '\0')
+		if (!is_line_empty(shell->line))
 		{
 			// ast(lexing(shell->line));
 			// add_history(shell->line);
 			// parse_line(shell);
 			test_lexing(shell->line);
+			add_history(shell->line);
+			append_history(1, HISTORY_FILE);
 		}
-		add_history(shell->line);
 		free(shell->line);
 		shell->line = readline(PROMPT);
 	}
