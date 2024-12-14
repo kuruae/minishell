@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 18:06:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/14 19:53:44 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/14 20:04:12 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	open_outfile(t_redir *redir)
 }
 
 
-t_exec_error run_command(t_shell *shell, t_ast_node *node)
+t_exec_error start_command(t_shell *shell, t_ast_node *node)
 {
 	int	fd_out;
 
@@ -31,7 +31,7 @@ t_exec_error run_command(t_shell *shell, t_ast_node *node)
 	else
 		fd_out = open_outfile(node->redirections);
 	if (fd_out == -1)
-		return ( perror("total erro: opening file") ,EXEC_ERR_OUTFILE);
+		return (perror("total erro: opening file") ,EXEC_ERR_OUTFILE);
 	return (exec_command(shell, node, fd_out));
 }
 
@@ -41,7 +41,7 @@ t_exec_error start_exec(t_shell *shell, t_ast_node *node)
 	(void)shell;
 	if (node->type == NODE_COMMAND)
 	{
-		status = run_command(shell, node);
+		status = start_command(shell, node);
 	}
 	return (EXEC_SUCCESS);
 }
