@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/14 01:02:55 by kuru             ###   ########.fr       */
+/*   Updated: 2024/12/14 17:56:29 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ t_error readline_loop(t_shell *shell)
     		debug_print_ast(ast, 0);
 			add_history(shell->line);
 			append_history(1, HISTORY_FILE);
+			start_exec(shell, ast);
 		}
 		free(shell->line);
 		shell->line = readline(PROMPT);
@@ -150,7 +151,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	// env = init_env(envp); // envp is an array of strings btw (and i didnt know the p stands for pointer)
 	shell.exit_status = 0;
-	shell.envp = envp; // i think this could give us problems later when we want to modify the envp with the builtins
+	shell.envp = copy_env(envp);
 	shell.line = NULL; // maybe its better to copy the envp in a new table
 	get_signal();
 	if (readline_loop(&shell) == CTRL_D)

@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:45:13 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/13 21:37:25 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/13 22:06:14 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	remove_var(char	*var, char **envp)
 	}
 
 }
-
 
 t_bi_error	ft_unset(char *arg,char **envp)
 {

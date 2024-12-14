@@ -41,7 +41,7 @@ typedef struct s_env
 
 typedef struct s_shell
 {
-	char	**envp;
+	char	***envp;
 	int		exit_status;
 	char	*line;
 	t_directory	dir;
