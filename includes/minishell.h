@@ -11,6 +11,7 @@
 // # include "ast.h"
 # include "colors.h"
 # include "get_signal.h"
+# include "builtin.h"
 # include "exec.h"
 
 // bullshit so i can work on macos
@@ -21,6 +22,10 @@
 
 // define readline prompt
 # define PROMPT cyan"petit total"magenta" > "reset
+
+
+# define HISTORY_FILE ".shell_history"
+# define HISTORY_SIZE 500
 
 // global variable
 extern int	g_sig_offset;
@@ -39,6 +44,9 @@ typedef struct s_shell
 	char	**envp;
 	int		exit_status;
 	char	*line;
+	t_directory	dir;
+	//values for builtins
+
 }	t_shell;
 
 typedef enum e_error

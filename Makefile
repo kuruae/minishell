@@ -59,28 +59,29 @@ NAME_SANITIZE = $(NAME)_sanitize
 ######### PROGRESS BAR ########
 
 define progress_bar_parsing
-    @printf "\r$(BOLD)$(YELLOW)Parsing Magic 🧙‍♂️ $(GREEN)"; \
-    for p in "✨" "🔍" "🌈" "🚀"; do \
-        printf "\r$(BOLD)$(YELLOW)Parsing [$(GREEN)%s$(YELLOW)] Decoding...$(RESET)" "$$p"; \
-        sleep 0.12; \
+    @printf "\r$(BOLD)$(YELLOW)Parsing 🚘 $(GREEN)"; \
+    for p in "⛽█░░░░" "⛽██░░░" "⛽███░░" "⛽████░"; do \
+        printf "\r$(BOLD)$(YELLOW)Parsing [$(GREEN)%s$(YELLOW)] Filling tank...$(RESET)" "$$p"; \
+        sleep 0.05; \
     done
 endef
 
 define progress_bar_exec
-    @printf "\r$(BOLD)$(RED)Executing Wizardry 🔮 $(GREEN)"; \
-    for p in "⚡️" "🔥" "💥" "🚀"; do \
-        printf "\r$(BOLD)$(RED)Executing [$(GREEN)%s$(RED)] Transforming...$(RESET)" "$$p"; \
-        sleep 0.12; \
+    @printf "\r$(BOLD)$(RED)Executing 🚙 $(GREEN)"; \
+    for p in "⛽█░░░░" "⛽██░░░" "⛽███░░" "⛽████░"; do \
+        printf "\r$(BOLD)$(RED)Executing [$(GREEN)%s$(RED)] Filling tank...$(RESET)" "$$p"; \
+        sleep 0.05; \
     done
 endef
 
 define progress_bar_builtin
-    @printf "\r$(BOLD)$(BLUE)Builtin Power 🛠️ $(GREEN)"; \
-    for p in "⚙️" "🔧" "💡" "🚀"; do \
-        printf "\r$(BOLD)$(BLUE)Builtin [$(GREEN)%s$(BLUE)] Optimizing...$(RESET)" "$$p"; \
-        sleep 0.12; \
+    @printf "\r$(BOLD)$(BLUE)Builtin 🚐 $(GREEN)"; \
+    for p in "⛽█░░░░" "⛽██░░░" "⛽███░░" "⛽████░"; do \
+        printf "\r$(BOLD)$(BLUE)Builtin [$(GREEN)%s$(BLUE)] Filling tank...$(RESET)" "$$p"; \
+        sleep 0.05; \
     done
 endef
+
 ######### COMMANDS ########
 
 all: $(NAME)

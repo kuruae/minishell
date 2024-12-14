@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/09 19:23:11 by kuru             ###   ########.fr       */
+/*   Updated: 2024/12/14 01:02:55 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,36 @@ int test_lexing(char *line)
     return (0);
 }
 
+static bool	is_line_empty(char *line)
+{
+	while (*line)
+	{
+		if (!ft_isspace(*line))
+			return (false);
+		line++;
+	}
+	return (true);
+}
+
+static void	init_history(void)
+{
+	int	file;
+
+	file = open(HISTORY_FILE, O_CREAT | O_RDWR, 0644);
+	stifle_history(HISTORY_SIZE);
+	history_truncate_file(HISTORY_FILE, HISTORY_SIZE);
+	read_history(HISTORY_FILE);
+	close(file);
+}
+
 t_error readline_loop(t_shell *shell)
 {
+	init_history();
+
 	shell->line = readline(PROMPT);
 	while (shell->line)
 	{
-		if (shell->line[0] != '\0')
+		if (!is_line_empty(shell->line))
 		{
 			// ast(lexing(shell->line));
 			// add_history(shell->line);
@@ -88,29 +112,65 @@ t_error readline_loop(t_shell *shell)
 			t_ast_node *ast = parse_tokens(lexing(shell->line));
 			printf("\nAST Structure:\n");
     		debug_print_ast(ast, 0);
+			add_history(shell->line);
+			append_history(1, HISTORY_FILE);
 		}
-		add_history(shell->line);
 		free(shell->line);
 		shell->line = readline(PROMPT);
 	}
 	return (CTRL_D);
 }
+char ***copy_env(char **envp)
+{
+	int		i;
+	char	***env_cpy;
+
+	i = 0;
+	while (envp[i])
+		i++;
+	env_cpy = malloc(sizeof(char **));
+	(*env_cpy) = (char **)malloc((i + 1) * sizeof(char *));
+	i = 0;
+	while (envp[i])
+	{
+		(*env_cpy)[i] = ft_strdup(envp[i]);
+		i++;
+	}
+	(*env_cpy)[i] = NULL;
+	return (env_cpy);
+}
+
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
 	// t_env env;
 	// int	g_sig_offset;
-
 	(void)argc;
 	(void)argv;
 	// env = init_env(envp); // envp is an array of strings btw (and i didnt know the p stands for pointer)
 	shell.exit_status = 0;
-	shell.envp = envp;
-	shell.line = NULL;
+	shell.envp = envp; // i think this could give us problems later when we want to modify the envp with the builtins
+	shell.line = NULL; // maybe its better to copy the envp in a new table
 	get_signal();
 	if (readline_loop(&shell) == CTRL_D)
 		g_sig_offset = 0;
 	clean_up(&shell);
 	return (0);
 }
+/*main to test builtins*/
+
+/*
+int	main(int argc, char **argv, char **envp)
+{
+	char ***envp_cpy;
+
+	envp_cpy = copy_env(envp);
+	if (argc == 3)
+		builtin(argv[1], argv[2], STDOUT_FILENO, envp_cpy);
+	else if (argc == 2)
+		builtin(argv[1], NULL , STDOUT_FILENO, envp_cpy);
+	free_all(*envp_cpy);
+	free(envp_cpy);
+}
+*/
