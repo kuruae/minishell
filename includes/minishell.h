@@ -8,7 +8,7 @@
 # include <readline/history.h>
 
 # include "lexing.h"
-# include "ast.h"
+// # include "ast.h"
 # include "colors.h"
 # include "get_signal.h"
 # include "builtin.h"
@@ -56,6 +56,8 @@ typedef enum e_error
 	ERR_MALLOC,
 	FAILURE
 }	t_error;
+
+# include "ast.h"
 
 // gobal functions
 int		parse_line(t_shell *shell);

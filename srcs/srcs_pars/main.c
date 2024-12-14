@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/13 23:48:14 by kuru             ###   ########.fr       */
+/*   Updated: 2024/12/14 01:02:55 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,11 @@ t_error readline_loop(t_shell *shell)
 			// ast(lexing(shell->line));
 			// add_history(shell->line);
 			// parse_line(shell);
+			printf("\nLexing:\n");
 			test_lexing(shell->line);
+			t_ast_node *ast = parse_tokens(lexing(shell->line));
+			printf("\nAST Structure:\n");
+    		debug_print_ast(ast, 0);
 			add_history(shell->line);
 			append_history(1, HISTORY_FILE);
 		}
