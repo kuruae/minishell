@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/08 18:06:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/14 20:04:12 by jbaumfal         ###   ########.fr       */
+/*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
+/*   Updated: 2024/12/15 01:29:10 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -43,6 +44,7 @@ t_exec_error start_exec(t_shell *shell, t_ast_node *node)
 	{
 		status = start_command(shell, node);
 	}
+	(void)status;
 	return (EXEC_SUCCESS);
 }
 

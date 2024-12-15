@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:04:43 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/13 21:34:51 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/14 23:19:59 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef enum	s_bi_error
 	BI_ERR_NON_FATAL
 }	t_bi_error;
 
-t_bi_error	builtin(char *command, char *arg, int fd_out, char ***envp);
+t_bi_error	builtin(char *command, char **args, int argc, int fd_out, char ***envp);
 void		free_all(char **arg);
 t_bi_error	ft_echo(char *string, int fd_out);
 t_bi_error	ft_pwd(t_directory *dir, int fd_out);
