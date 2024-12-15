@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/14 19:42:22 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/15 18:54:58 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,10 @@
 
 # include "minishell.h"
 
+# define MAX_PID 32768
+
 typedef struct s_shell t_shell;
 typedef struct s_ast_node t_ast_node;
-
-typedef enum	s_exec_error
-{
-	EXEC_ERR_FATAL,
-	EXEC_ERR_NON_FATAL,
-	EXEC_ERR_OUTFILE,
-	EXEC_SUCCESS,
-}	t_exec_error;
 
 t_exec_error start_exec(t_shell *shell, t_ast_node *node);
 

@@ -76,7 +76,7 @@ void debug_print_ast(t_ast_node *node, int depth)
     switch (node->type)
     {
         case NODE_COMMAND:
-            printf("Command: '%s'\n", node->data.command.command ? 
+            printf("Command: '%s'\n", node->data.command.command ?
                    node->data.command.command : "(null)");
             if (node->data.command.args)
             {

@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 16:45:22 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/13 22:06:22 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/15 17:47:43 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	replace_var(char *var,char ***envp)
 
 
 
-int	add_var(char *var, char ***envp)
+int	add_var(char *var, char ***envp) // i add the variable at the end i dont know if thats how it should be
 {
 	int	i;
 	char **new_envp; // as the envp will become one yard longer we have to create a new array and malloc one line more
@@ -82,29 +82,24 @@ int	add_var(char *var, char ***envp)
 	return (EXIT_SUCCESS);
 }
 
-t_bi_error	ft_export(char *arg,char ***envp)
+t_exec_error	ft_export(char **args, int argc, char ***envp)
 {
-	char	**variables;
 	int		i;
 
 	i = 0;
-	if (!arg)
-		return (BI_SUCCESS);
-	variables = ft_split(arg, ' ');
-	if (!variables)
-		return (free_all(variables), BI_ERR_MALLOC);
-	while (variables[i])
+	if (argc == 0)
+		return (EXEC_SUCCESS);
+	while (args[i])
 	{
-		if (check_var(variables[i]) == -1) // var starts with = -> error message
+		if (check_var(args[i]) == -1) // var starts with = -> error message
 			ft_putstr_fd("export: no valid identifier\n", 2); // in real bash the variable is mentioned (for this we would need a printf that prints on std_error)
-		else if (check_var(variables[i]) == 0) // var has no = -> do nothinf
+		else if (check_var(args[i]) == 0) // var has no = -> do nothinf
 				;
-		else if (find_var(variables[i], *envp) != NULL)
-			replace_var(variables[i], envp);
+		else if (find_var(args[i], *envp) != NULL)
+			replace_var(args[i], envp);
 		else
-			add_var(variables[i], envp);
+			add_var(args[i], envp);
 		i++;
 	}
-	ft_env(*envp, 1);
-	return (free_all(variables), BI_SUCCESS);
+	return (EXEC_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/15 01:29:10 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/15 19:30:19 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	open_outfile(t_redir *redir)
 	file_out = open(redir->file, O_CREAT | O_RDWR | O_TRUNC, 644);
 	return (file_out);
 }
-
 
 t_exec_error start_command(t_shell *shell, t_ast_node *node)
 {
@@ -42,9 +41,17 @@ t_exec_error start_exec(t_shell *shell, t_ast_node *node)
 	(void)shell;
 	if (node->type == NODE_COMMAND)
 	{
-		status = start_command(shell, node);
+		shell->child_count = 1;
+		shell->pid[0] = fork();
+		if (shell->pid[0] == -1)
+			return (EXEC_ERR_FATAL);
+		if (shell->pid[0] == 0)
+		{
+			status = start_command(shell, node);
+			exit(0);
+		}
+		waitpid(shell->pid[0], NULL, 0);
 	}
-	(void)status;
 	return (EXEC_SUCCESS);
 }
 

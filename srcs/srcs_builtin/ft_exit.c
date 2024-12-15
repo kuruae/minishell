@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:25:20 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/13 21:50:07 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/15 17:47:43 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,18 @@ bool	ft_is_num(char *str) // function that checks if a string consist only of di
 	return (true);
 }
 
-t_bi_error	ft_exit(char *arg)
+t_exec_error	ft_exit(char *arg)
 {
 	int	arg_n;
 
 	if (!arg)
 		exit(g_sig_offset);
 	if (!ft_is_num(arg))
-		return (ft_putstr_fd("exit: numeric argument required\n", STDERR_FILENO), BI_ERR_NON_FATAL);
+		return (ft_putstr_fd("exit: numeric argument required\n", STDERR_FILENO), EXEC_ERR_NON_FATAL);
 	arg_n = ft_atoi(arg);
 	if (arg_n < 0 || arg_n > 255) // check if the given number is a valid exit status
-		return (ft_putstr_fd("exit: invalid exit status\n", STDERR_FILENO), BI_ERR_NON_FATAL); // not sure what to do in this case
+		return (ft_putstr_fd("exit: invalid exit status\n", STDERR_FILENO), EXEC_ERR_NON_FATAL); // not sure what to do in this case
 	g_sig_offset = arg_n; // setting global variable
 	exit(arg_n);
-	return (BI_SUCCESS);
+	return (EXEC_SUCCESS);
 }

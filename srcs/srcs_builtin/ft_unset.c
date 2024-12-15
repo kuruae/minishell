@@ -6,13 +6,13 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:45:13 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/13 22:06:14 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/15 17:49:39 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	remove_var(char	*var, char **envp)
+t_exec_error	remove_var(char	*var, char **envp)
 {
 	int		i;
 	size_t	len;
@@ -27,6 +27,8 @@ void	remove_var(char	*var, char **envp)
 			while (envp[i + 1])
 			{
 				envp[i] = ft_strdup(envp[i + 1]);
+				if (!envp[i])
+					return (EXEC_ERR_FATAL);
 				free(envp[i + 1]);
 				i++;
 			}
@@ -35,22 +37,20 @@ void	remove_var(char	*var, char **envp)
 		}
 		i++;
 	}
-
+	return (EXEC_SUCCESS);
 }
 
-t_bi_error	ft_unset(char *arg,char **envp)
+t_exec_error	ft_unset(char **args, int argc, char **envp)
 {
-	char	**variables;
 	int		i;
 
 	i = 0;
-	if (!arg)
-		return (EXIT_SUCCESS);
-	variables = ft_split(arg, ' ');
-	if (!variables)
-		return (free_all(variables), BI_ERR_MALLOC);
-	while (variables[i])
-		remove_var(variables[i++], envp);
-	ft_env(envp, 1);
-	return (free_all(variables), BI_SUCCESS);
+	if (argc == 0)
+		return (EXEC_SUCCESS);
+	while (args[i])
+	{
+		if (remove_var(args[i++], envp) == EXEC_ERR_FATAL)
+			return (EXEC_ERR_FATAL);
+	}
+	return (EXEC_SUCCESS);
 }

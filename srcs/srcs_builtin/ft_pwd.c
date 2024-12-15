@@ -6,18 +6,18 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:40:58 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/13 21:36:41 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/15 17:47:43 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_bi_error	ft_pwd(t_directory *dir, int fd_out)
+t_exec_error	ft_pwd(t_directory *dir, int fd_out)
 {
 	if (getcwd(dir->current_path, MAX_PATH) == NULL)
-		return (perror("pwd error"), BI_ERR_NON_FATAL);
+		return (perror("pwd error"), EXEC_ERR_NON_FATAL);
 	else
 		ft_putstr_fd(dir->current_path, fd_out);
 	ft_putchar_fd('\n', fd_out);
-	return (BI_SUCCESS);
+	return (EXEC_SUCCESS);
 }
