@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:02:26 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/13 23:41:57 by kuru             ###   ########.fr       */
+/*   Updated: 2024/12/15 17:46:01 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,32 +54,31 @@ int	arg_count(char	*arg)
 	return (counter);
 }
 
-t_bi_error	ft_cd(char *path, t_directory *dir, char **envp)
+t_exec_error	ft_cd(char **args, int argc, t_directory *dir, char **envp)
 {
 	char	cache[MAX_PATH];
 
-	ft_printf("starting ft_cd\n");
-	if (arg_count(path) > 1)
+	if (argc > 1)
 	{
 		return(ft_putstr_fd("total error: cd: too many arguments", 2),
-		ft_putchar_fd('\n', 2), BI_ERR_NON_FATAL);
+		ft_putchar_fd('\n', 2), EXEC_ERR_NON_FATAL);
 	}
 	if (getcwd(cache, MAX_PATH) == NULL) //saving old_path variable in the cache
-		return (perror("total error: cd"), BI_ERR_NON_FATAL);
+		return (perror("total error: cd"), EXEC_ERR_NON_FATAL);
 	if (getcwd(cache, MAX_PATH) == NULL) //saving old_path variable in the cache
-		return (perror("total error: cd"), BI_ERR_NON_FATAL);
-	if (arg_count(path) == 0) // when there is only cd written it redirects to the home directory
+		return (perror("total error: cd"), EXEC_ERR_NON_FATAL);
+	if (argc == 0) // when there is only cd written it redirects to the home directory
 	{
 		if(!get_home(envp)) // whe use this sub function to look for the HOME= variable in envp
 			ft_putstr_fd("total error: cd: no home variable", 2);
 		ft_strlcpy(dir->home_path, get_home(envp), MAX_PATH);
 		chdir(dir->home_path);
 	}
-	else if (chdir(path) == -1)
-		return (perror("total error: cd"), BI_ERR_NON_FATAL);
+	else if (chdir(args[0]) == -1)
+		return (perror("total error: cd"), EXEC_ERR_NON_FATAL);
 	ft_strlcpy(dir->old_path, cache, ft_strlen(cache) + 1); // copying cache to old path after directory was succesfully changed
 	if (getcwd(dir->current_path, MAX_PATH) == NULL) // setting the new current_path variable
-		return (perror("cd error"), BI_ERR_NON_FATAL);
-	ft_printf("new directory: %s\nold directory: %s\n", dir->current_path, dir->old_path);
-	return (BI_SUCCESS);
+		return (perror("cd error"), EXEC_ERR_NON_FATAL);
+	//ft_printf("new directory: %s\nold directory: %s\n", dir->current_path, dir->old_path);
+	return (EXEC_SUCCESS);
 }

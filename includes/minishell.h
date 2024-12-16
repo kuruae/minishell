@@ -13,6 +13,7 @@
 # include "get_signal.h"
 # include "builtin.h"
 # include "exec.h"
+# include <sys/wait.h>
 
 // bullshit so i can work on macos
 # ifdef __APPLE__
@@ -41,12 +42,13 @@ typedef struct s_env
 
 typedef struct s_shell
 {
-	char	**envp;
+	char	***envp;
 	int		exit_status;
 	char	*line;
 	t_directory	dir;
+	int		child_count;
+	pid_t	pid[MAX_PID];
 	//values for builtins
-
 }	t_shell;
 
 typedef enum e_error
