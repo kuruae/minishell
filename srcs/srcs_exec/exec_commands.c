@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/16 01:36:11 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/16 16:09:57 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,23 +64,52 @@ t_exec_error try_command(char **paths, char **args, char *command, char **env)
 	return (EXEC_NOT_FOUND);
 }
 
+/* this function we use to create a new argv table that includes the command like execve is used*/
+
+char	**transform_args(char **args, char	*command, int argc)
+{
+	char	**argv;
+	int		i;
+
+	argv = (char **)malloc(sizeof(char *) * (argc + 1));
+	if (!argv)
+		return (NULL);
+	argv[0] = ft_strdup(command);
+	if (!argv[0])
+		return (NULL);	
+	i = 1;
+	while (i <= argc)
+	{
+		argv[i] = ft_strdup(args[i - 1]);
+		if (!argv[i])
+			return (NULL);
+		i++;
+	}
+	argv[i] = NULL;
+	return (argv);
+}
+
 t_exec_error	exec_command(t_shell *shell, t_ast_node *node, int fd_out)
 {
-	char		*command;
-	char		**args;
-	int			arg_count;
-	char		**paths;
+	char			*command;
+	char			**args;
+	int				argc;
+	char			**paths;
 	t_exec_error	status;
 
 
 	command = node->data.command.command;
-	args = node->data.command.args;
-	arg_count = node->data.command.arg_count;
+	argc = node->data.command.arg_count;
 	//first check if command is builtin
-	status = builtin(command, args, arg_count, fd_out, shell->envp);
+	status = builtin(command, node->data.command.args, argc, fd_out, shell->envp);
 	if (status != EXEC_NOT_FOUND)
 		return (status);
 	// only continues when the command wasnt found in the builtins
+	// First we have to adjust the argv so that it includes the comment
+	args = transform_args(node->data.command.args, command, argc);
+	if (!args)
+		return (free_all(args), EXEC_ERR_FATAL);
+	argc += 1; //adjusting argc
 	paths = get_paths(*shell->envp);
 	if (!paths)
 		return (EXEC_ERR_FATAL);

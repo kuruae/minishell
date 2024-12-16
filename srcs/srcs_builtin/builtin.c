@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:24:56 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/15 18:25:20 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/16 16:12:40 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_exec_error	builtin(char *command, char **args, int argc, int fd_out, char ***e
 	t_directory	dir;
 	t_exec_error	status;
 
-	// ft_printf("Starting builtin\nCommand:%s\nArg1:%s\n", command, args[0]);
+	//ft_printf("Starting builtin\nCommand:%s\nArg1:%s\n", command, args[0]);
 	(void)argc;
 	if (ft_strcmp(command, "echo") == 0)
 		status = ft_echo(args, argc, fd_out);
