@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/16 16:09:57 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/16 16:42:49 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ t_exec_error try_command(char **paths, char **args, char *command, char **env)
 		i++;
 		free(command_path);
 	}
+	ft_putstr_fd("total error: command not found\n", 2);
 	return (EXEC_NOT_FOUND);
 }
 
@@ -113,8 +114,14 @@ t_exec_error	exec_command(t_shell *shell, t_ast_node *node, int fd_out)
 	paths = get_paths(*shell->envp);
 	if (!paths)
 		return (EXEC_ERR_FATAL);
-	status = try_command(paths, args, command, *shell->envp);
-	ft_printf("command executed\n");
+	shell->pid[0] = fork();
+	if (shell->pid[0] == -1)
+		return (perror("total error: fork:"), EXEC_ERR_FATAL);
+	if (shell->pid[0] == 0)
+	{
+		status = try_command(paths, args, command, *shell->envp);
+	}
+	waitpid(shell->pid[0], NULL, 0);
 	free(paths);
 	return (status);
 }

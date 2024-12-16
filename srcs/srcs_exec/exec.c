@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/16 00:57:02 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/16 16:40:58 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,10 @@ t_exec_error start_exec(t_shell *shell, t_ast_node *node)
 	(void)shell;
 	if (node->type == NODE_COMMAND)
 	{
-		shell->child_count = 1;
-		shell->pid[0] = fork();
-		if (shell->pid[0] == -1)
+
+		status = start_command(shell, node);
+		if (status == EXEC_ERR_FATAL)
 			return (EXEC_ERR_FATAL);
-		if (shell->pid[0] == 0)
-		{
-			status = start_command(shell, node);
-			if (status == EXEC_ERR_FATAL)
-				return (EXEC_ERR_FATAL);
-			exit(0);
-		}
-		waitpid(shell->pid[0], NULL, 0);
 	}
 	return (EXEC_SUCCESS);
 }
