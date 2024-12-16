@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/15 18:30:01 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/16 01:36:11 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,12 +76,16 @@ t_exec_error	exec_command(t_shell *shell, t_ast_node *node, int fd_out)
 	command = node->data.command.command;
 	args = node->data.command.args;
 	arg_count = node->data.command.arg_count;
+	//first check if command is builtin
 	status = builtin(command, args, arg_count, fd_out, shell->envp);
-	if (status != EXEC_NOT_FOUND) // only continues when the command wasnt found in the builtins
+	if (status != EXEC_NOT_FOUND)
 		return (status);
+	// only continues when the command wasnt found in the builtins
 	paths = get_paths(*shell->envp);
 	if (!paths)
 		return (EXEC_ERR_FATAL);
 	status = try_command(paths, args, command, *shell->envp);
+	ft_printf("command executed\n");
+	free(paths);
 	return (status);
 }
