@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:04:43 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/15 18:27:18 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/17 15:35:19 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ typedef enum	s_exec_error
 	EXEC_ERR_FATAL,
 	EXEC_ERR_NON_FATAL,
 	EXEC_ERR_ACESS,
-	EXEC_ERR_OUTFILE,
+	EXEC_ERR_FILE,
 	EXEC_SUCCESS,
 	EXEC_NOT_FOUND
 }	t_exec_error;

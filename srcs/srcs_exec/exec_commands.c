@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/17 12:28:10 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/17 17:48:43 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,27 @@ char	**get_paths(char **env)
 	return (free(path_value), paths);
 }
 
-t_exec_error	try_command(char **paths, char **args, char *command, char **env)
+void	setting_std_in_out(t_ast_node *node)
+{
+	int	in_file;
+	int	out_file;
+
+	if (node->exex_data.in_redir == true)
+	{
+		in_file = node->exex_data.in_file;
+		ft_printf("fd_in: %d\n", in_file);
+		dup2(in_file, STDIN_FILENO);
+		close(in_file);
+	}
+	if (node->exex_data.out_redir == true)
+	{
+		out_file = node->exex_data.out_file;
+		dup2(out_file, STDOUT_FILENO);
+		close(out_file);
+	}
+}
+
+t_exec_error	try_command(char **paths, char **args, char **env, t_ast_node *node)
 {
 	char	*command_path;
 	int		i;
@@ -49,12 +69,13 @@ t_exec_error	try_command(char **paths, char **args, char *command, char **env)
 	while (paths[i])
 	{
 		path = ft_strjoin(paths[i], "/");
-		command_path = ft_strjoin(path, command);
+		command_path = ft_strjoin(path, args[0]);
 		free(path);
 		if (!command_path)
 			return (free(command_path), EXEC_ERR_FATAL);
 		if (access(command_path, F_OK | X_OK) == 0) // checking if file exist and exec permission
 		{
+			setting_std_in_out(node);
 			execve(command_path, args, env);
 			return (free(command_path), EXEC_SUCCESS);
 		}
@@ -118,14 +139,7 @@ t_exec_error	exec_command(t_shell *shell, t_ast_node *node, int fd_out)
 	if (shell->pid[0] == -1)
 		return (perror("total error: fork:"), EXEC_ERR_FATAL);
 	if (shell->pid[0] == 0)
-	{
-		if (node->redirections)
-		{
-			dup2(node->redirections->fd_redir, STDOUT_FILENO);
-			close(node->redirections->fd_redir);
-		}
-		status = try_command(paths, args, command, *shell->envp);
-	}
+		status = try_command(paths, args, *shell->envp, node);
 	waitpid(shell->pid[0], NULL, 0);
 	free(paths);
 	return (status);
