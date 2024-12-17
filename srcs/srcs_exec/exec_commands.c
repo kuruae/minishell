@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/16 16:42:49 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/17 12:28:10 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	**get_paths(char **env)
 	return (free(path_value), paths);
 }
 
-t_exec_error try_command(char **paths, char **args, char *command, char **env)
+t_exec_error	try_command(char **paths, char **args, char *command, char **env)
 {
 	char	*command_path;
 	int		i;
@@ -119,6 +119,11 @@ t_exec_error	exec_command(t_shell *shell, t_ast_node *node, int fd_out)
 		return (perror("total error: fork:"), EXEC_ERR_FATAL);
 	if (shell->pid[0] == 0)
 	{
+		if (node->redirections)
+		{
+			dup2(node->redirections->fd_redir, STDOUT_FILENO);
+			close(node->redirections->fd_redir);
+		}
 		status = try_command(paths, args, command, *shell->envp);
 	}
 	waitpid(shell->pid[0], NULL, 0);
