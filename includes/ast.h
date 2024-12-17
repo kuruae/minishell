@@ -25,7 +25,6 @@ typedef struct s_redir
 		REDIR_HEREDOC    // <<
 	} type;
 	char *file;  // File to redirect to/from
-	int	fd_redir;
 	struct s_redir *next;  // Next redirection
 } t_redir;
 
@@ -39,9 +38,9 @@ typedef struct s_parser
 /* Structure for command arguments */
 typedef struct s_ast_node 
 {
-	t_node_type type;  // Type of the node    
-	t_redir *redirections;  // All nodes can have redirections
-	
+	t_node_type	type;  // Type of the node    
+	t_redir		*redirections;  // All nodes can have redirections
+	t_exec_data	exex_data;
 	union
 	{
 		struct
