@@ -25,6 +25,7 @@ typedef struct s_redir
 		REDIR_HEREDOC    // <<
 	} type;
 	char *file;  // File to redirect to/from
+	int	fd_redir;
 	struct s_redir *next;  // Next redirection
 } t_redir;
 
