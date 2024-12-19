@@ -40,14 +40,14 @@ typedef struct s_ast_node
 {
 	t_node_type	type;  // Type of the node    
 	t_redir		*redirections;  // All nodes can have redirections
-	t_exec_data	exex_data;
 	union
 	{
 		struct
 		{
-			char	*command;
-			char	**args;
-			int	arg_count;
+			char		*command;
+			char		**args;
+			int			arg_count;
+			t_exec_data	exec_data;
 		} command;
 
 		struct

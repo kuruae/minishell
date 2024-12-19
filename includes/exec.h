@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/17 16:31:42 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/18 01:58:17 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,23 @@
 
 typedef struct s_exec_data
 {
+	//REDIRECTION
 	bool	in_redir;
 	int		in_file;
 	bool	out_redir;
 	int		out_file;
+	//PROCCESS
+	pid_t	child_pid;
+	int		*status;
 }	t_exec_data;
 
 typedef struct s_shell		t_shell;
 typedef struct s_ast_node	t_ast_node;
 
-t_exec_error	start_exec(t_shell *shell, t_ast_node *node);
+t_exec_error			start_exec(t_shell *shell, t_ast_node *node);
 
-t_exec_error	exec_command(t_shell *shell, t_ast_node *node, int fd_out);
+void					exec_command(t_shell *shell, t_ast_node *node);
+
+t_exec_error			set_input_output(t_shell *shell, t_ast_node *node);
 
 #endif

@@ -42,12 +42,10 @@ typedef struct s_env
 
 typedef struct s_shell
 {
-	char	***envp;
-	int		exit_status;
-	char	*line;
+	char		***envp;
+	int			exit_status;
+	char		*line;
 	t_directory	dir;
-	int		child_count;
-	pid_t	pid[MAX_PID];
 	//values for builtins
 }	t_shell;
 
