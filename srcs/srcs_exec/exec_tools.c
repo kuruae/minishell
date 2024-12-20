@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 23:45:35 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/19 23:58:53 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:14:43 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	exit_exec_status(t_exec_error	status)
 {
 	if (status == EXEC_ERR_FATAL)
-		exit(1);
+		exit(128);
 	if (status == EXEC_SUCCESS)
 		exit(0);
 	if (status == EXEC_ERR_NON_FATAL)

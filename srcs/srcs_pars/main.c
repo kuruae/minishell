@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/16 01:55:48 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:39:32 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,9 @@ static void	init_history(void)
 
 t_error readline_loop(t_shell *shell)
 {
-	init_history();
+	t_exec_error	status;
 
+	init_history();
 	shell->line = readline(PROMPT);
 	while (shell->line)
 	{
@@ -114,7 +115,9 @@ t_error readline_loop(t_shell *shell)
     		debug_print_ast(ast, 0);
 			add_history(shell->line);
 			append_history(1, HISTORY_FILE);
-			start_exec(shell, ast);
+			status = start_exec(shell, ast);
+			if (status == EXEC_ERR_FATAL)
+				return (ERR_FATAL);
 		}
 		free(shell->line);
 		shell->line = readline(PROMPT);
@@ -145,6 +148,7 @@ char ***copy_env(char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
+	t_error	status;
 	// t_env env;
 	// int	g_sig_offset;
 	(void)argc;
@@ -154,9 +158,12 @@ int	main(int argc, char **argv, char **envp)
 	shell.envp = copy_env(envp);
 	shell.line = NULL; // maybe its better to copy the envp in a new table
 	get_signal();
-	if (readline_loop(&shell) == CTRL_D)
+	status = readline_loop(&shell);
+	if (status == ERR_FATAL)
+		return(clean_up_end(&shell), 1);
+	if (status == CTRL_D)
 		g_sig_offset = 0;
-	clean_up(&shell);
+	clean_up_end(&shell);
 	return (0);
 }
 /*main to test builtins*/
