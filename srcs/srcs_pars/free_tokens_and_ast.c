@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   free_tokens_and_ast.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 18:20:35 by emagnani          #+#    #+#             */
-/*   Updated: 2024/12/20 18:22:11 by emagnani         ###   ########.fr       */
+/*   Updated: 2024/12/20 22:40:57 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_lexing(t_token *tokens)
+static void	free_lexing(t_token *tokens)
 {
 	t_token *tmp;
 
@@ -26,4 +26,10 @@ void	free_lexing(t_token *tokens)
 			free(tmp->value);
 		free(tmp);
 	}
+}
+
+void	free_user_input(t_token *tokens, t_ast_node *ast)
+{
+	free_lexing(tokens);
+	free_ast(ast);
 }

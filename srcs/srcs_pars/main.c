@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/20 18:19:43 by emagnani         ###   ########.fr       */
+/*   Updated: 2024/12/20 22:40:48 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ t_error readline_loop(t_shell *shell)
 			add_history(shell->line);
 			append_history(1, HISTORY_FILE);
 			start_exec(shell, ast);
-			free_lexing(tokens);
+			free_user_input(tokens, ast);
 		}
 		free(shell->line);
 		shell->line = readline(PROMPT);
