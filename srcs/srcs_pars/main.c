@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/16 01:55:48 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/20 18:19:43 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,13 +108,15 @@ t_error readline_loop(t_shell *shell)
 			// add_history(shell->line);
 			// parse_line(shell);
 			printf("\nLexing:\n");
-			test_lexing(shell->line);
-			t_ast_node *ast = parse_tokens(lexing(shell->line));
+			// test_lexing(shell->line);
+			t_token *tokens = lexing(shell->line);
+			t_ast_node *ast = parse_tokens(tokens);
 			printf("\nAST Structure:\n");
     		debug_print_ast(ast, 0);
 			add_history(shell->line);
 			append_history(1, HISTORY_FILE);
 			start_exec(shell, ast);
+			free_lexing(tokens);
 		}
 		free(shell->line);
 		shell->line = readline(PROMPT);
