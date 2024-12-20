@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/20 02:22:25 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/20 03:19:25 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,8 @@ void	exec_command(t_shell *shell, t_ast_node *node)
     }
 	command = node->data.command.command;
 	argc = node->data.command.arg_count;
-	// if (set_input_output(shell, node) == EXEC_ERR_FILE)
-	//		exit(1);
+	if (set_input_output(shell, node) == EXEC_ERR_FILE)
+			exit(1);
 	//first check if command is builtin
 	status = builtin(node, shell);
 //	ft_printf("Builtin status: %d\n", status);
