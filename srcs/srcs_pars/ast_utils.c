@@ -65,48 +65,50 @@ void	paser_advance(t_parser *parser)
 
 void free_ast(t_ast_node *node)
 {
-	t_redir *redir;
-	t_redir *next;
-	
-	if (!node)
-		return ;
-	redir = node->redirections;
-	while (redir)
-	{
-		next = redir->next;
-		free(redir->file);
-		free(redir);
-		redir = next;
-	}
+    t_redir *redir;
+    t_redir *next;
+    int i;
 
-	switch (node->type)
-	   {
-        case NODE_COMMAND:
-            free(node->data.command.command);
-            if (node->data.command.args)
-            {
-                for (int i = 0; i < node->data.command.arg_count; i++)
-                    free(node->data.command.args[i]);
-                free(node->data.command.args);
-            }
-            break;
-            
-        case NODE_PIPE:
-            free_ast(node->data.pipe.left);
-            free_ast(node->data.pipe.right);
-            break;
-            
-        case NODE_SUBSHELL:
-            free_ast(node->data.subshell.command);
-            break;
-            
-        case NODE_AND:
-        case NODE_OR:
-            free_ast(node->data.logical_op.left);
-            free_ast(node->data.logical_op.right);
-            break;
+    if (!node)
+        return ;
+    redir = node->redirections;
+    while (redir)
+    {
+        next = redir->next;
+        free(redir->file);
+        free(redir);
+        redir = next;
     }
-    
+
+    if (node->type == NODE_COMMAND)
+    {
+        free(node->data.command.command);
+        if (node->data.command.args)
+        {
+            i = 0;
+            while (i < node->data.command.arg_count)
+            {
+                free(node->data.command.args[i]);
+                i++;
+            }
+            free(node->data.command.args);
+        }
+    }
+    else if (node->type == NODE_PIPE)
+    {
+        free_ast(node->data.pipe.left);
+        free_ast(node->data.pipe.right);
+    }
+    else if (node->type == NODE_SUBSHELL)
+    {
+        free_ast(node->data.subshell.command);
+    }
+    else if (node->type == NODE_AND || node->type == NODE_OR)
+    {
+        free_ast(node->data.logical_op.left);
+        free_ast(node->data.logical_op.right);
+    }
+
     free(node);
 }
 

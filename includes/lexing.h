@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:10:53 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/02 15:27:35 by emagnani         ###   ########.fr       */
+/*   Updated: 2024/12/20 23:19:52 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ typedef enum e_token_type
     TOK_PAR_OPEN,   // (
     TOK_PAR_CLOSE,  // )
     TOK_NEWLINE,    // \n
-    TOK_EOF         // End of input
+    TOK_EOF,        // End of input
+    TOK_EXPAND,     // $
+    TOK_WILDCARD    // *
 } t_token_type;
 
 /* Quote state for parsing */

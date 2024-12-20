@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/20 22:40:48 by kuru             ###   ########.fr       */
+/*   Updated: 2024/12/20 23:31:24 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ static const char *get_token_type_str(t_token_type type)
         case TOK_AND: return "AND";
 		case TOK_PAR_OPEN: return "OPEN PARENTHESE";
 		case TOK_PAR_CLOSE: return "CLOSE PARENTHESE";
+		case TOK_EXPAND: return "EXPAND";
+		case TOK_WILDCARD: return "WILDCARD";
         default: return "UNKNOWN";
     }
 }
@@ -108,7 +110,7 @@ t_error readline_loop(t_shell *shell)
 			// add_history(shell->line);
 			// parse_line(shell);
 			printf("\nLexing:\n");
-			// test_lexing(shell->line);
+			test_lexing(shell->line);
 			t_token *tokens = lexing(shell->line);
 			t_ast_node *ast = parse_tokens(tokens);
 			printf("\nAST Structure:\n");
