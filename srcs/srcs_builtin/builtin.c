@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:24:56 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/20 02:20:25 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/20 02:51:24 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_exec_error	builtin_parent(t_ast_node *node, t_shell *shell)
 		return EXEC_ERR_FATAL;
 	}
 	if (ft_strcmp(command, "cd") == 0)
-		status = ft_cd(args, argc, &shell->dir, *envp);
+		status = ft_cd(args, argc, &shell->dir, envp);
 	else if (ft_strcmp(command, "export") == 0)
 		status = ft_export(args, argc, envp);
 	else if (ft_strcmp(command, "unset") == 0)

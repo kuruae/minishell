@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:02:26 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/20 02:23:32 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/20 03:06:12 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,35 +26,28 @@ char	*get_home(char **envp) // i use this function instead of getenv("HOME") in 
 	return (NULL);
 }
 
-void	skip_space(char	*arg, int *i)
+t_exec_error	update_pwd(char ***envp, t_directory *dir)
 {
-	while (ft_isspace(arg[*i]))
-		(*i)++;
-}
+	char			*arg;
+	char			**args;
+	t_exec_error	status;
 
-int	arg_count(char	*arg)
-{
-	int	i;
-	int	counter;
-
-	i = 0;
-	counter = 0;
+	(void)envp;
+	arg = ft_strjoin("PWD=", dir->current_path);
 	if (!arg)
-		return (0);
-	if (ft_isspace(arg[i]))
-			skip_space(arg, &i);
-	while (arg[i])
-	{
-		counter++;
-		while(!ft_isspace(arg[i]) && arg[i])
-			i++;
-		if (ft_isspace(arg[i]))
-			skip_space(arg, &i);
-	}
-	return (counter);
+		return (EXEC_ERR_FATAL);
+	args = malloc(sizeof(char *) * 2);
+	if (!args)
+		return (EXEC_ERR_FATAL);
+	args[0] = arg;
+	args[1] = NULL;
+	status = ft_export(args, 1, envp);
+	free(arg);
+	free(args);
+	return (status);
 }
 
-t_exec_error	ft_cd(char **args, int argc, t_directory *dir, char **envp)
+t_exec_error	ft_cd(char **args, int argc, t_directory *dir, char ***envp)
 {
 	char	cache[MAX_PATH];
 
@@ -69,9 +62,9 @@ t_exec_error	ft_cd(char **args, int argc, t_directory *dir, char **envp)
 		return (perror("total error: cd"), EXEC_ERR_NON_FATAL);
 	if (argc == 0) // when there is only cd written it redirects to the home directory
 	{
-		if(!get_home(envp)) // whe use this sub function to look for the HOME= variable in envp
+		if(!get_home(*envp)) // whe use this sub function to look for the HOME= variable in envp
 			ft_putstr_fd("total error: cd: no home variable", 2);
-		ft_strlcpy(dir->home_path, get_home(envp), MAX_PATH);
+		ft_strlcpy(dir->home_path, get_home(*envp), MAX_PATH);
 		chdir(dir->home_path);
 	}
 	else if (chdir(args[0]) == -1)
@@ -80,5 +73,6 @@ t_exec_error	ft_cd(char **args, int argc, t_directory *dir, char **envp)
 	if (getcwd(dir->current_path, MAX_PATH) == NULL) // setting the new current_path variable
 		return (perror("cd error"), EXEC_ERR_NON_FATAL);
 	//ft_printf("new directory: %s\nold directory: %s\n", dir->current_path, dir->old_path);
-	return (EXEC_SUCCESS);
+	return (update_pwd(envp, dir));
+	//return (EXEC_SUCCESS);
 }
