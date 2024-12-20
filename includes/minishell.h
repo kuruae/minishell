@@ -52,7 +52,7 @@ typedef enum e_error
 {
 	SUCCESS,
 	CTRL_D,
-	ERR_MALLOC,
+	ERR_FATAL,
 	FAILURE
 }	t_error;
 
@@ -60,6 +60,9 @@ typedef enum e_error
 
 // gobal functions
 int		parse_line(t_shell *shell);
-void	clean_up(t_shell *shell);
+
+void	clean_up_end(t_shell *shell);
+void	clean_up_node(t_ast_node *node);
+void	clean_up_parser(t_parser *parser);
 
 #endif

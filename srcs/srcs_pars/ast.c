@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/12 03:33:03 by kuru             ###   ########.fr       */
+/*   Updated: 2024/12/20 14:56:22 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ static t_error count_and_process_args(t_parser *parser, t_ast_node **node)
         if (!(*node)->data.command.args)
         {
             free((*node)->data.command.command);
-            return (ERR_MALLOC);
+            return (ERR_FATAL);
         }
         
         i = 0;
@@ -281,7 +281,6 @@ t_ast_node *parse_logic(t_parser *parser)
 
         left = node;
     }
-
     return left;
 }
 
