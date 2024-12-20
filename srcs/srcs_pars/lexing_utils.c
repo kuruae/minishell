@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 00:41:04 by kuru              #+#    #+#             */
-/*   Updated: 2024/11/28 16:12:59 by enzo             ###   ########.fr       */
+/*   Updated: 2024/12/20 23:22:25 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ static bool	is_metacharacter(char *str)
 {
 	if (ft_strncmp(str, "&&", 2) == 0)
 		return (true);
-	if (str[0] == '|' || str[0] == '<' || str[0] == '>' || str[0] == '(' || str[0] == ')')
+	if (str[0] == '|' || str[0] == '<' || str[0] == '>' || str[0] == '('
+			|| str[0] == ')' || str[0] == '$' || str[0] == '*')
 		return (true);
 	return (false);
 }

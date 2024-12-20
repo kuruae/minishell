@@ -60,9 +60,7 @@ typedef enum e_error
 
 // gobal functions
 int		parse_line(t_shell *shell);
-
-void	clean_up_end(t_shell *shell);
-void	clean_up_node(t_ast_node *node);
-void	clean_up_parser(t_parser *parser);
+void	clean_up(t_shell *shell);
+void	free_user_input(t_token *tokens, t_ast_node *ast);
 
 #endif

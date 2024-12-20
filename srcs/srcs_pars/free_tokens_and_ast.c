@@ -1,35 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   clean_up.c                                         :+:      :+:    :+:   */
+/*   free_tokens_and_ast.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/02 14:18:10 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/21 00:21:34 by kuru             ###   ########.fr       */
+/*   Created: 2024/12/20 18:20:35 by emagnani          #+#    #+#             */
+/*   Updated: 2024/12/20 22:40:57 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	free_env(char ***envp)
+static void	free_lexing(t_token *tokens)
 {
-	int	i;
+	t_token *tmp;
 
-	i = 0;
-	if (!*envp)
+	if (!tokens)
 		return ;
-	while ((*envp)[i])
+	while (tokens)
 	{
-		free((*envp)[i]);
-		i++;
+		tmp = tokens;
+		tokens = tokens->next;
+		if (tmp->value)
+			free(tmp->value);
+		free(tmp);
 	}
-	free(*envp);
-	free(envp);
 }
 
-void	clean_up_end(t_shell *shell)
+void	free_user_input(t_token *tokens, t_ast_node *ast)
 {
-	rl_clear_history();
-	free_env(shell->envp);
+	free_lexing(tokens);
+	free_ast(ast);
 }
