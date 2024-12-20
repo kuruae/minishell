@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 01:08:11 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/18 01:42:37 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/19 23:33:29 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	open_infile(t_ast_node	*node)
 {
 	int	in_file;
 
+	ft_printf("Setting new Infile to %s\n", node->redirections->file);
 	in_file = open(node->redirections->file, O_RDONLY);
 	if (in_file == -1)
 		return (perror("total error:  input file"), EXEC_ERR_FILE);
@@ -29,11 +30,13 @@ int	open_outfile(t_ast_node	*node)
 {
 	int	out_file;
 
+	ft_printf("Setting new Out file to %s\n", node->redirections->file);
 	out_file = open(node->redirections->file, O_CREAT | O_RDWR | O_TRUNC, 644);
 	if (out_file == -1)
 		return (perror("total error: output file"), EXEC_ERR_FILE);
 	node->data.command.exec_data.out_redir = true;
 	node->data.command.exec_data.out_file = out_file;
+	ft_printf("fd_out: %d\n", out_file);
 	return (EXEC_SUCCESS);
 }
 

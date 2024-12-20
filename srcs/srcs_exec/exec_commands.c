@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/18 02:58:52 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/20 02:22:25 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,21 +113,28 @@ char	**transform_args(char **args, char	*command, int argc)
 
 void	exec_command(t_shell *shell, t_ast_node *node)
 {
-	char			*command;
-	char			**args;
-	int				argc;
-	char			**paths;
-	t_exec_error	status;
+    //ft_printf("Entered exec_command\n");
+    
+    char *command;
+    char **args;
+    int argc;
+    char **paths;
+    t_exec_error status;
 
-
+	if (!node || !node->data.command.command)
+	{
+		ft_printf("Invalid node or command\n");
+		exit(1);
+    }
 	command = node->data.command.command;
 	argc = node->data.command.arg_count;
 	// if (set_input_output(shell, node) == EXEC_ERR_FILE)
 	//		exit(1);
 	//first check if command is builtin
-	ft_printf("starting builtin search\n");
-	status = builtin(command, node->data.command.args, argc, shell->envp);
-	ft_printf(" builtin not found \n");
+	status = builtin(node, shell);
+//	ft_printf("Builtin status: %d\n", status);
+	if (status != EXEC_NOT_FOUND)
+		exit_exec_status(status);
 	// only continues when the command wasnt found in the builtins
 	// First we have to adjust the argv so that it includes the comment
 	args = transform_args(node->data.command.args, command, argc);
@@ -137,7 +144,7 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	paths = get_paths(*shell->envp);
 	if (!paths)
 		exit(1);
-	ft_printf("starting command execution\n");
+//	ft_printf("starting command execution\n");
 	status = try_command(paths, args, *shell->envp, node);
 	if (status == EXEC_ERR_FATAL)
 		exit(1);

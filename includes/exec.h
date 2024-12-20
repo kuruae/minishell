@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/18 01:58:17 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/19 23:57:59 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,7 @@ t_exec_error			start_exec(t_shell *shell, t_ast_node *node);
 void					exec_command(t_shell *shell, t_ast_node *node);
 
 t_exec_error			set_input_output(t_shell *shell, t_ast_node *node);
+
+void					exit_exec_status(t_exec_error	status);
 
 #endif
