@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/17 17:48:43 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/20 03:19:25 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,16 @@ void	setting_std_in_out(t_ast_node *node)
 	int	in_file;
 	int	out_file;
 
-	if (node->exex_data.in_redir == true)
+	if (node->data.command.exec_data.in_redir == true)
 	{
-		in_file = node->exex_data.in_file;
+		in_file = node->data.command.exec_data.in_file;
 		ft_printf("fd_in: %d\n", in_file);
 		dup2(in_file, STDIN_FILENO);
 		close(in_file);
 	}
-	if (node->exex_data.out_redir == true)
+	if (node->data.command.exec_data.out_redir == true)
 	{
-		out_file = node->exex_data.out_file;
+		out_file = node->data.command.exec_data.out_file;
 		dup2(out_file, STDOUT_FILENO);
 		close(out_file);
 	}
@@ -111,36 +111,43 @@ char	**transform_args(char **args, char	*command, int argc)
 	return (argv);
 }
 
-t_exec_error	exec_command(t_shell *shell, t_ast_node *node, int fd_out)
+void	exec_command(t_shell *shell, t_ast_node *node)
 {
-	char			*command;
-	char			**args;
-	int				argc;
-	char			**paths;
-	t_exec_error	status;
+    //ft_printf("Entered exec_command\n");
+    
+    char *command;
+    char **args;
+    int argc;
+    char **paths;
+    t_exec_error status;
 
-
+	if (!node || !node->data.command.command)
+	{
+		ft_printf("Invalid node or command\n");
+		exit(1);
+    }
 	command = node->data.command.command;
 	argc = node->data.command.arg_count;
+	if (set_input_output(shell, node) == EXEC_ERR_FILE)
+			exit(1);
 	//first check if command is builtin
-	status = builtin(command, node->data.command.args, argc, fd_out, shell->envp);
+	status = builtin(node, shell);
+//	ft_printf("Builtin status: %d\n", status);
 	if (status != EXEC_NOT_FOUND)
-		return (status);
+		exit_exec_status(status);
 	// only continues when the command wasnt found in the builtins
 	// First we have to adjust the argv so that it includes the comment
 	args = transform_args(node->data.command.args, command, argc);
 	if (!args)
-		return (free_all(args), EXEC_ERR_FATAL);
+		exit(1);
 	argc += 1; //adjusting argc
 	paths = get_paths(*shell->envp);
 	if (!paths)
-		return (EXEC_ERR_FATAL);
-	shell->pid[0] = fork();
-	if (shell->pid[0] == -1)
-		return (perror("total error: fork:"), EXEC_ERR_FATAL);
-	if (shell->pid[0] == 0)
-		status = try_command(paths, args, *shell->envp, node);
-	waitpid(shell->pid[0], NULL, 0);
+		exit(1);
+//	ft_printf("starting command execution\n");
+	status = try_command(paths, args, *shell->envp, node);
+	if (status == EXEC_ERR_FATAL)
+		exit(1);
 	free(paths);
-	return (status);
+	exit(82);
 }
