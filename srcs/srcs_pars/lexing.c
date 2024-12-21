@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 23:56:06 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/13 21:59:48 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/20 23:20:52 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,21 @@ static t_token_type get_token_type(char *line)
 		return (TOK_PAR_OPEN);
 	if (*line == ')')
 		return (TOK_PAR_CLOSE);
+	if (*line == '$')
+		return (TOK_EXPAND);
+	if (*line == '*')
+		return (TOK_WILDCARD);
 	else
 		return (TOK_WORD);
 }
+
 
 size_t	get_token_len(char *line, t_token_type type)
 {
 	int len;
 
 	if (type == TOK_PIPE || type == TOK_REDIR_IN || type == TOK_REDIR_OUT
-				|| type == TOK_PAR_CLOSE || type == TOK_PAR_OPEN)
+				|| type == TOK_PAR_CLOSE || type == TOK_PAR_OPEN || type == TOK_EXPAND || type == TOK_WILDCARD)
 		len = 1;
 	else if (type == TOK_APPEND || type == TOK_HEREDOC || type == TOK_OR || type == TOK_AND)
 		len = 2;

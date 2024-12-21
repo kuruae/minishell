@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/20 14:39:32 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/21 17:25:34 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ static const char *get_token_type_str(t_token_type type)
         case TOK_AND: return "AND";
 		case TOK_PAR_OPEN: return "OPEN PARENTHESE";
 		case TOK_PAR_CLOSE: return "CLOSE PARENTHESE";
+		case TOK_EXPAND: return "EXPAND";
+		case TOK_WILDCARD: return "WILDCARD";
         default: return "UNKNOWN";
     }
 }
@@ -110,7 +112,8 @@ t_error readline_loop(t_shell *shell)
 			// parse_line(shell);
 			printf("\nLexing:\n");
 			test_lexing(shell->line);
-			t_ast_node *ast = parse_tokens(lexing(shell->line));
+			t_token *tokens = lexing(shell->line);
+			t_ast_node *ast = parse_tokens(tokens);
 			printf("\nAST Structure:\n");
     		debug_print_ast(ast, 0);
 			add_history(shell->line);
@@ -118,6 +121,7 @@ t_error readline_loop(t_shell *shell)
 			status = start_exec(shell, ast);
 			if (status == EXEC_ERR_FATAL)
 				return (ERR_FATAL);
+			free_user_input(tokens, ast);
 		}
 		free(shell->line);
 		shell->line = readline(PROMPT);
