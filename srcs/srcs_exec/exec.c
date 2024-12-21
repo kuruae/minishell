@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/20 14:36:06 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2024/12/21 00:31:29 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	{
 		status = builtin_parent(node, shell);
 		if (status != EXEC_NOT_FOUND)
-			return (clean_up_node(node), status);
+			return (status);
 		child_pid = fork();
 		if (child_pid == -1)
-			return (clean_up_node(node), perror("total error: fork:"), EXEC_ERR_FATAL);
+			return (perror("total error: fork:"), EXEC_ERR_FATAL);
 		//child process:
 		if (child_pid == 0)
 		{
@@ -55,10 +55,10 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 			exit(1);
 		}
 		waitpid(child_pid, &child_status, 0);
-		return (clean_up_node(node), return_status(child_status));
+		return (return_status(child_status));
 	}
 	else
 		ft_printf("this version only suports single commands\n");
-	return (clean_up_node(node), EXEC_SUCCESS);
+	return (EXEC_SUCCESS);
 }
 
