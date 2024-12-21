@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/21 00:34:59 by kuru             ###   ########.fr       */
+/*   Updated: 2024/12/21 17:25:34 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ t_error readline_loop(t_shell *shell)
 			status = start_exec(shell, ast);
 			if (status == EXEC_ERR_FATAL)
 				return (ERR_FATAL);
-			start_exec(shell, ast);
 			free_user_input(tokens, ast);
 		}
 		free(shell->line);
