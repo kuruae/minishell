@@ -18,6 +18,7 @@
 # ifdef __APPLE__
     extern void rl_replace_line(const char*, int);
 	extern void rl_clear_history (void);
+	extern  int append_history (int nelements, char *filename);
 # endif
 
 // define readline prompt
