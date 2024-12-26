@@ -24,8 +24,8 @@ typedef struct s_redir
 		REDIR_APPEND,    // >>
 		REDIR_HEREDOC    // <<
 	} type;
-	char *file;  // File to redirect to/from
-	struct s_redir *next;  // Next redirection
+	char			*file;  // File to redirect to/from
+	struct s_redir	*next;  // Next redirection
 } t_redir;
 
 typedef struct s_parser
@@ -52,19 +52,19 @@ typedef struct s_ast_node
 
 		struct
 		{
-			struct s_ast_node *left;
-			struct s_ast_node *right;
+			struct s_ast_node	*left;
+			struct s_ast_node	*right;
 		} pipe;
 
 		struct
 		{
-			struct s_ast_node *command;
+			struct s_ast_node	*command;
 		} subshell;
 
 		struct
 		{
-			struct s_ast_node *left;
-			struct s_ast_node *right;
+			struct s_ast_node	*left;
+			struct s_ast_node	*right;
 		} logical_op;
 	} data;
 } t_ast_node;

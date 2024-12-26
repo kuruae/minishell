@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:10:53 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/20 23:19:52 by kuru             ###   ########.fr       */
+/*   Updated: 2024/12/27 00:27:42 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ size_t	get_token_len(char *line, t_token_type type);
 void	free_tokens(t_token *tokens);
 void	add_new_token(t_token **tokens, t_token *new_token);
 int     get_tok_word_len(char *line);
+t_error verify_unclosed_quotes(t_token *tokens);
 
 
 #endif

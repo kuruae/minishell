@@ -304,7 +304,7 @@ static t_error  start_ast(t_parser *parser, t_ast_node **root)
  * Returns: Root node of the complete AST or NULL on failure
  */
 t_ast_node	*parse_tokens(t_token *tokens)
-{
+{ 
 	t_parser parser;
 	t_ast_node *root;
 
