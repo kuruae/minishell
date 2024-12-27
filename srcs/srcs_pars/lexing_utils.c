@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 00:41:04 by kuru              #+#    #+#             */
-/*   Updated: 2024/12/27 00:30:35 by enzo             ###   ########.fr       */
+/*   Updated: 2024/12/27 23:53:13 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static bool	is_metacharacter(char *str)
 	if (ft_strncmp(str, "&&", 2) == 0)
 		return (true);
 	if (str[0] == '|' || str[0] == '<' || str[0] == '>' || str[0] == '('
-			|| str[0] == ')' || str[0] == '$' || str[0] == '*')
+			|| str[0] == ')' || str[0] == '*')
 		return (true);
 	return (false);
 }
@@ -60,7 +60,13 @@ t_token *create_token(char *value, size_t len, t_token_type type)
     t_token *token = malloc(sizeof(t_token));
     if (!token)
         return NULL;
-    token->value = ft_substr(value, 0, len);
+	if (type == TOK_WORD && value[0] == '$' && len > 1)
+		{
+			token->value = ft_substr(value, 1, len);
+			token->expands = true;
+		}
+	else
+    	token->value = ft_substr(value, 0, len);
     if (!token->value)
     {
         free(token);
