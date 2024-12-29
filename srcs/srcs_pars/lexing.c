@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 23:56:06 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/28 00:00:34 by enzo             ###   ########.fr       */
+/*   Updated: 2024/12/29 00:08:55 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,6 @@ t_token *lexing(char *line)
 				return (NULL);
 			}
 			add_new_token(&tokens, current);
-			if (current->expands)
-				i++;
 			i += ft_strlen(current->value);
 		}
 	}

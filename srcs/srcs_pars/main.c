@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/28 00:03:47 by enzo             ###   ########.fr       */
+/*   Updated: 2024/12/28 03:24:26 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ t_error readline_loop(t_shell *shell)
 			t_token *tokens = lexing(shell->line);
 			if (!tokens)
 				return (ERR_FATAL);
-			t_ast_node *ast = parse_tokens(tokens);
+			t_ast_node *ast = parse_tokens(tokens, shell->envp);
 			printf("\nAST Structure:\n");
     		debug_print_ast(ast, 0);
 			add_history(shell->line);

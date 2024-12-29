@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 00:41:04 by kuru              #+#    #+#             */
-/*   Updated: 2024/12/28 00:08:14 by enzo             ###   ########.fr       */
+/*   Updated: 2024/12/28 02:32:26 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,8 @@ t_token *create_token(char *value, size_t len, t_token_type type)
     if (!token)
         return NULL;
 	if (type == TOK_WORD && value[0] == '$' && len > 1)
-		{
-			token->value = ft_substr(value, 1, len - 1);
-			token->expands = true;
-		}
-	else
-    	token->value = ft_substr(value, 0, len);
+		token->expands = true;
+    token->value = ft_substr(value, 0, len);
     if (!token->value)
     {
         free(token);

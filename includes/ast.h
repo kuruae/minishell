@@ -33,6 +33,7 @@ typedef struct s_parser
 	t_token     *current;   // Current token being processed
 	t_token     *tokens;    // All tokens
 	t_error     err_status; // Track parsing errors
+	char		**env;
 } t_parser;
 
 /* Structure for command arguments */
@@ -83,7 +84,7 @@ int	count_args(t_token *token);
 t_ast_node	*parse_pipe(t_parser *parser);
 t_ast_node	*parse_logic(t_parser *parser);
 void free_ast(t_ast_node *node);
-t_ast_node	*parse_tokens(t_token *tokens);
+t_ast_node	*parse_tokens(t_token *tokens, char ***env);
 void debug_print_ast(t_ast_node *node, int depth);
 t_ast_node	*err_free_and_return(t_parser *parser, t_ast_node *node);
 t_node_type	get_node_type(t_token_type token_type);

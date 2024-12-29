@@ -59,6 +59,7 @@ typedef enum e_error
 
 # include "lexing.h"
 # include "ast.h"
+# include "expansion.h"
 
 // gobal functions
 int		parse_line(t_shell *shell);
