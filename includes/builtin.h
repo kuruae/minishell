@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:04:43 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/20 02:49:31 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/02 15:19:14 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,6 @@ typedef struct s_directory
 	char	old_path[MAX_PATH];
 	char	home_path[MAX_PATH];
 }	t_directory;
-
-typedef enum	s_exec_error
-{
-	EXEC_ERR_FATAL,
-	EXEC_ERR_NON_FATAL,
-	EXEC_ERR_ACESS,
-	EXEC_ERR_FILE,
-	EXEC_SUCCESS,
-	EXEC_NOT_FOUND
-}	t_exec_error;
 
 t_exec_error	builtin_parent(t_ast_node *node, t_shell *shell);
 t_exec_error	builtin(t_ast_node *node, t_shell *shell);

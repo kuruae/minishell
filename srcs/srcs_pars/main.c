@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/21 17:25:34 by emagnani         ###   ########.fr       */
+/*   Updated: 2024/12/25 10:46:17 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,8 @@ t_error readline_loop(t_shell *shell)
 			// ast(lexing(shell->line));
 			// add_history(shell->line);
 			// parse_line(shell);
-			printf("\nLexing:\n");
-			test_lexing(shell->line);
+			//printf("\nLexing:\n");
+			//test_lexing(shell->line);
 			t_token *tokens = lexing(shell->line);
 			t_ast_node *ast = parse_tokens(tokens);
 			printf("\nAST Structure:\n");
@@ -154,7 +154,6 @@ int	main(int argc, char **argv, char **envp)
 	t_shell	shell;
 	t_error	status;
 	// t_env env;
-	// int	g_sig_offset;
 	(void)argc;
 	(void)argv;
 	// env = init_env(envp); // envp is an array of strings btw (and i didnt know the p stands for pointer)
