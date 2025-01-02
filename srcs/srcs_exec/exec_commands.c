@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/20 03:19:25 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/02 22:37:40 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ void	setting_std_in_out(t_ast_node *node)
 	int	in_file;
 	int	out_file;
 
-	if (node->data.command.exec_data.in_redir == true)
+	if (node->data.command.exec_data.in_type == FILE_T)
 	{
 		in_file = node->data.command.exec_data.in_file;
 		ft_printf("fd_in: %d\n", in_file);
 		dup2(in_file, STDIN_FILENO);
 		close(in_file);
 	}
-	if (node->data.command.exec_data.out_redir == true)
+	if (node->data.command.exec_data.out_type == FILE_T)
 	{
 		out_file = node->data.command.exec_data.out_file;
 		dup2(out_file, STDOUT_FILENO);
