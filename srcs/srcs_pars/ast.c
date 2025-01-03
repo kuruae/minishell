@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/28 22:28:55 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/03 15:42:35 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,8 +173,11 @@ t_ast_node *parse_command(t_parser *parser)
 	if (!parse_redir(parser, node))
 	   return (err_free_and_return(parser, node));
 
-	if (expand_command_args(node, parser->env) == FAILURE)
+	if (start_dollar_expansion(node, parser->env) == FAILURE)
 		return (err_free_and_return(parser, node));
+
+	// if (start_wildcard_expansion(node, parser->env) == FAILURE)
+	// 	return (err_free_and_return(parser, node));
 
 	return node;
 }

@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 00:41:04 by kuru              #+#    #+#             */
-/*   Updated: 2024/12/28 02:32:26 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/03 15:45:24 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static bool	is_metacharacter(char *str)
 	if (ft_strncmp(str, "&&", 2) == 0)
 		return (true);
 	if (str[0] == '|' || str[0] == '<' || str[0] == '>' || str[0] == '('
-			|| str[0] == ')' || str[0] == '*')
+			|| str[0] == ')')
 		return (true);
 	return (false);
 }

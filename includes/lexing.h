@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:10:53 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/27 23:39:15 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/03 15:39:13 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ typedef enum e_token_type
     TOK_PAR_CLOSE,  // )
     TOK_NEWLINE,    // \n
     TOK_EOF,        // End of input
-    TOK_WILDCARD    // *
 } t_token_type;
 
 /* Quote state for parsing */

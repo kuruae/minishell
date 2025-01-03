@@ -54,14 +54,15 @@ typedef enum e_error
 	SUCCESS,
 	CTRL_D,
 	ERR_FATAL,
+	ERR_MALLOC,
 	FAILURE
 }	t_error;
 
 # include "lexing.h"
 # include "ast.h"
-# include "expansion.h"
+# include "wildcard.h"
 
-// gobal functions
+// general functions
 int		parse_line(t_shell *shell);
 void	clean_up_end(t_shell *shell);
 void	clean_up_node(t_ast_node *node);

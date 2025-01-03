@@ -3,6 +3,8 @@
 
 # include "minishell.h"
 
+# include "expansion.h"
+
 /* Node types for the AST */
 typedef enum e_node_type
 {
@@ -69,7 +71,6 @@ typedef struct s_ast_node
 		} logical_op;
 	} data;
 } t_ast_node;
-
 
 bool	_parser_is_token_type_redir(t_token_type type);
 t_redir	*create_redir_node(t_token *token, char *file);

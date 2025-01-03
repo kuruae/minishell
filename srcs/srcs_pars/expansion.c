@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 03:04:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/29 01:56:38 by enzo             ###   ########.fr       */
+/*   Updated: 2024/12/31 10:34:55 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static char	*expand_env_vars(const char *str, char **env)
 }
 
 
-t_error expand_command_args(t_ast_node *node, char **env)
+t_error start_dollar_expansion(t_ast_node *node, char **env)
 {
 	char	*expanded;
 	int		i;
@@ -96,7 +96,7 @@ t_error expand_command_args(t_ast_node *node, char **env)
 	// Expand command name
 	expanded = expand_env_vars(node->data.command.command, env);
 	if (!expanded)
-		return (ERR_FATAL);
+		return (ERR_MALLOC);
 	free(node->data.command.command);
 	node->data.command.command = expanded;
 
@@ -108,7 +108,7 @@ t_error expand_command_args(t_ast_node *node, char **env)
 		{
 			expanded = expand_env_vars(node->data.command.args[i], env);
 			if (!expanded)
-				return (ERR_FATAL);
+				return (ERR_MALLOC);
 			free(node->data.command.args[i]);
 			node->data.command.args[i] = expanded;
 			i++;
