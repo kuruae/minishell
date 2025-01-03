@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 00:41:04 by kuru              #+#    #+#             */
-/*   Updated: 2025/01/03 15:45:24 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/03 17:49:52 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,20 @@ int	get_tok_word_len(char *line)
 
 t_token *create_token(char *value, size_t len, t_token_type type)
 {
-    t_token *token = malloc(sizeof(t_token));
-    if (!token)
-        return NULL;
+	t_token *token = malloc(sizeof(t_token));
+	if (!token)
+		return NULL;
 	if (type == TOK_WORD && value[0] == '$' && len > 1)
 		token->expands = true;
-    token->value = ft_substr(value, 0, len);
-    if (!token->value)
-    {
-        free(token);
-        return NULL;
-    }
-    token->type = type;
-    token->next = NULL;
-    return token;
+	token->value = ft_substr(value, 0, len);
+	if (!token->value)
+	{
+		free(token);
+		return NULL;
+	}
+	token->type = type;
+	token->next = NULL;
+	return token;
 }
 
 void	add_new_token(t_token **tokens, t_token *new_token)
