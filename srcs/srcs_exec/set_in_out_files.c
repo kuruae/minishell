@@ -24,7 +24,6 @@ int	open_infile(t_ast_node	*node)
 	node->data.command.exec_data.in_file = in_file;
 	ft_printf("fd_in: %d\n", in_file);
 	dup2(in_file, STDIN_FILENO);
-	close(in_file);
 	return (EXEC_SUCCESS);
 }
 
@@ -47,13 +46,38 @@ int	open_outfile(t_ast_node	*node, bool second)
 	return (EXEC_SUCCESS);
 }
 
-void			set_pipes(t_ast_node	*node)
+void			close_unused_pipes(t_ast_node *node, t_shell *shell)
+{
+	int			i;
+	t_exec_data	*data;
+
+	i = 0;
+	data = &node->data.command.exec_data;
+	while (i < shell->pipe_count)
+	{
+		if (data->pipe_index_in == i)
+			close(shell->pipes[i][0]);
+		else if (data->pipe_index_out == i)
+			close(shell->pipes[i][1]);
+		else
+		{
+			close(shell->pipes[i][0]);
+			close(shell->pipes[i][1]);
+		}
+		i++;
+	}
+}
+
+void			set_pipes(t_ast_node	*node, t_shell *shell)
 {
 	t_exec_data	*data;
 
-	data = &*node->data.command.exec_data;
+	data = &node->data.command.exec_data;
 	if (data->in_type == PIPE_T)
-	 dup2()
+		dup2(data->in_file, STDIN_FILENO);
+	if (data->out_type == PIPE_T)
+		dup2(data->out_file, STDOUT_FILENO);
+	close_unused_pipes(node, shell);
 }
 
 t_exec_error	set_input_output(t_shell *shell, t_ast_node *node)
@@ -61,11 +85,11 @@ t_exec_error	set_input_output(t_shell *shell, t_ast_node *node)
 	t_exec_error	status;
 
 	(void)shell;
+	//first i set all data
 	if (node->data.command.exec_data.in_type == STD_T)
 		node->data.command.exec_data.in_file = STDIN_FILENO;
 	if (node->data.command.exec_data.out_type == STD_T)
 		node->data.command.exec_data.out_file = STDIN_FILENO;
-	//the following bools show if there is a redirection or not
 	if (!(node->redirections))
 		return (EXEC_SUCCESS);
 	else if (node->redirections->type == REDIR_INPUT)

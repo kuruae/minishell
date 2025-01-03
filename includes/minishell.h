@@ -46,8 +46,10 @@ typedef struct s_shell
 	char		*line;
 	t_directory	dir;
 	pid_t		pid[MAX_PROCESS_COUNT];
-	int			process_count;
-	int			process_index;
+	int			pipes[MAX_PIPE_COUNT][2];
+	int			pipe_count;
+	int			process_count; //amount of child processes
+	int			process_index; //amount of pipes used
 }	t_shell;
 
 typedef enum e_error

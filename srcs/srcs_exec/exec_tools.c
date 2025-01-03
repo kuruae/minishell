@@ -27,27 +27,32 @@ void	exit_exec_status(t_exec_error	status)
 	ft_printf("missing status in exit_exec_status function\n");
 }
 
-void	link_pipe(t_ast_node	*node)
+void	link_pipe(t_ast_node *node, t_shell *shell)
 {
 	t_ast_node	*left;
 	t_ast_node	*right;
+	int			index;
 
+	index = shell->pipe_count;
 	left = node->data.pipe.left;
 	right = node->data.pipe.left;
 	if (left->type == NODE_COMMAND)
 	{
 		left->data.command.exec_data.out_type = PIPE_T;
-		left->data.command.exec_data.out_file = node->data.pipe.pipe[1];
+		left->data.command.exec_data.out_file = shell->pipes[index][1];
+		left->data.command.exec_data.pipe_index_out = index;
 	}
 	if (right->type == NODE_COMMAND)
 	{
 		left->data.command.exec_data.in_type = PIPE_T;
-		left->data.command.exec_data.in_file = node->data.pipe.pipe[0];
+		left->data.command.exec_data.in_file =  shell->pipes[index][0];
+		left->data.command.exec_data.pipe_index_in = index;
 	}
 	if (left->type == NODE_PIPE)
 	{
 		left = &*left->data.pipe.right;
 		left->data.command.exec_data.out_type = PIPE_T;
-		left->data.command.exec_data.out_file = node->data.pipe.pipe[1];
+		left->data.command.exec_data.out_file = shell->pipes[index][1];
+		left->data.command.exec_data.pipe_index_out = index;
 	}
 }

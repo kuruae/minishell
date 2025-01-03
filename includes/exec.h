@@ -42,14 +42,15 @@ typedef enum s_command_redir
 typedef struct s_exec_dat
 {
 	//REDIRECTION
-	int					in_file;
-	int					out_file;
+	int				in_file;
+	int				out_file;
 	//PIPE
 	t_command_redir	in_type;
 	t_command_redir	out_type;
+	int				pipe_index_in;
+	int				pipe_index_out;
 	//PROCCESS
-	pid_t				child_pid;
-	int					*status;
+	int				*status;
 }	t_exec_data;
 
 
@@ -65,7 +66,7 @@ void					exec_command(t_shell *shell, t_ast_node *node);
 t_exec_error			set_input_output(t_shell *shell, t_ast_node *node);
 
 void					exit_exec_status(t_exec_error	status);
-void					link_pipe(t_ast_node	*node);
+void					link_pipe(t_ast_node *node, t_shell *shell);
 
 t_exec_error			start_pipeline(t_shell *shell, t_ast_node *node);
 

@@ -67,11 +67,10 @@ t_exec_error	init_pipeline(t_shell *shell, t_ast_node *node)
 		if (status == EXEC_ERR_PIPE)
 			return (status);
 	}
-	if (pipe(node->data.pipe.pipe) == -1)
-	{
-		status = EXEC_ERR_PIPE;
-		link_pipe(node);
-	}
+	if (pipe(shell->pipes[shell->pipe_count]) == -1)
+		return (EXEC_ERR_PIPE);
+	link_pipe(node, shell); //this function sets all the data in the commands that use this pipe
+	shell->pipe_count++;
 	return (status);
 }
 
@@ -94,8 +93,8 @@ t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 
-	shell->process_count = pipe_count(node);
-	shell->process_count = 0;
+	shell->process_count = pipe_count(node) + 1;
+	shell->pipe_count = 0;
 	status = init_pipeline(shell, node);
 	if (status != EXEC_SUCCESS)
 		return (status);
