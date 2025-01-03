@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 01:08:11 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/02 20:10:27 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/03 02:49:25 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,25 @@ int	open_outfile(t_ast_node	*node, bool second)
 	return (EXEC_SUCCESS);
 }
 
+void			set_pipes(t_ast_node	*node)
+{
+	t_exec_data	*data;
+
+	data = &*node->data.command.exec_data;
+	if (data->in_type == PIPE_T)
+	 dup2()
+}
+
 t_exec_error	set_input_output(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 
 	(void)shell;
-	//setting all values concerning redirection to the standard
-	node->data.command.exec_data.in_file = STDIN_FILENO;
-	node->data.command.exec_data.out_file = STDOUT_FILENO;
+	if (node->data.command.exec_data.in_type == STD_T)
+		node->data.command.exec_data.in_file = STDIN_FILENO;
+	if (node->data.command.exec_data.out_type == STD_T)
+		node->data.command.exec_data.out_file = STDIN_FILENO;
 	//the following bools show if there is a redirection or not
-	node->data.command.exec_data.in_type = STD_T;
-	node->data.command.exec_data.out_type = STD_T;
 	if (!(node->redirections))
 		return (EXEC_SUCCESS);
 	else if (node->redirections->type == REDIR_INPUT)
@@ -72,5 +80,6 @@ t_exec_error	set_input_output(t_shell *shell, t_ast_node *node)
 		status = open_outfile(node, false);
 	if (status == EXEC_ERR_FILE)
 		return (status);
+	
 	return (EXEC_SUCCESS);
 }

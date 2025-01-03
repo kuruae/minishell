@@ -47,6 +47,7 @@ typedef struct s_shell
 	t_directory	dir;
 	pid_t		pid[MAX_PROCESS_COUNT];
 	int			process_count;
+	int			process_index;
 }	t_shell;
 
 typedef enum e_error

@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/02 22:33:26 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/03 02:44:33 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,21 @@
 
 t_exec_error	exec_command_pipe(t_shell *shell, t_ast_node *node)
 {
-	(void)shell;
+	int	index;
+
+	index = shell->process_index;
 	(void)node;
+	shell->pid[index] = fork();
+	if (shell->pid[index]  == -1)
+		return (perror("total error: fork:"), EXEC_ERR_FATAL);
+	if (shell->pid[index]== 0)
+	{
+//		ft_printf("Child process started\n");
+		exec_command(shell, node);
+		//normally it should not reach here
+		ft_printf("Child process did not exit properly\n");
+		exit(1);
+	}
 	return (EXEC_SUCCESS);
 }
 
@@ -24,9 +37,15 @@ t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 	if (node->type == NODE_PIPE)
 		exec_pipeline(shell, node->data.pipe.left);
 	if (node->data.pipe.right->type == NODE_COMMAND)
+	{
 		exec_command_pipe(shell, node);
+		shell->process_index++;
+	}
 	if (node->type == NODE_COMMAND)	
+	{
 		exec_command_pipe(shell, node);
+		shell->process_index++;
+	}
 	return (EXEC_SUCCESS);
 }
 
@@ -56,10 +75,27 @@ t_exec_error	init_pipeline(t_shell *shell, t_ast_node *node)
 	return (status);
 }
 
+int	pipe_count(t_ast_node *node)
+{
+	int			counter;
+	t_ast_node	*cursor;
+
+	counter = 0;
+	cursor = &*node;
+	while (cursor->type == NODE_PIPE)
+	{
+		counter++;
+		cursor = &*cursor->data.pipe.left;
+	}
+	return (counter);
+}
+
 t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 
+	shell->process_count = pipe_count(node);
+	shell->process_count = 0;
 	status = init_pipeline(shell, node);
 	if (status != EXEC_SUCCESS)
 		return (status);
