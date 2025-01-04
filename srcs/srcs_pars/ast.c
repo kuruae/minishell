@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/03 15:42:35 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/04 17:18:16 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,8 +176,8 @@ t_ast_node *parse_command(t_parser *parser)
 	if (start_dollar_expansion(node, parser->env) == FAILURE)
 		return (err_free_and_return(parser, node));
 
-	// if (start_wildcard_expansion(node, parser->env) == FAILURE)
-	// 	return (err_free_and_return(parser, node));
+	if (start_wildcard_expansion(node) == FAILURE)
+		return (err_free_and_return(parser, node));
 
 	return node;
 }

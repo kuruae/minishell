@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:16:31 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/31 11:02:18 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/04 16:19:05 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,6 @@
 # include <dirent.h>
 
 
-t_error start_wildcard_expansion(t_ast_node *node, char **env);
+t_error	start_wildcard_expansion(t_ast_node *node);
 
 #endif

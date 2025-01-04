@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 00:41:04 by kuru              #+#    #+#             */
-/*   Updated: 2025/01/03 17:49:52 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/04 17:13:31 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ t_token *create_token(char *value, size_t len, t_token_type type)
 	t_token *token = malloc(sizeof(t_token));
 	if (!token)
 		return NULL;
+	token->expands = false;
 	if (type == TOK_WORD && value[0] == '$' && len > 1)
 		token->expands = true;
 	token->value = ft_substr(value, 0, len);
