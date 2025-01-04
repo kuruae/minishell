@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 22:24:05 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/29 01:56:43 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/04 19:11:37 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,28 +24,6 @@
 bool should_expand(t_quote_depth depth)
 {
 	return (depth.single_quotes != 1);
-}
-
-char	*ft_strjoinch(char *s1, char c)
-{
-	char	*result;
-	int		i;
-
-	if (!s1)
-		return (NULL);
-	result = malloc(sizeof(char) * (ft_strlen(s1) + 2));
-	if (!result)
-		return (NULL);
-	i = 0;
-	while (s1 && s1[i])
-	{
-		result[i] = s1[i];
-		i++;
-	}
-	result[i] = c;
-	i++;
-	result[i] = '\0';
-	return (result);
 }
 
 void    update_quote_depth(t_quote_depth *depth, char c)
