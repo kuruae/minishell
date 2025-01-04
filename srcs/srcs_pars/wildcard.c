@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:20:49 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/04 17:17:39 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:42:28 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,29 +98,33 @@ static void fill_matches(char **matches, const char *pattern)
     closedir(dir);
 }
 
-static char	**bubble_sort_matches(char **matches, int count)
+static char **bubble_sort_matches(char **matches, int count)
 {
-	int		i;
-	int		j;
-	char	*tmp;
+    int     i;
+    int     j;
+    char    *tmp;
 
-	i = 0;
-	j = 0;
-	while (i < count - 1)
-	{
-		while (j < count - (i - 1))
-		{
-			if (ft_strcmp(matches[j], matches[j + 1]) > 0)
-			{
-				tmp = matches[j];
-				matches[j] = matches[j + 1];
-				matches[j + 1] = tmp;
-			}
-			j++;
-		}
-		i++;
-	}
-	return (matches);
+    if (!matches || count <= 0)
+        return (matches);
+        
+    i = 0;
+    while (i < count - 1)
+    {
+        j = 0;
+        while (j < count - 1 - i)
+        {
+            if (ft_strncmp(matches[j], matches[j + 1], 
+                ft_strlen(matches[j]) + 1) > 0)
+            {
+                tmp = matches[j];
+                matches[j] = matches[j + 1];
+                matches[j + 1] = tmp;
+            }
+            j++;
+        }
+        i++;
+    }
+    return (matches);
 }
 
 
