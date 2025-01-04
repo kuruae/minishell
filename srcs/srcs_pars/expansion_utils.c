@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 22:24:05 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/04 19:11:37 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/04 19:14:17 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void    update_quote_depth(t_quote_depth *depth, char c)
 		else
 			depth->single_quotes = !depth->single_quotes;
 	}
-	else if (c == '"')
+	else if (c == '\"')
 	{
 		if (depth->single_quotes == 1)
 		{
