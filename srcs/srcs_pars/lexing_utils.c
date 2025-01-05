@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 00:41:04 by kuru              #+#    #+#             */
-/*   Updated: 2025/01/04 17:13:31 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/05 18:44:50 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ int	get_tok_word_len(char *line)
 
 t_token *create_token(char *value, size_t len, t_token_type type)
 {
-	t_token *token = malloc(sizeof(t_token));
+	t_token *token;
+
+	token = malloc(sizeof(t_token));
 	if (!token)
 		return NULL;
 	token->expands = false;

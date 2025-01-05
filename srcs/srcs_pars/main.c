@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/04 17:09:31 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/05 18:42:24 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ t_error readline_loop(t_shell *shell)
 			// add_history(shell->line);
 			// parse_line(shell);
 			printf("\nLexing:\n");
-			test_lexing(shell->line);
+			// test_lexing(shell->line);
 			t_token *tokens = lexing(shell->line);
 			if (!tokens)
 				return (ERR_FATAL);

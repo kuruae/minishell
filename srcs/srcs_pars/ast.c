@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/04 17:18:16 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/05 18:29:17 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,12 +173,18 @@ t_ast_node *parse_command(t_parser *parser)
 	if (!parse_redir(parser, node))
 	   return (err_free_and_return(parser, node));
 
-	if (start_dollar_expansion(node, parser->env) == FAILURE)
-		return (err_free_and_return(parser, node));
-
-	if (start_wildcard_expansion(node) == FAILURE)
-		return (err_free_and_return(parser, node));
-
+	if (parser->current && parser->current->expands == true)
+	{
+		if (start_dollar_expansion(node, parser->env) != SUCCESS)
+			return (err_free_and_return(parser, node));
+	}
+	
+	if (ft_strchr(node->data.command.command, '*'))
+	{
+		if (start_wildcard_expansion(node) != SUCCESS)
+			return (err_free_and_return(parser, node));
+	}
+	
 	return node;
 }
 
@@ -321,6 +327,6 @@ t_ast_node	*parse_tokens(t_token *tokens, char ***env)
 
 	if (start_ast(&parser, &root) == FAILURE)
 		return (NULL);
-
+	free_tokens(parser.current);
 	return (root);
 }
