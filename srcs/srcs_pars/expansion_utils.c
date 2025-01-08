@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 22:24:05 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/04 19:14:17 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/08 18:34:45 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,4 @@ void    update_quote_depth(t_quote_depth *depth, char c)
 		else
 			depth->double_quotes = !depth->double_quotes;
 	}
-}
-
-void	join_to_result(char **result, void *to_join, t_join_type type)
-{
-	char	*temp;
-
-	temp = *result;
-	if (type == JOIN_STR)
-		*result = ft_strjoin(*result, (char *)to_join);
-	else if (type == JOIN_CHAR)
-		*result = ft_strjoinch(*result, *(char *)to_join);
-	free(temp);
 }

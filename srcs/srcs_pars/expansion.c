@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 03:04:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/03 17:55:12 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/08 18:34:24 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,11 @@ static char	*expand_env_vars(const char *str, char **env)
 			expansion = process_expansion(str, &i, env);
 			if (!expansion)
 				return (free(result), NULL);
-			join_to_result(&result, expansion, JOIN_STR);
+			result = ft_strjoin(result, expansion);
 			free(expansion);
+			continue; // Skip the ft_strjoinch for this iteration
 		}
-		join_to_result(&result, (void *)&str[i], JOIN_CHAR);
+		result = ft_strjoinch(result, str[i]);
 		i++;
 	}
 	return (result);
