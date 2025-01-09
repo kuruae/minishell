@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/05 18:29:17 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/09 17:02:50 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,17 +173,9 @@ t_ast_node *parse_command(t_parser *parser)
 	if (!parse_redir(parser, node))
 	   return (err_free_and_return(parser, node));
 
-	if (parser->current && parser->current->expands == true)
-	{
-		if (start_dollar_expansion(node, parser->env) != SUCCESS)
-			return (err_free_and_return(parser, node));
-	}
-	
-	if (ft_strchr(node->data.command.command, '*'))
-	{
-		if (start_wildcard_expansion(node) != SUCCESS)
-			return (err_free_and_return(parser, node));
-	}
+	// Check for expansions
+	if (all_expands_handler(node, parser) == FAILURE)
+		return (err_free_and_return(parser, node));
 	
 	return node;
 }
@@ -305,7 +297,7 @@ static t_error  start_ast(t_parser *parser, t_ast_node **root)
 }
 
 
-/* parse_tokens: Entry point for parsing a token stream
+/* ast_handler: Entry point for parsing a token stream
  * @tokens: Linked list of lexical tokens
  *
  * Main parser function that:
@@ -315,7 +307,7 @@ static t_error  start_ast(t_parser *parser, t_ast_node **root)
  *
  * Returns: Root node of the complete AST or NULL on failure
  */
-t_ast_node	*parse_tokens(t_token *tokens, char ***env)
+t_ast_node	*ast_handler(t_token *tokens, char ***env)
 { 
 	t_parser parser;
 	t_ast_node *root;

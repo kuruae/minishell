@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 22:24:05 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/08 18:34:45 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:52:39 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@
 *    1. Inside single quotes
 *    2. inside double quotes nested in single quotes 
 */
-bool should_expand(t_quote_depth depth)
+bool	should_expand(t_quote_depth depth)
 {
 	return (depth.single_quotes != 1);
 }
 
-void    update_quote_depth(t_quote_depth *depth, char c)
+void	update_quote_depth(t_quote_depth *depth, char c)
 {
 	if (c == '\'')
 	{

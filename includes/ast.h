@@ -85,9 +85,10 @@ int	count_args(t_token *token);
 t_ast_node	*parse_pipe(t_parser *parser);
 t_ast_node	*parse_logic(t_parser *parser);
 void free_ast(t_ast_node *node);
-t_ast_node	*parse_tokens(t_token *tokens, char ***env);
+t_ast_node	*ast_handler(t_token *tokens, char ***env);
 void debug_print_ast(t_ast_node *node, int depth);
 t_ast_node	*err_free_and_return(t_parser *parser, t_ast_node *node);
 t_node_type	get_node_type(t_token_type token_type);
+t_error	all_expands_handler(t_ast_node *node, t_parser *parser);
 
 #endif

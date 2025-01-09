@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-t_ast_node *create_ast_node(t_node_type type)
+t_ast_node	*create_ast_node(t_node_type type)
 {
-	t_ast_node *node;
+	t_ast_node	*node;
 
 	node = malloc(sizeof(t_ast_node));
 	if (!node)
@@ -21,7 +21,7 @@ bool	_parser_is_token_type_redir(t_token_type type)
 
 t_redir	*create_redir_node(t_token *token, char *file)
 {
-	t_redir *redir;
+	t_redir	*redir;
 
 	redir = malloc(sizeof(t_redir));
 	if (!redir)
@@ -63,65 +63,9 @@ void	paser_advance(t_parser *parser)
 		parser->current = parser->current->next;
 }
 
-void free_ast(t_ast_node *node)
-{
-    t_redir *redir;
-    t_redir *next;
-    int i;
-
-    if (!node)
-        return ;
-    redir = node->redirections;
-    while (redir)
-    {
-        next = redir->next;
-        free(redir->file);
-        free(redir);
-        redir = next;
-    }
-
-    if (node->type == NODE_COMMAND)
-    {
-        free(node->data.command.command);
-        if (node->data.command.args)
-        {
-            i = 0;
-            while (i < node->data.command.arg_count)
-            {
-                free(node->data.command.args[i]);
-                i++;
-            }
-            free(node->data.command.args);
-        }
-    }
-    else if (node->type == NODE_PIPE)
-    {
-        free_ast(node->data.pipe.left);
-        free_ast(node->data.pipe.right);
-    }
-    else if (node->type == NODE_SUBSHELL)
-    {
-        free_ast(node->data.subshell.command);
-    }
-    else if (node->type == NODE_AND || node->type == NODE_OR)
-    {
-        free_ast(node->data.logical_op.left);
-        free_ast(node->data.logical_op.right);
-    }
-
-    free(node);
-}
-
 t_node_type	get_node_type(t_token_type token_type)
 {
 	if (token_type == TOK_AND)
 		return (NODE_AND);
 	return (NODE_OR);
-}
-
-t_ast_node	*err_free_and_return(t_parser *parser, t_ast_node *node)
-{
-	free_ast(node);
-	parser->err_status = FAILURE;
-	return (NULL);
 }

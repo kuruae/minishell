@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:20:49 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/04 18:42:28 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:57:11 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,53 +78,53 @@ static int	count_matching_patterns(const char *pattern)
 
 static void fill_matches(char **matches, const char *pattern)
 {
-    DIR             *dir;
-    struct dirent   *entry;
-    int             i;
+	DIR             *dir;
+	struct dirent   *entry;
+	int             i;
 
-    dir = opendir(".");
-    if (!dir)
-        return;
+	dir = opendir(".");
+	if (!dir)
+		return;
 
-    i = 0;
-    while ((entry = readdir(dir)))
-    {
-        if (entry->d_name[0] == '.' && pattern[0] != '.')
-            continue;
-            
-        if (is_pattern_matching(pattern, entry->d_name))
-            matches[i++] = ft_strdup(entry->d_name);
-    }
-    closedir(dir);
+	i = 0;
+	while ((entry = readdir(dir)))
+	{
+		if (entry->d_name[0] == '.' && pattern[0] != '.')
+			continue;
+			
+		if (is_pattern_matching(pattern, entry->d_name))
+			matches[i++] = ft_strdup(entry->d_name);
+	}
+	closedir(dir);
 }
 
 static char **bubble_sort_matches(char **matches, int count)
 {
-    int     i;
-    int     j;
-    char    *tmp;
+	int     i;
+	int     j;
+	char    *tmp;
 
-    if (!matches || count <= 0)
-        return (matches);
-        
-    i = 0;
-    while (i < count - 1)
-    {
-        j = 0;
-        while (j < count - 1 - i)
-        {
-            if (ft_strncmp(matches[j], matches[j + 1], 
-                ft_strlen(matches[j]) + 1) > 0)
-            {
-                tmp = matches[j];
-                matches[j] = matches[j + 1];
-                matches[j + 1] = tmp;
-            }
-            j++;
-        }
-        i++;
-    }
-    return (matches);
+	if (!matches || count <= 0)
+		return (matches);
+		
+	i = 0;
+	while (i < count - 1)
+	{
+		j = 0;
+		while (j < count - 1 - i)
+		{
+			if (ft_strncmp(matches[j], matches[j + 1], 
+				ft_strlen(matches[j]) + 1) > 0)
+			{
+				tmp = matches[j];
+				matches[j] = matches[j + 1];
+				matches[j + 1] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
+	return (matches);
 }
 
 
@@ -173,6 +173,7 @@ t_error	start_wildcard_expansion(t_ast_node *node)
 	int     j;
 	int     k;
 
+	printf("Expanding wildcard signs reached!\n");
 	// Count total arguments after expansion
 	total_args = 0;
 	for (i = 0; i < node->data.command.arg_count; i++)

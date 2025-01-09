@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 03:04:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/08 18:34:24 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/08 18:57:39 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ t_error start_dollar_expansion(t_ast_node *node, char **env)
 	char	*expanded;
 	int		i;
 
+	printf("Expanding dollar signs reached!\n");
 	// Expand command name
 	expanded = expand_env_vars(node->data.command.command, env);
 	if (!expanded)
