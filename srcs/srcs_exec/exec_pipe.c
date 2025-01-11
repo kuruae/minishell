@@ -6,45 +6,69 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/03 02:44:33 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/11 20:19:48 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_exec_error	exec_command_pipe(t_shell *shell, t_ast_node *node)
+t_exec_error exec_command_pipe(t_shell *shell, t_ast_node *node)
 {
-	int	index;
+	pid_t pid;
 
-	index = shell->process_index;
-	(void)node;
-	shell->pid[index] = fork();
-	if (shell->pid[index]  == -1)
-		return (perror("total error: fork:"), EXEC_ERR_FATAL);
-	if (shell->pid[index]== 0)
+	pid = fork();
+	if (pid == -1)
+		return (EXEC_ERR_FATAL);
+	if (pid == 0)
 	{
-//		ft_printf("Child process started\n");
+		// Child process
 		exec_command(shell, node);
-		//normally it should not reach here
-		ft_printf("Child process did not exit properly\n");
-		exit(1);
+		exit(1); // Should not reach here
 	}
+	shell->pid[shell->process_index++] = pid;
 	return (EXEC_SUCCESS);
 }
+// t_exec_error	exec_command_pipe(t_shell *shell, t_ast_node *node)
+// {
+// 	int	index;
+
+// 	ft_printf("Exec_command_pipe functions started\n");
+// 	index = shell->process_index;
+// 	ft_printf("index initialized to %d\n", index);
+// 	shell->pid[index] = fork();
+// 	if (shell->pid[index]  == -1)
+// 		return (perror("total error: fork:"), EXEC_ERR_FATAL);
+// 	if (shell->pid[index]== 0)
+// 	{
+// 		//ft_printf("Child process started\n");
+// 		exec_command(shell, node);
+// 		//normally it should not reach here
+// 		//ft_printf("Child process did not exit properly\n");
+// 		exit(1);
+// 	}
+// 	return (EXEC_SUCCESS);
+// }
 
 t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 {
-	if (node->type == NODE_PIPE)
-		exec_pipeline(shell, node->data.pipe.left);
-	if (node->data.pipe.right->type == NODE_COMMAND)
-	{
-		exec_command_pipe(shell, node);
-		shell->process_index++;
-	}
+	t_exec_error	status;
+
+	ft_printf("starting exec_pipeline for process of type %d\n", node->type);
 	if (node->type == NODE_COMMAND)	
 	{
-		exec_command_pipe(shell, node);
-		shell->process_index++;
+		ft_printf("starting execution of %s\n", node->data.command.command);
+		status = exec_command_pipe(shell, node);
+		// if (status == EXEC_SUCCESS)
+		// 	shell->process_index++;
+		return (status);
+	}
+	if (node->type == NODE_PIPE)
+	{
+		status = exec_pipeline(shell, node->data.pipe.left);
+		if (status != EXEC_SUCCESS)
+			 return (status);
+		status = exec_pipeline(shell, node->data.pipe.right);
+		if (status != EXEC_SUCCESS)
+			 return (status);
 	}
 	return (EXEC_SUCCESS);
 }
@@ -55,26 +79,27 @@ t_exec_error	init_pipeline(t_shell *shell, t_ast_node *node)
 
 	ft_printf("initializing pipe\n");
 	status = EXEC_SUCCESS;
+	if (pipe(shell->pipes[shell->pipe_index]) == -1)
+		return (EXEC_ERR_PIPE);
+	ft_printf("Succesfuly setted pipe %d\n", shell->pipe_index);
+	link_pipe(node, shell); //this function sets all the data in the commands that use this pipe
+	shell->pipe_index++;
 	if (node->data.pipe.left->type == NODE_PIPE)
 	{
-		status = init_pipeline(shell, node->data.pipe.left) == EXEC_ERR_PIPE;
+		status = init_pipeline(shell, node->data.pipe.left);
 		if (status == EXEC_ERR_PIPE)
 			return (status);
 	}	
 	if (node->data.pipe.right->type == NODE_PIPE)
 	{
-		status = init_pipeline(shell, node->data.pipe.right) == EXEC_ERR_PIPE;
+		status = init_pipeline(shell, node->data.pipe.right);
 		if (status == EXEC_ERR_PIPE)
 			return (status);
 	}
-	if (pipe(shell->pipes[shell->pipe_count]) == -1)
-		return (EXEC_ERR_PIPE);
-	link_pipe(node, shell); //this function sets all the data in the commands that use this pipe
-	shell->pipe_count++;
 	return (status);
 }
 
-int	pipe_count(t_ast_node *node)
+int	count_pipes(t_ast_node *node)
 {
 	int			counter;
 	t_ast_node	*cursor;
@@ -92,13 +117,31 @@ int	pipe_count(t_ast_node *node)
 t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
+	int				i;
 
-	shell->process_count = pipe_count(node) + 1;
-	shell->pipe_count = 0;
+	i = 0;
+	shell->process_count = count_pipes(node) + 1;
+	shell->pipe_count = count_pipes(node);
+	ft_printf("process count = %d, pipe_count = %d", shell->process_count, shell->pipe_count);
+	shell->pipe_index = 0;
+	shell->process_index = 0;
 	status = init_pipeline(shell, node);
+	//ft_printf("All pipes initialized, Status %d\n", status);
 	if (status != EXEC_SUCCESS)
 		return (status);
-	status = exec_pipeline(shell, node);
+	status = exec_pipeline(shell, node);	
+	while (i < shell->pipe_count)
+	{
+		close(shell->pipes[i][0]);
+		close(shell->pipes[i][1]);
+		i++;
+	}
+	i = 0;
+	while (i < shell->process_count)
+	{
+		waitpid(shell->pid[i], NULL, 0);
+		i++;
+	}
 	return (status);
 }
 

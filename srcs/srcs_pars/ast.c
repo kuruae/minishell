@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/20 14:56:22 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/11 19:57:53 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,17 @@ static t_error count_and_process_args(t_parser *parser, t_ast_node **node)
  *
  * Returns: A new AST node of type NODE_COMMAND or NULL on failure
  */
+
+
+void set_command_data(t_ast_node *node)
+{
+	node->data.command.exec_data.in_type = STD_T;
+	node->data.command.exec_data.out_type = STD_T;
+	node->data.command.exec_data.in_file = STDIN_FILENO;
+	node->data.command.exec_data.out_file = STDOUT_FILENO;
+}
+
+
 t_ast_node *parse_command(t_parser *parser)
 {
     t_ast_node *node;
@@ -172,7 +183,7 @@ t_ast_node *parse_command(t_parser *parser)
     // Parse any redirections that follow the command
     if (!parse_redir(parser, node))
        return (err_free_and_return(parser, node));
-
+	set_command_data(node);
     return node;
 }
 

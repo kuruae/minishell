@@ -54,7 +54,6 @@ typedef struct s_ast_node
 		{
 			struct s_ast_node	*left;
 			struct s_ast_node	*right;
-			int					pipe[2];
 		} pipe;
 
 		struct

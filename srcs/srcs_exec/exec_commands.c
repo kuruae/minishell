@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/02 22:37:40 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/11 19:19:48 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	command = node->data.command.command;
 	argc = node->data.command.arg_count;
 	if (set_input_output(shell, node) == EXEC_ERR_FILE)
-			exit(1);
+		exit(1);
 	//first check if command is builtin
 	status = builtin(node, shell);
 //	ft_printf("Builtin status: %d\n", status);
@@ -144,10 +144,10 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	paths = get_paths(*shell->envp);
 	if (!paths)
 		exit(1);
-//	ft_printf("starting command execution\n");
+	close_used_fds(shell, node);
+	//ft_printf("starting command execution\n");
 	status = try_command(paths, args, *shell->envp, node);
 	if (status == EXEC_ERR_FATAL)
 		exit(1);
 	free(paths);
-	exit(82);
 }

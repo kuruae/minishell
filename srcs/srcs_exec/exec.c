@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/02 15:49:46 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/09 19:36:22 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 	//child process:
 	if (child_pid == 0)
 	{
-//		ft_printf("Child process started\n");
 		exec_command(shell, node);
 		//normally it should not reach here
 		ft_printf("Child process did not exit properly\n");
