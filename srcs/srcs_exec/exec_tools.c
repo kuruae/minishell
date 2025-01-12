@@ -68,10 +68,14 @@ void	close_used_fds(t_shell *shell, t_ast_node *node)
 
 	(void)shell;
 	data = &node->data.command.exec_data;
-	if (data->in_type == PIPE_T || data->in_type == FILE_T)
+	if (data->in_type == FILE_T)
 		close(data->in_file);
-	if (data->out_type == PIPE_T || data->out_type == FILE_T)
+	if (data->out_type == FILE_T)
 		close(data->out_file);
+	if (data->in_type == PIPE_T)
+		close(shell->pid[data->pipe_index_in]);
+	if (data->out_type == PIPE_T)
+		close(shell->pid[data->pipe_index_out]);
 }
 
 void	close_unused_pipes(t_ast_node *node, t_shell *shell)

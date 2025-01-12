@@ -63,6 +63,6 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	else if (node->type == NODE_PIPE)
 		return (start_pipeline(shell, node));
 	else
-		ft_printf("this version only suports single commands\n");
+		ft_printf("this version only suports pipes and commands\n");
 	return (EXEC_SUCCESS);
 }

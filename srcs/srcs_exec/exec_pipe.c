@@ -52,12 +52,10 @@ t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 
-	//ft_printf("starting exec_pipeline for process of type %d\n", node->type);
 	status = builtin_parent(node, shell);
 	if (status != EXEC_NOT_FOUND)
 		return (status);
 	if (node->type == NODE_COMMAND)	
-		//ft_printf("starting execution of %s\n", node->data.command.command);
 	{
 		status = exec_command_pipe(shell, node);
 		// if (status == EXEC_SUCCESS)
@@ -125,14 +123,13 @@ t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 	i = 0;
 	shell->process_count = count_pipes(node) + 1;
 	shell->pipe_count = count_pipes(node);
-	//ft_printf("process count = %d, pipe_count = %d", shell->process_count, shell->pipe_count);
 	shell->pipe_index = 0;
 	shell->process_index = 0;
 	status = init_pipeline(shell, node);
-	//ft_printf("All pipes initialized, Status %d\n", status);
 	if (status != EXEC_SUCCESS)
 		return (status);
-	status = exec_pipeline(shell, node);	
+	status = exec_pipeline(shell, node);
+	//here i close all the pipes (this part should onl be reached by the parrent)
 	while (i < shell->pipe_count)
 	{
 		close(shell->pipes[i][0]);

@@ -130,9 +130,10 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	argc = node->data.command.arg_count;
 	if (set_input_output(shell, node) == EXEC_ERR_FILE)
 		exit(1);
+	//as now the used fds are redirected with dup2 we can close all fds we opened (pipes, in or out_files)
+	close_used_fds(shell, node);
 	//first check if command is builtin
 	status = builtin(node, shell);
-//	ft_printf("Builtin status: %d\n", status);
 	if (status != EXEC_NOT_FOUND)
 		exit_exec_status(status);
 	// only continues when the command wasnt found in the builtins
@@ -140,12 +141,10 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	args = transform_args(node->data.command.args, command, argc);
 	if (!args)
 		exit(1);
-	argc += 1; //adjusting argc
+	argc += 1; //adjusting argc (as now agv inludes the command)
 	paths = get_paths(*shell->envp);
 	if (!paths)
 		exit(1);
-	close_used_fds(shell, node);
-	//ft_printf("starting command execution\n");
 	status = try_command(paths, args, *shell->envp, node);
 	if (status == EXEC_ERR_FATAL)
 		exit(1);
