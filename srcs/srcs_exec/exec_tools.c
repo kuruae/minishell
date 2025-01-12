@@ -35,7 +35,7 @@ void	link_pipe(t_ast_node *node, t_shell *shell)
 	t_ast_node	*last_command;
 	int			index;
 
-	ft_printf("linking pipe with index %d\n", shell->pipe_index);
+	//ft_printf("linking pipe with index %d\n", shell->pipe_index);
 	index = shell->pipe_index;
 	left = node->data.pipe.left;
 	right = node->data.pipe.right;

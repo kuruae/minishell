@@ -52,10 +52,13 @@ t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 
-	ft_printf("starting exec_pipeline for process of type %d\n", node->type);
+	//ft_printf("starting exec_pipeline for process of type %d\n", node->type);
+	status = builtin_parent(node, shell);
+	if (status != EXEC_NOT_FOUND)
+		return (status);
 	if (node->type == NODE_COMMAND)	
+		//ft_printf("starting execution of %s\n", node->data.command.command);
 	{
-		ft_printf("starting execution of %s\n", node->data.command.command);
 		status = exec_command_pipe(shell, node);
 		// if (status == EXEC_SUCCESS)
 		// 	shell->process_index++;
@@ -77,11 +80,11 @@ t_exec_error	init_pipeline(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 
-	ft_printf("initializing pipe\n");
+	//ft_printf("initializing pipe\n");
 	status = EXEC_SUCCESS;
 	if (pipe(shell->pipes[shell->pipe_index]) == -1)
 		return (EXEC_ERR_PIPE);
-	ft_printf("Succesfuly setted pipe %d\n", shell->pipe_index);
+	//ft_printf("Succesfuly setted pipe %d\n", shell->pipe_index);
 	link_pipe(node, shell); //this function sets all the data in the commands that use this pipe
 	shell->pipe_index++;
 	if (node->data.pipe.left->type == NODE_PIPE)
@@ -122,7 +125,7 @@ t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 	i = 0;
 	shell->process_count = count_pipes(node) + 1;
 	shell->pipe_count = count_pipes(node);
-	ft_printf("process count = %d, pipe_count = %d", shell->process_count, shell->pipe_count);
+	//ft_printf("process count = %d, pipe_count = %d", shell->process_count, shell->pipe_count);
 	shell->pipe_index = 0;
 	shell->process_index = 0;
 	status = init_pipeline(shell, node);

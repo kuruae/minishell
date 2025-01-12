@@ -16,7 +16,7 @@ int	open_infile(t_ast_node	*node)
 {
 	int	in_file;
 
-	ft_printf("opening infile\n");
+	//ft_printf("opening infile\n");
 
 	//ft_printf("Setting new Infile to %s\n", node->redirections->file);
 	in_file = open(node->redirections->file, O_RDONLY);
@@ -33,7 +33,7 @@ int	open_outfile(t_ast_node	*node, bool second)
 {
 	int	out_file;
 
-	ft_printf("opening out file\n");
+	//ft_printf("opening out file\n");
 
 	//ft_printf("Setting new Out file to %s\n", node->redirections->file);
 	if (second == true)
