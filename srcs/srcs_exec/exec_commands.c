@@ -88,6 +88,7 @@ t_exec_error	try_command(char **paths, char **args, char **env, t_ast_node *node
 
 /* this function we use to create a new argv table that includes the command like execve is used*/
 
+/*
 char	**transform_args(char **args, char	*command, int argc)
 {
 	char	**argv;
@@ -110,6 +111,7 @@ char	**transform_args(char **args, char	*command, int argc)
 	argv[i] = NULL;
 	return (argv);
 }
+*/
 
 void	exec_command(t_shell *shell, t_ast_node *node)
 {

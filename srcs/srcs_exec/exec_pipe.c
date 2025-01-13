@@ -68,7 +68,7 @@ t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 	{
 		status = exec_command_pipe(shell, node);
 		// if (status == EXEC_SUCCESS)
-		// 	shell->process_index++;
+		//  	shell->process_index++;
 		return (status);
 	}
 	return (EXEC_SUCCESS);
