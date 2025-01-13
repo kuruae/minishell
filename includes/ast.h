@@ -90,5 +90,6 @@ void debug_print_ast(t_ast_node *node, int depth);
 t_ast_node	*err_free_and_return(t_parser *parser, t_ast_node *node);
 t_node_type	get_node_type(t_token_type token_type);
 t_error	all_expands_handler(t_ast_node *node, t_parser *parser);
+t_error	remove_quotes_handler(t_ast_node *node);
 
 #endif

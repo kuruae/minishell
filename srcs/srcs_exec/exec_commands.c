@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_commands.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/20 03:19:25 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:16:39 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ char	**transform_args(char **args, char	*command, int argc)
 
 void	exec_command(t_shell *shell, t_ast_node *node)
 {
-    //ft_printf("Entered exec_command\n");
+    // ft_printf("Entered exec_command\n");
     
     char *command;
     char **args;
