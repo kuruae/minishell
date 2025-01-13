@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/11 17:59:27 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:46:26 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,6 @@ void					close_used_fds(t_shell *shell, t_ast_node *node);
 void					close_unused_pipes(t_ast_node *node, t_shell *shell);
 
 t_exec_error			start_pipeline(t_shell *shell, t_ast_node *node);
+int						count_pipes(t_ast_node *node);
 
 #endif

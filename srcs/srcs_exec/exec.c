@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/09 19:36:22 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:45:33 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,10 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 
 t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 {
+	shell->process_count = count_pipes(node) + 1;
+	shell->pipe_count = count_pipes(node);
+	shell->pipe_index = 0;
+	shell->process_index = 0;
 	if (node->type == NODE_COMMAND)
 		return (start_command(shell, node));
 	else if (node->type == NODE_PIPE)

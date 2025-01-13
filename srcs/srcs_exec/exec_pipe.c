@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/11 20:19:48 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:10:58 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,6 @@ t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 	status = builtin_parent(node, shell);
 	if (status != EXEC_NOT_FOUND)
 		return (status);
-	if (node->type == NODE_COMMAND)	
-	{
-		status = exec_command_pipe(shell, node);
-		// if (status == EXEC_SUCCESS)
-		// 	shell->process_index++;
-		return (status);
-	}
 	if (node->type == NODE_PIPE)
 	{
 		status = exec_pipeline(shell, node->data.pipe.left);
@@ -70,6 +63,13 @@ t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 		status = exec_pipeline(shell, node->data.pipe.right);
 		if (status != EXEC_SUCCESS)
 			 return (status);
+	}
+	if (node->type == NODE_COMMAND)	
+	{
+		status = exec_command_pipe(shell, node);
+		// if (status == EXEC_SUCCESS)
+		// 	shell->process_index++;
+		return (status);
 	}
 	return (EXEC_SUCCESS);
 }
@@ -121,10 +121,6 @@ t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 	int				i;
 
 	i = 0;
-	shell->process_count = count_pipes(node) + 1;
-	shell->pipe_count = count_pipes(node);
-	shell->pipe_index = 0;
-	shell->process_index = 0;
 	status = init_pipeline(shell, node);
 	if (status != EXEC_SUCCESS)
 		return (status);
