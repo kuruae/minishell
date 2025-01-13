@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/20 14:56:22 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:06:47 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,61 +77,61 @@ bool	parse_redir(t_parser *parser, t_ast_node *node)
  */
 t_ast_node *parse_subshell(t_parser *parser)
 {
-    t_ast_node *node;
+	t_ast_node *node;
 
-    // Skip the opening parenthesis
-    if (parser->current->type != TOK_PAR_OPEN)
-        return (NULL);
-    paser_advance(parser);
+	// Skip the opening parenthesis
+	if (parser->current->type != TOK_PAR_OPEN)
+		return (NULL);
+	paser_advance(parser);
 
-    node = create_ast_node(NODE_SUBSHELL);
-    if (!node)
-        return (NULL);
+	node = create_ast_node(NODE_SUBSHELL);
+	if (!node)
+		return (NULL);
 
-    // Parse everything inside the parentheses as a complete command
-    node->data.subshell.command = parse_logic(parser);
-    if (!node->data.subshell.command)
-       return (err_free_and_return(parser, node));
+	// Parse everything inside the parentheses as a complete command
+	node->data.subshell.command = parse_logic(parser);
+	if (!node->data.subshell.command)
+	   return (err_free_and_return(parser, node));
 
-    // Expect closing parenthesis
-    if (!parser->current || parser->current->type != TOK_PAR_CLOSE)
-        return (err_free_and_return(parser, node));
-    paser_advance(parser);
+	// Expect closing parenthesis
+	if (!parser->current || parser->current->type != TOK_PAR_CLOSE)
+		return (err_free_and_return(parser, node));
+	paser_advance(parser);
 
-    // Parse any redirections that might follow the subshell
-    if (!parse_redir(parser, node))
-        return (err_free_and_return(parser, node));
+	// Parse any redirections that might follow the subshell
+	if (!parse_redir(parser, node))
+		return (err_free_and_return(parser, node));
 
-    return node;
+	return node;
 }
 
 
 static t_error count_and_process_args(t_parser *parser, t_ast_node **node)
 {
-    int args_count;
-    int i;
+	int args_count;
+	int i;
 
-    args_count = count_args(parser->current);
-    if (args_count > 0)
-    {
-        (*node)->data.command.args = malloc(sizeof(char *) * (args_count + 1));
-        if (!(*node)->data.command.args)
-        {
-            free((*node)->data.command.command);
-            return (ERR_FATAL);
-        }
-        
-        i = 0;
-        while (parser->current && parser->current->type == TOK_WORD && i < args_count)
-        {
-            (*node)->data.command.args[i] = ft_strdup(parser->current->value);
-            paser_advance(parser);
-            i++;
-        }
-        (*node)->data.command.args[i] = NULL;
-        (*node)->data.command.arg_count = args_count;
-    }
-    return (SUCCESS);
+	args_count = count_args(parser->current);
+	if (args_count > 0)
+	{
+		(*node)->data.command.args = malloc(sizeof(char *) * (args_count + 1));
+		if (!(*node)->data.command.args)
+		{
+			free((*node)->data.command.command);
+			return (ERR_FATAL);
+		}
+		
+		i = 0;
+		while (parser->current && parser->current->type == TOK_WORD && i < args_count)
+		{
+			(*node)->data.command.args[i] = ft_strdup(parser->current->value);
+			paser_advance(parser);
+			i++;
+		}
+		(*node)->data.command.args[i] = NULL;
+		(*node)->data.command.arg_count = args_count;
+	}
+	return (SUCCESS);
 }
 
 
@@ -151,29 +151,36 @@ static t_error count_and_process_args(t_parser *parser, t_ast_node **node)
  */
 t_ast_node *parse_command(t_parser *parser)
 {
-    t_ast_node *node;
+	t_ast_node	*node;
 
-    // First check if we're starting a subshell
-    if (parser->current->type == TOK_PAR_OPEN)
-        return parse_subshell(parser);
+	// First check if we're starting a subshell
+	if (parser->current->type == TOK_PAR_OPEN)
+		return parse_subshell(parser);
 
-    // Otherwise, parse as a regular command
-    node = create_ast_node(NODE_COMMAND);
-    if (!node)
-        return (NULL);
+	// Otherwise, parse as a regular command
+	node = create_ast_node(NODE_COMMAND);
+	if (!node)
+		return (NULL);
 
-    // Store command name and advance
-    node->data.command.command = ft_strdup(parser->current->value);
-    paser_advance(parser);
+	// Store command name and advance
+	node->data.command.command = ft_strdup(parser->current->value);
+	paser_advance(parser);
 
-    if (count_and_process_args(parser, &node) != SUCCESS)
-        return (err_free_and_return(parser, node));
+	if (count_and_process_args(parser, &node) != SUCCESS)
+		return (err_free_and_return(parser, node));
 
-    // Parse any redirections that follow the command
-    if (!parse_redir(parser, node))
-       return (err_free_and_return(parser, node));
+	// Parse any redirections that follow the command
+	if (!parse_redir(parser, node))
+	   return (err_free_and_return(parser, node));
 
-    return node;
+	if (remove_quotes_handler(node) != SUCCESS)
+		return (err_free_and_return(parser, node));
+
+	// Check for expansions
+	if (all_expands_handler(node, parser) == FAILURE)
+		return (err_free_and_return(parser, node));
+	
+	return node;
 }
 
 
@@ -205,16 +212,16 @@ t_ast_node	*parse_pipe(t_parser *parser)
 	{
 		paser_advance(parser);
 
-        if (!parser->current || parser->current->type == TOK_EOF)
-            return (err_free_and_return(parser, left));
+		if (!parser->current || parser->current->type == TOK_EOF)
+			return (err_free_and_return(parser, left));
 
 		node = create_ast_node(NODE_PIPE);
 		if (!node)
-            return (err_free_and_return(parser, left));
+			return (err_free_and_return(parser, left));
 		node->data.pipe.left = left;
 		node->data.pipe.right = parse_command(parser);
 		if (!node->data.pipe.right)
-            return (err_free_and_return(parser, node));
+			return (err_free_and_return(parser, node));
 		left = node;
 	}
 	return (left);
@@ -222,10 +229,10 @@ t_ast_node	*parse_pipe(t_parser *parser)
 
 static t_error testing_pointer_parse_pipe(t_parser *parser, t_ast_node **left)
 { 
-    *left = parse_pipe(parser);
-    if (!*left && parser->err_status == FAILURE)
-        return (FAILURE);
-    return (SUCCESS);
+	*left = parse_pipe(parser);
+	if (!*left && parser->err_status == FAILURE)
+		return (FAILURE);
+	return (SUCCESS);
 }
 
 
@@ -251,49 +258,49 @@ static t_error testing_pointer_parse_pipe(t_parser *parser, t_ast_node **left)
  */
 t_ast_node *parse_logic(t_parser *parser)
 {
-    t_ast_node *left;
-    t_ast_node *node;
-    t_node_type type;
+	t_ast_node *left;
+	t_ast_node *node;
+	t_node_type type;
 
-    left = NULL;
+	left = NULL;
 
-    // First get the leftmost command or subshell
-    if (testing_pointer_parse_pipe(parser, &left) == FAILURE)
-        return (NULL);
-    
-    // Keep processing while we find logical operators
-    while (parser->current && (parser->current->type == TOK_AND || 
-           parser->current->type == TOK_OR))
-    {
-        type = get_node_type(parser->current->type);
+	// First get the leftmost command or subshell
+	if (testing_pointer_parse_pipe(parser, &left) == FAILURE)
+		return (NULL);
+	
+	// Keep processing while we find logical operators
+	while (parser->current && (parser->current->type == TOK_AND || 
+		   parser->current->type == TOK_OR))
+	{
+		type = get_node_type(parser->current->type);
 
-        paser_advance(parser);
+		paser_advance(parser);
 
-        node = create_ast_node(type);
-        if (!node)
-            return (err_free_and_return(parser, left));
+		node = create_ast_node(type);
+		if (!node)
+			return (err_free_and_return(parser, left));
 
-        node->data.logical_op.left = left;
-        node->data.logical_op.right = parse_pipe(parser);
-        
-        if (parser->err_status == FAILURE)
-            return (err_free_and_return(parser, node));
+		node->data.logical_op.left = left;
+		node->data.logical_op.right = parse_pipe(parser);
+		
+		if (parser->err_status == FAILURE)
+			return (err_free_and_return(parser, node));
 
-        left = node;
-    }
-    return left;
+		left = node;
+	}
+	return left;
 }
 
 static t_error  start_ast(t_parser *parser, t_ast_node **root)
 {
-    *root = parse_logic(parser);
-    if (!*root || parser->err_status == FAILURE)
-        return (FAILURE);
-    return (SUCCESS);
+	*root = parse_logic(parser);
+	if (!*root || parser->err_status == FAILURE)
+		return (FAILURE);
+	return (SUCCESS);
 }
 
 
-/* parse_tokens: Entry point for parsing a token stream
+/* ast_handler: Entry point for parsing a token stream
  * @tokens: Linked list of lexical tokens
  *
  * Main parser function that:
@@ -303,17 +310,18 @@ static t_error  start_ast(t_parser *parser, t_ast_node **root)
  *
  * Returns: Root node of the complete AST or NULL on failure
  */
-t_ast_node	*parse_tokens(t_token *tokens)
-{
+t_ast_node	*ast_handler(t_token *tokens, char ***env)
+{ 
 	t_parser parser;
 	t_ast_node *root;
 
 	parser.tokens = tokens;
 	parser.current = tokens;
+	parser.env = *env;
 	parser.err_status = SUCCESS;
 
 	if (start_ast(&parser, &root) == FAILURE)
-        return (NULL);
-
+		return (NULL);
+	free_tokens(parser.current);
 	return (root);
 }

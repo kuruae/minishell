@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 00:41:04 by kuru              #+#    #+#             */
-/*   Updated: 2024/12/20 23:22:25 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/05 18:44:50 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static bool	is_metacharacter(char *str)
 	if (ft_strncmp(str, "&&", 2) == 0)
 		return (true);
 	if (str[0] == '|' || str[0] == '<' || str[0] == '>' || str[0] == '('
-			|| str[0] == ')' || str[0] == '$' || str[0] == '*')
+			|| str[0] == ')')
 		return (true);
 	return (false);
 }
@@ -57,18 +57,23 @@ int	get_tok_word_len(char *line)
 
 t_token *create_token(char *value, size_t len, t_token_type type)
 {
-    t_token *token = malloc(sizeof(t_token));
-    if (!token)
-        return NULL;
-    token->value = ft_substr(value, 0, len);
-    if (!token->value)
-    {
-        free(token);
-        return NULL;
-    }
-    token->type = type;
-    token->next = NULL;
-    return token;
+	t_token *token;
+
+	token = malloc(sizeof(t_token));
+	if (!token)
+		return NULL;
+	token->expands = false;
+	if (type == TOK_WORD && value[0] == '$' && len > 1)
+		token->expands = true;
+	token->value = ft_substr(value, 0, len);
+	if (!token->value)
+	{
+		free(token);
+		return NULL;
+	}
+	token->type = type;
+	token->next = NULL;
+	return token;
 }
 
 void	add_new_token(t_token **tokens, t_token *new_token)

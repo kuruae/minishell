@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 23:56:06 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/20 23:20:52 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/03 15:44:59 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,6 @@ static t_token_type get_token_type(char *line)
 		return (TOK_PAR_OPEN);
 	if (*line == ')')
 		return (TOK_PAR_CLOSE);
-	if (*line == '$')
-		return (TOK_EXPAND);
-	if (*line == '*')
-		return (TOK_WILDCARD);
 	else
 		return (TOK_WORD);
 }
@@ -52,7 +48,7 @@ size_t	get_token_len(char *line, t_token_type type)
 	int len;
 
 	if (type == TOK_PIPE || type == TOK_REDIR_IN || type == TOK_REDIR_OUT
-				|| type == TOK_PAR_CLOSE || type == TOK_PAR_OPEN || type == TOK_EXPAND || type == TOK_WILDCARD)
+				|| type == TOK_PAR_CLOSE || type == TOK_PAR_OPEN)
 		len = 1;
 	else if (type == TOK_APPEND || type == TOK_HEREDOC || type == TOK_OR || type == TOK_AND)
 		len = 2;
@@ -95,5 +91,46 @@ t_token *lexing(char *line)
 			i += ft_strlen(current->value);
 		}
 	}
+	if (verify_unclosed_quotes(tokens) != SUCCESS)
+		return (NULL);
 	return (tokens);
+}
+
+
+static bool	is_unclosed_quote(char *str)
+{
+	int i;
+	int single_quote;
+	int double_quote;
+
+	i = 0;
+	single_quote = 0;
+	double_quote = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+			single_quote += 1;
+		if (str[i] == '\"')
+			double_quote += 1;
+		i++;
+	}
+	return (single_quote % 2 != 0 || double_quote % 2 != 0);
+}
+
+t_error	verify_unclosed_quotes(t_token *tokens)
+{
+	t_token *current;
+
+	current = tokens;
+	while (current)
+	{
+		if (current->type == TOK_WORD && is_unclosed_quote(current->value))
+		{
+			perror("syntax error: unclosed quote");
+			free_lexing(tokens);
+			return (FAILURE);
+		}
+		current = current->next;
+	}
+	return (SUCCESS);
 }

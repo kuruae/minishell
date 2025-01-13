@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/21 17:25:34 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/09 17:00:17 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ static const char *get_token_type_str(t_token_type type)
         case TOK_AND: return "AND";
 		case TOK_PAR_OPEN: return "OPEN PARENTHESE";
 		case TOK_PAR_CLOSE: return "CLOSE PARENTHESE";
-		case TOK_EXPAND: return "EXPAND";
-		case TOK_WILDCARD: return "WILDCARD";
         default: return "UNKNOWN";
     }
 }
@@ -67,6 +65,8 @@ int test_lexing(char *line)
                i,
                get_token_type_str(current->type),
                current->value);
+		if (current->expands)
+			printf("expands: true\n");
         current = current->next;
         i++;
     }
@@ -113,7 +113,9 @@ t_error readline_loop(t_shell *shell)
 			printf("\nLexing:\n");
 			test_lexing(shell->line);
 			t_token *tokens = lexing(shell->line);
-			t_ast_node *ast = parse_tokens(tokens);
+			if (!tokens)
+				return (ERR_FATAL);
+			t_ast_node *ast = ast_handler(tokens, shell->envp);
 			printf("\nAST Structure:\n");
     		debug_print_ast(ast, 0);
 			add_history(shell->line);
@@ -164,7 +166,7 @@ int	main(int argc, char **argv, char **envp)
 	get_signal();
 	status = readline_loop(&shell);
 	if (status == ERR_FATAL)
-		return(clean_up_end(&shell), 1);
+		return(clean_up_end(&shell), EXIT_FAILURE);
 	if (status == CTRL_D)
 		g_sig_offset = 0;
 	clean_up_end(&shell);

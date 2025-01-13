@@ -6,7 +6,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# include "lexing.h"
+// # include "lexing.h"
 // # include "ast.h"
 # include "colors.h"
 # include "get_signal.h"
@@ -16,8 +16,9 @@
 
 // bullshit so i can work on macos
 # ifdef __APPLE__
-    extern void rl_replace_line(const char*, int);
-	extern void rl_clear_history (void);
+    extern void	rl_replace_line(const char*, int);
+	extern void	rl_clear_history (void);
+	extern int	append_history (int nelements, char *filename);
 # endif
 
 // define readline prompt
@@ -53,16 +54,20 @@ typedef enum e_error
 	SUCCESS,
 	CTRL_D,
 	ERR_FATAL,
+	ERR_MALLOC,
 	FAILURE
 }	t_error;
 
+# include "lexing.h"
 # include "ast.h"
+# include "wildcard.h"
 
-// gobal functions
+// general functions
 int		parse_line(t_shell *shell);
 void	clean_up_end(t_shell *shell);
 void	clean_up_node(t_ast_node *node);
 void	clean_up_parser(t_parser *parser);
+void	free_lexing(t_token *tokens);
 void	free_user_input(t_token *tokens, t_ast_node *ast);
 
 #endif

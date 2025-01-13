@@ -3,6 +3,8 @@
 
 # include "minishell.h"
 
+# include "expansion.h"
+
 /* Node types for the AST */
 typedef enum e_node_type
 {
@@ -24,8 +26,8 @@ typedef struct s_redir
 		REDIR_APPEND,    // >>
 		REDIR_HEREDOC    // <<
 	} type;
-	char *file;  // File to redirect to/from
-	struct s_redir *next;  // Next redirection
+	char			*file;  // File to redirect to/from
+	struct s_redir	*next;  // Next redirection
 } t_redir;
 
 typedef struct s_parser
@@ -33,6 +35,7 @@ typedef struct s_parser
 	t_token     *current;   // Current token being processed
 	t_token     *tokens;    // All tokens
 	t_error     err_status; // Track parsing errors
+	char		**env;
 } t_parser;
 
 /* Structure for command arguments */
@@ -52,23 +55,22 @@ typedef struct s_ast_node
 
 		struct
 		{
-			struct s_ast_node *left;
-			struct s_ast_node *right;
+			struct s_ast_node	*left;
+			struct s_ast_node	*right;
 		} pipe;
 
 		struct
 		{
-			struct s_ast_node *command;
+			struct s_ast_node	*command;
 		} subshell;
 
 		struct
 		{
-			struct s_ast_node *left;
-			struct s_ast_node *right;
+			struct s_ast_node	*left;
+			struct s_ast_node	*right;
 		} logical_op;
 	} data;
 } t_ast_node;
-
 
 bool	_parser_is_token_type_redir(t_token_type type);
 t_redir	*create_redir_node(t_token *token, char *file);
@@ -83,9 +85,11 @@ int	count_args(t_token *token);
 t_ast_node	*parse_pipe(t_parser *parser);
 t_ast_node	*parse_logic(t_parser *parser);
 void free_ast(t_ast_node *node);
-t_ast_node	*parse_tokens(t_token *tokens);
+t_ast_node	*ast_handler(t_token *tokens, char ***env);
 void debug_print_ast(t_ast_node *node, int depth);
 t_ast_node	*err_free_and_return(t_parser *parser, t_ast_node *node);
 t_node_type	get_node_type(t_token_type token_type);
+t_error	all_expands_handler(t_ast_node *node, t_parser *parser);
+t_error	remove_quotes_handler(t_ast_node *node);
 
 #endif

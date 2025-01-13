@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:10:53 by enzo              #+#    #+#             */
-/*   Updated: 2024/12/20 23:19:52 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/03 15:39:13 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ typedef enum e_token_type
     TOK_PAR_CLOSE,  // )
     TOK_NEWLINE,    // \n
     TOK_EOF,        // End of input
-    TOK_EXPAND,     // $
-    TOK_WILDCARD    // *
 } t_token_type;
 
 /* Quote state for parsing */
@@ -46,6 +44,7 @@ typedef enum e_quote_state
 /* Token structure */
 typedef struct s_token
 {
+    bool            expands;
     char            *value;
     t_token_type    type;
     struct s_token  *next;
@@ -70,6 +69,7 @@ size_t	get_token_len(char *line, t_token_type type);
 void	free_tokens(t_token *tokens);
 void	add_new_token(t_token **tokens, t_token *new_token);
 int     get_tok_word_len(char *line);
+t_error verify_unclosed_quotes(t_token *tokens);
 
 
 #endif
