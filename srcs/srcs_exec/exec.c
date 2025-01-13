@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/13 15:45:33 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:27:01 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,12 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 
 t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 {
+	//initializing the shell struct
 	shell->process_count = count_pipes(node) + 1;
 	shell->pipe_count = count_pipes(node);
 	shell->pipe_index = 0;
 	shell->process_index = 0;
+	//two different functions for the case its a single command or a pipeline
 	if (node->type == NODE_COMMAND)
 		return (start_command(shell, node));
 	else if (node->type == NODE_PIPE)

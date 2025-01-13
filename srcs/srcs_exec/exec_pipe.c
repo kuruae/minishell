@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/13 16:10:58 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:26:26 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,8 @@ t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 	if (status != EXEC_SUCCESS)
 		return (status);
 	status = exec_pipeline(shell, node);
+	if (status != EXEC_SUCCESS)
+		return (status);
 	//here i close all the pipes (this part should onl be reached by the parrent)
 	while (i < shell->pipe_count)
 	{
