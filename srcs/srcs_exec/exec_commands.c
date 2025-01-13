@@ -116,7 +116,7 @@ void	exec_command(t_shell *shell, t_ast_node *node)
     // ft_printf("Entered exec_command\n");
     
     char *command;
-    char **args;
+    char **argv_exec;
     int argc;
     char **paths;
     t_exec_error status;
@@ -128,6 +128,7 @@ void	exec_command(t_shell *shell, t_ast_node *node)
     }
 	command = node->data.command.command;
 	argc = node->data.command.arg_count;
+	argv_exec = node->data.command.argv_exec;
 	if (set_input_output(shell, node) == EXEC_ERR_FILE)
 		exit(1);
 	//as now the used fds are redirected with dup2 we can close all fds we opened (pipes, in or out_files)
@@ -137,15 +138,11 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	if (status != EXEC_NOT_FOUND)
 		exit_exec_status(status);
 	// only continues when the command wasnt found in the builtins
-	// First we have to adjust the argv so that it includes the comment
-	args = transform_args(node->data.command.args, command, argc);
-	if (!args)
-		exit(1);
 	argc += 1; //adjusting argc (as now agv inludes the command)
 	paths = get_paths(*shell->envp);
 	if (!paths)
 		exit(1);
-	status = try_command(paths, args, *shell->envp, node);
+	status = try_command(paths, argv_exec, *shell->envp, node);
 	if (status == EXEC_ERR_FATAL)
 		exit(1);
 	free(paths);
