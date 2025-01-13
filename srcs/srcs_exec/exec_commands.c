@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/13 16:16:39 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/13 16:32:35 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ void	setting_std_in_out(t_ast_node *node)
 	int	in_file;
 	int	out_file;
 
-	if (node->data.command.exec_data.in_redir == true)
+	if (node->data.command.exec_data.in_type == FILE_T)
 	{
 		in_file = node->data.command.exec_data.in_file;
 		ft_printf("fd_in: %d\n", in_file);
 		dup2(in_file, STDIN_FILENO);
 		close(in_file);
 	}
-	if (node->data.command.exec_data.out_redir == true)
+	if (node->data.command.exec_data.out_type == FILE_T)
 	{
 		out_file = node->data.command.exec_data.out_file;
 		dup2(out_file, STDOUT_FILENO);
@@ -129,10 +129,11 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	command = node->data.command.command;
 	argc = node->data.command.arg_count;
 	if (set_input_output(shell, node) == EXEC_ERR_FILE)
-			exit(1);
+		exit(1);
+	//as now the used fds are redirected with dup2 we can close all fds we opened (pipes, in or out_files)
+	close_used_fds(shell, node);
 	//first check if command is builtin
 	status = builtin(node, shell);
-//	ft_printf("Builtin status: %d\n", status);
 	if (status != EXEC_NOT_FOUND)
 		exit_exec_status(status);
 	// only continues when the command wasnt found in the builtins
@@ -140,14 +141,12 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	args = transform_args(node->data.command.args, command, argc);
 	if (!args)
 		exit(1);
-	argc += 1; //adjusting argc
+	argc += 1; //adjusting argc (as now agv inludes the command)
 	paths = get_paths(*shell->envp);
 	if (!paths)
 		exit(1);
-//	ft_printf("starting command execution\n");
 	status = try_command(paths, args, *shell->envp, node);
 	if (status == EXEC_ERR_FATAL)
 		exit(1);
 	free(paths);
-	exit(82);
 }

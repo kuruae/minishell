@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/13 16:06:47 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/13 16:34:26 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,17 @@ static t_error count_and_process_args(t_parser *parser, t_ast_node **node)
  *
  * Returns: A new AST node of type NODE_COMMAND or NULL on failure
  */
+
+
+void set_command_data(t_ast_node *node)
+{
+	node->data.command.exec_data.in_type = STD_T;
+	node->data.command.exec_data.out_type = STD_T;
+	node->data.command.exec_data.in_file = STDIN_FILENO;
+	node->data.command.exec_data.out_file = STDOUT_FILENO;
+}
+
+
 t_ast_node *parse_command(t_parser *parser)
 {
 	t_ast_node	*node;

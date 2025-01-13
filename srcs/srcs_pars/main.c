@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/09 17:00:17 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:35:40 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,6 @@ int	main(int argc, char **argv, char **envp)
 	t_shell	shell;
 	t_error	status;
 	// t_env env;
-	// int	g_sig_offset;
 	(void)argc;
 	(void)argv;
 	// env = init_env(envp); // envp is an array of strings btw (and i didnt know the p stands for pointer)

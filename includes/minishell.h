@@ -6,12 +6,11 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-// # include "lexing.h"
+# include "exec.h"
 // # include "ast.h"
 # include "colors.h"
 # include "get_signal.h"
 # include "builtin.h"
-# include "exec.h"
 # include <sys/wait.h>
 
 // bullshit so i can work on macos
@@ -46,7 +45,12 @@ typedef struct s_shell
 	int			exit_status;
 	char		*line;
 	t_directory	dir;
-	//values for builtins
+	pid_t		pid[MAX_PROCESS_COUNT];
+	int			pipes[MAX_PIPE_COUNT][2];
+	int			pipe_count;
+	int			pipe_index;
+	int			process_count; //amount of child processes
+	int			process_index;
 }	t_shell;
 
 typedef enum e_error
