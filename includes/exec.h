@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/13 15:46:26 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:50:23 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ typedef enum	s_exec_error
 
 typedef enum s_command_redir
 {
+	STD_T,
 	PIPE_T,
-	FILE_T,
-	STD_T
+	FILE_T
 }	t_command_redir;
 
 typedef struct s_exec_dat
