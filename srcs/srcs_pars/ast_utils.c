@@ -69,3 +69,11 @@ t_node_type	get_node_type(t_token_type token_type)
 		return (NODE_AND);
 	return (NODE_OR);
 }
+
+void set_command_data(t_ast_node *node)
+{
+	node->data.command.exec_data.in_type = STD_T;
+	node->data.command.exec_data.out_type = STD_T;
+	node->data.command.exec_data.in_file = STDIN_FILENO;
+	node->data.command.exec_data.out_file = STDOUT_FILENO;
+}
