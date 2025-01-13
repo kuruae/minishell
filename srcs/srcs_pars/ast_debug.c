@@ -76,8 +76,11 @@ void debug_print_ast(t_ast_node *node, int depth)
     switch (node->type)
     {
         case NODE_COMMAND:
+            print_indent(depth);
             printf("Command: '%s'\n", node->data.command.command ?
                    node->data.command.command : "(null)");
+            
+            // Print args array
             if (node->data.command.args)
             {
                 print_indent(depth + 1);
@@ -86,6 +89,18 @@ void debug_print_ast(t_ast_node *node, int depth)
                     printf("'%s' ", node->data.command.args[i]);
                 printf("\n");
             }
+            
+            // Print argv_exec array
+            if (node->data.command.argv_exec)
+            {
+                print_indent(depth + 1);
+                printf("Argv_exec: ");
+                for (int i = 0; node->data.command.argv_exec[i]; i++)
+                    printf("'%s' ", node->data.command.argv_exec[i]);
+                printf("\n");
+            }
+            
+            // Print redirections
             if (node->redirections)
             {
                 print_indent(depth + 1);

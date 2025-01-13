@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/13 16:53:46 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/13 18:40:45 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,45 @@ static t_error count_and_process_args(t_parser *parser, t_ast_node **node)
 	return (SUCCESS);
 }
 
+static t_error create_argv_exec(t_ast_node *node)
+{
+    int i;
+    
+    // Allocate space for command + NULL terminator
+    node->data.command.argv_exec = malloc(sizeof(char *) * 
+        (node->data.command.arg_count + 2));
+    if (!node->data.command.argv_exec)
+        return (ERR_MALLOC);
+
+    // Copy command as first argument
+    if (!(node->data.command.argv_exec[0] = ft_strdup(node->data.command.command)))
+    {
+        free(node->data.command.argv_exec);
+        return (ERR_MALLOC);
+    }
+
+    // If we have arguments, copy them
+    i = 1;
+    if (node->data.command.args)
+    {
+        while (i <= node->data.command.arg_count)
+        {
+            node->data.command.argv_exec[i] = ft_strdup(node->data.command.args[i - 1]);
+            if (!node->data.command.argv_exec[i])
+            {
+                while (--i >= 0)
+                    free(node->data.command.argv_exec[i]);
+                free(node->data.command.argv_exec);
+                return (ERR_MALLOC);
+            }
+            i++;
+        }
+    }
+    
+    node->data.command.argv_exec[i] = NULL;
+    return (SUCCESS);
+}
+
 
 /* parse_command: Parses a single command or subshell expression
  * @parser: Current parser state
@@ -178,6 +217,9 @@ t_ast_node *parse_command(t_parser *parser)
 
 	// Check for expansions
 	if (all_expands_handler(node, parser) == FAILURE)
+		return (err_free_and_return(parser, node));
+
+	if (create_argv_exec(node) != SUCCESS)
 		return (err_free_and_return(parser, node));
 
 	set_command_data(node);

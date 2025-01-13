@@ -49,6 +49,7 @@ typedef struct s_ast_node
 		{
 			char		*command;
 			char		**args;
+			char		**argv_exec;
 			int			arg_count;
 			t_exec_data	exec_data;
 		} command;
