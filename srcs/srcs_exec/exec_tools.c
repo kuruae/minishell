@@ -42,14 +42,14 @@ void	link_pipe(t_ast_node *node, t_shell *shell)
 	if (left->type == NODE_COMMAND)
 	{
 		left->data.command.exec_data.out_type = PIPE_T;
-		left->data.command.exec_data.out_file = shell->pipes[index][1];
 		left->data.command.exec_data.pipe_index_out = index;
+		ft_printf("command %s sends out to pipe %d\n", left->data.command.command, index);	
 	}
 	if (right->type == NODE_COMMAND)
 	{
 		right->data.command.exec_data.in_type = PIPE_T;
-		right->data.command.exec_data.in_file =  shell->pipes[index][0];
 		right->data.command.exec_data.pipe_index_in = index;
+		ft_printf("command %s takes in from pipe %d\n", right->data.command.command, index);	
 	}
 	if (left->type == NODE_PIPE)
 	{
@@ -57,8 +57,8 @@ void	link_pipe(t_ast_node *node, t_shell *shell)
 		while (last_command->type == NODE_PIPE)
 			last_command = last_command->data.pipe.right;
 		last_command->data.command.exec_data.out_type = PIPE_T;
-		last_command->data.command.exec_data.out_file = shell->pipes[index][1];
 		last_command->data.command.exec_data.pipe_index_out = index;
+		ft_printf("command %s sends out to pipe %d\n", last_command->data.command.command, index);	
 	}
 }
 
@@ -73,9 +73,9 @@ void	close_used_fds(t_shell *shell, t_ast_node *node)
 	if (data->out_type == FILE_T)
 		close(data->out_file);
 	if (data->in_type == PIPE_T)
-		close(shell->pid[data->pipe_index_in]);
+		close(shell->pipes[data->pipe_index_in][1]);
 	if (data->out_type == PIPE_T)
-		close(shell->pid[data->pipe_index_out]);
+		close(shell->pipes[data->pipe_index_out][0]);
 }
 
 void	close_unused_pipes(t_ast_node *node, t_shell *shell)

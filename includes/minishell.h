@@ -51,6 +51,7 @@ typedef struct s_shell
 	int			pipe_index;
 	int			process_count; //amount of child processes
 	int			process_index;
+	t_ast_node	*root_node;
 }	t_shell;
 
 typedef enum e_error
