@@ -52,9 +52,6 @@ t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 
-	status = builtin_parent(node, shell);
-	if (status != EXEC_NOT_FOUND)
-		return (status);
 	if (node->type == NODE_PIPE)
 	{
 		status = exec_pipeline(shell, node->data.pipe.left);
@@ -66,9 +63,10 @@ t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 	}
 	if (node->type == NODE_COMMAND)	
 	{
+		status = builtin_parent(node, shell);
+		if (status != EXEC_NOT_FOUND)
+			return (status);
 		status = exec_command_pipe(shell, node);
-		// if (status == EXEC_SUCCESS)
-		// 	shell->process_index++;
 		return (status);
 	}
 	return (EXEC_SUCCESS);
