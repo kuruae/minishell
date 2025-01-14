@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/13 16:35:40 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/14 18:14:56 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int test_lexing(char *line)
     t_token *current;
     int     i;
 
+	printf("Lexing:\n");
     tokens = lexing(line);
     if (!tokens)
         return (1);
@@ -97,33 +98,42 @@ static void	init_history(void)
 	close(file);
 }
 
-t_error readline_loop(t_shell *shell)
+static t_error	user_intput_routine(t_shell *shell)
 {
 	t_exec_error	status;
+	t_token			*tokens;
+	t_ast_node		*ast;
 
+	test_lexing(shell->line); // debug function
+	tokens = lexing(shell->line);
+	if (!tokens)
+		return (ERR_SYNTAX);
+	ast = ast_handler(tokens, shell->envp);
+	debug_print_ast(ast, 0); // debug function
+	add_history(shell->line);
+	append_history(1, HISTORY_FILE);
+	status = start_exec(shell, ast);
+	if (status == EXEC_ERR_FATAL)
+		return (ERR_FATAL);
+	free_user_input(tokens, ast);
+	return (SUCCESS);
+}
+
+t_error readline_loop(t_shell *shell)
+{
+	t_error	routine_status;
+	
 	init_history();
 	shell->line = readline(PROMPT);
 	while (shell->line)
 	{
 		if (!is_line_empty(shell->line))
 		{
-			// ast(lexing(shell->line));
-			// add_history(shell->line);
-			// parse_line(shell);
-			printf("\nLexing:\n");
-			test_lexing(shell->line);
-			t_token *tokens = lexing(shell->line);
-			if (!tokens)
+			routine_status = user_intput_routine(shell);
+			if (routine_status == ERR_FATAL)
 				return (ERR_FATAL);
-			t_ast_node *ast = ast_handler(tokens, shell->envp);
-			printf("\nAST Structure:\n");
-    		debug_print_ast(ast, 0);
-			add_history(shell->line);
-			append_history(1, HISTORY_FILE);
-			status = start_exec(shell, ast);
-			if (status == EXEC_ERR_FATAL)
-				return (ERR_FATAL);
-			free_user_input(tokens, ast);
+			if (routine_status == ERR_SYNTAX)
+				ft_putstr_fd("minishell: syntax error\n", STDERR_FILENO);
 		}
 		free(shell->line);
 		shell->line = readline(PROMPT);

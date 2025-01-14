@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:10:53 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/13 16:32:08 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/14 17:44:28 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,13 @@ void	free_tokens(t_token *tokens);
 void	add_new_token(t_token **tokens, t_token *new_token);
 int     get_tok_word_len(char *line);
 t_error verify_unclosed_quotes(t_token *tokens);
+t_error	grammar_handler(t_token *tokens);
 
+/*grammar utils functions*/
+
+bool    is_operator(t_token_type type);
+bool    is_redir(t_token_type type);
+bool    is_unclosed_quote(char *str);
+t_error is_subshell_valid(t_token *tokens);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/13 16:32:48 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/14 19:41:40 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	shell->pipe_count = count_pipes(node);
 	shell->pipe_index = 0;
 	shell->process_index = 0;
+	shell->root_node = node;
 	//two different functions for the case its a single command or a pipeline
 	if (node->type == NODE_COMMAND)
 		return (start_command(shell, node));
