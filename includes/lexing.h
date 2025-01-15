@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:10:53 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/14 17:44:28 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/15 17:13:04 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,6 @@ bool    is_operator(t_token_type type);
 bool    is_redir(t_token_type type);
 bool    is_unclosed_quote(char *str);
 t_error is_subshell_valid(t_token *tokens);
+t_error	prev_and_after_par(t_token *current, t_token *prev);
 
 #endif
