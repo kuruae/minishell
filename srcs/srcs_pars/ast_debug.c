@@ -63,6 +63,7 @@ static void print_redirections(t_redir *redir, int depth)
 // Main debug function to print the AST
 void debug_print_ast(t_ast_node *node, int depth)
 {
+    printf("\nAST Structure:\n");
     if (!node)
     {
         print_indent(depth);
