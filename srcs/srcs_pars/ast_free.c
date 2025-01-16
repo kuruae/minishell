@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_free.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:35:28 by emagnani          #+#    #+#             */
-/*   Updated: 2025/01/16 16:09:06 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/16 21:38:59 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ static void	free_redir(t_ast_node *node)
 	while (redir)
 	{
 		next = redir->next;
+		if (redir->type == REDIR_HEREDOC)
+			unlink(redir->file);
 		free(redir->file);
 		free(redir);
 		redir = next;

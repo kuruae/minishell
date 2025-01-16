@@ -1,6 +1,11 @@
 #ifndef AST_H
 # define AST_H
 
+# define HEX_STRING_LEN 8
+# define HEREDOC_PREFIX "/tmp/heredoc_"
+# define HEX_MASK 0xF
+
+
 # include "minishell.h"
 
 # include "expansion.h"
@@ -93,5 +98,6 @@ t_node_type	get_node_type(t_token_type token_type);
 t_error	all_expands_handler(t_ast_node *node, t_parser *parser);
 t_error	remove_quotes_handler(t_ast_node *node);
 void set_command_data(t_ast_node *node);
+char	*heredoc_handler(char *delimiter);
 
 #endif
