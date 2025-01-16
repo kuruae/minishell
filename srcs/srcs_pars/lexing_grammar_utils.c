@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing_grammar_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 17:31:55 by emagnani          #+#    #+#             */
-/*   Updated: 2025/01/15 17:22:33 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/16 18:10:12 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ bool	is_operator(t_token_type type)
 bool	is_redir(t_token_type type)
 {
 	return (type == TOK_REDIR_IN || type == TOK_REDIR_OUT
-		|| type == TOK_APPEND);
+		|| type == TOK_APPEND || type == TOK_HEREDOC);
 }
 
 bool	is_unclosed_quote(char *str)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_free.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:35:28 by emagnani          #+#    #+#             */
-/*   Updated: 2025/01/09 16:37:47 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:09:06 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	free_command_node(t_ast_node *node)
 {
-	int i;
+	int	i;
 
 	free(node->data.command.command);
 	if (node->data.command.args)
@@ -31,8 +31,8 @@ static void	free_command_node(t_ast_node *node)
 
 static void	free_redir(t_ast_node *node)
 {
-	t_redir *next;
-	t_redir *redir;
+	t_redir	*next;
+	t_redir	*redir;
 
 	redir = node->redirections;
 	while (redir)
@@ -44,31 +44,28 @@ static void	free_redir(t_ast_node *node)
 	}
 }
 
-void free_ast(t_ast_node *node)
+void	free_ast(t_ast_node *node)
 {
 	if (!node)
-    	return ;
+		return ;
 	free_redir(node);
-
-    if (node->type == NODE_COMMAND)
+	if (node->type == NODE_COMMAND)
 		free_command_node(node);
-
-    else if (node->type == NODE_PIPE)
-    {
-        free_ast(node->data.pipe.left);
-        free_ast(node->data.pipe.right);
-    }
-    else if (node->type == NODE_SUBSHELL)
-    {
-        free_ast(node->data.subshell.command);
-    }
-    else if (node->type == NODE_AND || node->type == NODE_OR)
-    {
-        free_ast(node->data.logical_op.left);
-        free_ast(node->data.logical_op.right);
-    }
-
-    free(node);
+	else if (node->type == NODE_PIPE)
+	{
+		free_ast(node->data.pipe.left);
+		free_ast(node->data.pipe.right);
+	}
+	else if (node->type == NODE_SUBSHELL)
+	{
+		free_ast(node->data.subshell.command);
+	}
+	else if (node->type == NODE_AND || node->type == NODE_OR)
+	{
+		free_ast(node->data.logical_op.left);
+		free_ast(node->data.logical_op.right);
+	}
+	free(node);
 }
 
 t_ast_node	*err_free_and_return(t_parser *parser, t_ast_node *node)
