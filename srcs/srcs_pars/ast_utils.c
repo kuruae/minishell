@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:09:16 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/16 18:18:47 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/16 18:32:25 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,22 @@ static void	fill_heredoc(int fd, char *delimiter)
 
 static char	*get_heredoc_filename(void)
 {
-	char	*filename;
-	char	*char_count;
-	static int	int_count;
+	char		*filename;
+	char		*char_count;
+	static int	int_count = 0;
 
-	int_count = 0;
 	char_count = ft_itoa(int_count);
+	if (!char_count)
+		return (NULL);
 	int_count++;
 	filename = ft_strjoin("/tmp/heredoc_", char_count);
 	free(char_count);
+	if (!filename)
+		return (NULL);
 	if (access(filename, F_OK) == 0)
 	{
 		free(filename);
-		get_heredoc_filename();
+		return (get_heredoc_filename());
 	}
 	return (filename);
 }
