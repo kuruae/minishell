@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:35:28 by emagnani          #+#    #+#             */
-/*   Updated: 2025/01/16 21:38:59 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/17 20:10:20 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,16 @@ static void	free_command_node(t_ast_node *node)
 			i++;
 		}
 		free(node->data.command.args);
+	}
+	if (node->data.command.argv_exec)
+	{
+		i = 0;
+		while (node->data.command.argv_exec[i])
+		{
+			free(node->data.command.argv_exec[i]);
+			i++;
+		}
+		free(node->data.command.argv_exec);
 	}
 }
 
