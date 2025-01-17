@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 23:56:06 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/13 16:35:24 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/14 18:07:05 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,46 +91,12 @@ t_token *lexing(char *line)
 			i += ft_strlen(current->value);
 		}
 	}
-	if (verify_unclosed_quotes(tokens) != SUCCESS)
+	if (grammar_handler(tokens) != SUCCESS)
+	{
+		free_tokens(tokens);
 		return (NULL);
+	}
 	return (tokens);
 }
 
 
-static bool	is_unclosed_quote(char *str)
-{
-	int i;
-	int single_quote;
-	int double_quote;
-
-	i = 0;
-	single_quote = 0;
-	double_quote = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'')
-			single_quote += 1;
-		if (str[i] == '\"')
-			double_quote += 1;
-		i++;
-	}
-	return (single_quote % 2 != 0 || double_quote % 2 != 0);
-}
-
-t_error	verify_unclosed_quotes(t_token *tokens)
-{
-	t_token *current;
-
-	current = tokens;
-	while (current)
-	{
-		if (current->type == TOK_WORD && is_unclosed_quote(current->value))
-		{
-			perror("syntax error: unclosed quote");
-			free_lexing(tokens);
-			return (FAILURE);
-		}
-		current = current->next;
-	}
-	return (SUCCESS);
-}

@@ -60,6 +60,7 @@ typedef enum e_error
 	CTRL_D,
 	ERR_FATAL,
 	ERR_MALLOC,
+	ERR_SYNTAX,
 	FAILURE
 }	t_error;
 
