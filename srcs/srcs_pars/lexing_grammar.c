@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 15:52:56 by emagnani          #+#    #+#             */
-/*   Updated: 2025/01/17 00:48:50 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/17 19:06:49 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static t_error	op_grammar_handler(t_token *current, t_token *prev)
 {
 	if (!current->next || (current->next->type != TOK_WORD
 			&& current->next->type != TOK_PAR_OPEN
-			&& current->next->type != TOK_HEREDOC) || !prev)
+			&& !is_redir(current->next->type)) || !prev)
 		return (FAILURE);
 	return (SUCCESS);
 }
