@@ -58,6 +58,8 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 
 t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 {
+	t_exec_error	status;
+
 	//initializing the shell struct
 	shell->process_count = count_pipes(node) + 1;
 	shell->pipe_count = count_pipes(node);
@@ -69,7 +71,14 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 		return (start_command(shell, node));
 	else if (node->type == NODE_PIPE)
 		return (start_pipeline(shell, node));
+	else if (node->type == NODE_AND)
+	{
+		status = start_exec(shell, node->data.logical_op.left);
+		if (status != EXEC_SUCCESS)
+			return (status);
+		return (start_exec(shell, node->data.logical_op.right));
+	}
 	else
 		ft_printf("this version only suports pipes and commands\n");
-	return (EXEC_SUCCESS);
+	return (EXIT_SUCCESS);
 }

@@ -76,4 +76,6 @@ void	set_command_data(t_ast_node *node)
 	node->data.command.exec_data.out_type = STD_T;
 	node->data.command.exec_data.in_file = STDIN_FILENO;
 	node->data.command.exec_data.out_file = STDOUT_FILENO;
+	node->data.command.exec_data.pipe_index_in = 0;
+	node->data.command.exec_data.pipe_index_out = 0;
 }
