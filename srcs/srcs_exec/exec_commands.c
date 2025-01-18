@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/13 16:56:20 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/16 16:00:52 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,11 +115,11 @@ char	**transform_args(char **args, char	*command, int argc)
 
 void	exec_command(t_shell *shell, t_ast_node *node)
 {
-    // ft_printf("Entered exec_command\n");
+    ft_printf("Entered exec_command\n");
     
-    char *command;
+    // char *command;
     char **argv_exec;
-    int argc;
+    // int argc;
     char **paths;
     t_exec_error status;
 
@@ -128,8 +128,8 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 		ft_printf("Invalid node or command\n");
 		exit(1);
     }
-	command = node->data.command.command;
-	argc = node->data.command.arg_count;
+	// command = node->data.command.command;
+	// argc = node->data.command.arg_count;
 	argv_exec = node->data.command.argv_exec;
 	if (set_input_output(shell, node) == EXEC_ERR_FILE)
 		exit(1);
@@ -140,7 +140,7 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	if (status != EXEC_NOT_FOUND)
 		exit_exec_status(status);
 	// only continues when the command wasnt found in the builtins
-	argc += 1; //adjusting argc (as now agv inludes the command)
+	// argc += 1; //adjusting argc (as now agv inludes the command)
 	paths = get_paths(*shell->envp);
 	if (!paths)
 		exit(1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/13 18:40:45 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/17 18:55:11 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,41 +136,41 @@ static t_error count_and_process_args(t_parser *parser, t_ast_node **node)
 
 static t_error create_argv_exec(t_ast_node *node)
 {
-    int i;
-    
-    // Allocate space for command + NULL terminator
-    node->data.command.argv_exec = malloc(sizeof(char *) * 
-        (node->data.command.arg_count + 2));
-    if (!node->data.command.argv_exec)
-        return (ERR_MALLOC);
+	int i;
+	
+	// Allocate space for command + NULL terminator
+	node->data.command.argv_exec = malloc(sizeof(char *) * 
+		(node->data.command.arg_count + 2));
+	if (!node->data.command.argv_exec)
+		return (ERR_MALLOC);
 
-    // Copy command as first argument
-    if (!(node->data.command.argv_exec[0] = ft_strdup(node->data.command.command)))
-    {
-        free(node->data.command.argv_exec);
-        return (ERR_MALLOC);
-    }
+	// Copy command as first argument
+	if (!(node->data.command.argv_exec[0] = ft_strdup(node->data.command.command)))
+	{
+		free(node->data.command.argv_exec);
+		return (ERR_MALLOC);
+	}
 
-    // If we have arguments, copy them
-    i = 1;
-    if (node->data.command.args)
-    {
-        while (i <= node->data.command.arg_count)
-        {
-            node->data.command.argv_exec[i] = ft_strdup(node->data.command.args[i - 1]);
-            if (!node->data.command.argv_exec[i])
-            {
-                while (--i >= 0)
-                    free(node->data.command.argv_exec[i]);
-                free(node->data.command.argv_exec);
-                return (ERR_MALLOC);
-            }
-            i++;
-        }
-    }
-    
-    node->data.command.argv_exec[i] = NULL;
-    return (SUCCESS);
+	// If we have arguments, copy them
+	i = 1;
+	if (node->data.command.args)
+	{
+		while (i <= node->data.command.arg_count)
+		{
+			node->data.command.argv_exec[i] = ft_strdup(node->data.command.args[i - 1]);
+			if (!node->data.command.argv_exec[i])
+			{
+				while (--i >= 0)
+					free(node->data.command.argv_exec[i]);
+				free(node->data.command.argv_exec);
+				return (ERR_MALLOC);
+			}
+			i++;
+		}
+	}
+	
+	node->data.command.argv_exec[i] = NULL;
+	return (SUCCESS);
 }
 
 
@@ -200,6 +200,14 @@ t_ast_node *parse_command(t_parser *parser)
 	node = create_ast_node(NODE_COMMAND);
 	if (!node)
 		return (NULL);
+
+	   // Handle any redirections that come BEFORE the command
+	if (!parse_redir(parser, node))
+		return (err_free_and_return(parser, node));
+
+	// If we hit EOF or a special token after redirections without finding a command
+	if (!parser->current || parser->current->type != TOK_WORD)
+		return (err_free_and_return(parser, node));
 
 	// Store command name and advance
 	node->data.command.command = ft_strdup(parser->current->value);
@@ -252,6 +260,8 @@ t_ast_node	*parse_pipe(t_parser *parser)
 	t_ast_node	*node;
 
 	left = parse_command(parser);
+	if (!left)
+		return (NULL);
 	while (parser->current && parser->current->type == TOK_PIPE)
 	{
 		paser_advance(parser);
