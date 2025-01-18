@@ -84,15 +84,13 @@ t_exec_error	set_input_output(t_shell *shell, t_ast_node *node)
 	t_exec_error	status;
 
 	(void)shell;
-	//ft_printf("starting to set in and out\n");
 	//first i set all data
 	if (node->data.command.exec_data.in_type == STD_T)
 		node->data.command.exec_data.in_file = STDIN_FILENO;
 	if (node->data.command.exec_data.out_type == STD_T)
 		node->data.command.exec_data.out_file = STDOUT_FILENO;
-	if (node->redirections && node->redirections->type == REDIR_INPUT)
+	if (node->redirections && (node->redirections->type == REDIR_INPUT || node->redirections->type == REDIR_HEREDOC))
 	{
-		//ft_printf("opening infile\n");
 		status = open_infile(node);
 		if (status == EXEC_ERR_FILE)
 			return (status);
