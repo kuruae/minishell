@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:09:16 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/16 20:42:28 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/18 18:31:31 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_redir	*create_redir_node(t_token *token, char *file)
 		free(redir);
 		return (NULL);
 	}
-	if (redir->type != REDIR_HEREDOC)
+	if (redir->type != REDIR_HEREDOC) // heredoc file is already set and malloced
 		redir->file = ft_strdup(file);
 	redir->next = NULL;
 	return (redir);

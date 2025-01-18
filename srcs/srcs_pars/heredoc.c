@@ -6,12 +6,21 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 20:42:09 by kuru              #+#    #+#             */
-/*   Updated: 2025/01/16 21:44:47 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/18 18:28:03 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * Converts an unsigned integer to its hexadecimal string representation
+ * 
+ * @param num      The unsigned integer to convert
+ * @param hex_str  Output buffer for the hex string (must be at least HEX_STRING_LEN + 1 bytes)
+ * 
+ * Converts each 4-bit chunk of the input number into a hex character (0-f)
+ * and stores it in the provided buffer. Adds null terminator at the end.
+ */
 static void uint_to_hex(unsigned int num, char *hex_str)
 {
     const char hex_chars[] = "0123456789abcdef";
@@ -27,11 +36,30 @@ static void uint_to_hex(unsigned int num, char *hex_str)
     hex_str[HEX_STRING_LEN] = '\0';
 }
 
+/**
+ * Linear Congruential Generator (LCG) for pseudo-random number generation
+ * 
+ * @param seed  Pointer to the seed value that will be updated
+ * @return      The next pseudo-random number in the sequence
+ * 
+ * Uses the formula: next = (seed * 1664525 + 1013904223) % UINT32_MAX
+ * Parameters chosen for good statistical properties
+ * We use this to generate unique filenames for heredoc temporary files
+ * in case we need to create multiple heredocs in the same session.
+ */
 static unsigned int	lcg_rand(unsigned int *seed)
 {
 	return ((*seed * 1664525 + 1013904223) % UINT32_MAX);
 }
 
+/**
+ * Generates a unique filename for heredoc temporary files
+ * 
+ * @return  Dynamically allocated string containing the filename, or NULL on error
+ * 
+ * Creates a filename by combining HEREDOC_PREFIX with a random hex string.
+ * If the generated filename already exists, recursively tries again.
+ */
 static char *get_heredoc_filename(void)
 {
     static unsigned int seed = 42;
