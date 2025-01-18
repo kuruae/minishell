@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 20:42:09 by kuru              #+#    #+#             */
-/*   Updated: 2025/01/18 18:28:03 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/18 21:50:37 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,24 @@
  * Converts an unsigned integer to its hexadecimal string representation
  * 
  * @param num      The unsigned integer to convert
- * @param hex_str  Output buffer for the hex string (must be at least HEX_STRING_LEN + 1 bytes)
+ * @param hex_str  Output buffer for the hex string
  * 
  * Converts each 4-bit chunk of the input number into a hex character (0-f)
  * and stores it in the provided buffer. Adds null terminator at the end.
  */
-static void uint_to_hex(unsigned int num, char *hex_str)
+static void	uint_to_hex(unsigned int num, char *hex_str)
 {
-    const char hex_chars[] = "0123456789abcdef";
-    int i;
-    
+	const char	hex_chars[] = "0123456789abcdef";
+	int			i;
+
 	i = HEX_STRING_LEN - 1;
-    while (i >= 0)
-    {
-        hex_str[i] = hex_chars[num & HEX_MASK];
-        num >>= 4;
+	while (i >= 0)
+	{
+		hex_str[i] = hex_chars[num & HEX_MASK];
+		num >>= 4;
 		i--;
-    }
-    hex_str[HEX_STRING_LEN] = '\0';
+	}
+	hex_str[HEX_STRING_LEN] = '\0';
 }
 
 /**
@@ -55,28 +55,28 @@ static unsigned int	lcg_rand(unsigned int *seed)
 /**
  * Generates a unique filename for heredoc temporary files
  * 
- * @return  Dynamically allocated string containing the filename, or NULL on error
+ * @return  Dynamically alloc string containing the filename, or NULL on error
  * 
  * Creates a filename by combining HEREDOC_PREFIX with a random hex string.
  * If the generated filename already exists, recursively tries again.
  */
-static char *get_heredoc_filename(void)
+static char	*get_heredoc_filename(void)
 {
-    static unsigned int seed = 42;
-    char *filename;
-    char hex_string[HEX_STRING_LEN + 1];
+	static unsigned int	seed = 42;
+	char				*filename;
+	char				hex_string[HEX_STRING_LEN + 1];
 
-    seed = lcg_rand(&seed);
-    uint_to_hex(seed, hex_string);
-    filename = ft_strjoin(HEREDOC_PREFIX, hex_string);
-    if (!filename)
-        return (NULL);
-    if (access(filename, F_OK) == 0)
-    {
-        free(filename);
-        return (get_heredoc_filename());
-    }
-    return (filename);
+	seed = lcg_rand(&seed);
+	uint_to_hex(seed, hex_string);
+	filename = ft_strjoin(HEREDOC_PREFIX, hex_string);
+	if (!filename)
+		return (NULL);
+	if (access(filename, F_OK) == 0)
+	{
+		free(filename);
+		return (get_heredoc_filename());
+	}
+	return (filename);
 }
 
 static void	fill_heredoc(int fd, char *delimiter)
