@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_remove_quotes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 16:05:23 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/15 18:46:50 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:08:03 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_error	remove_quotes_handler(t_ast_node *node)
 {
 	int		i;
 	char	*quoteless;
-	
+
 	quoteless = remove_quotes_from_string(node->data.command.command);
 	if (!quoteless)
 		return (ERR_MALLOC);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ast_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/16 16:09:16 by enzo              #+#    #+#             */
+/*   Updated: 2025/01/18 18:31:31 by kuru             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_ast_node	*create_ast_node(t_node_type type)
@@ -33,13 +45,17 @@ t_redir	*create_redir_node(t_token *token, char *file)
 	else if (token->type == TOK_APPEND)
 		redir->type = REDIR_APPEND;
 	else if (token->type == TOK_HEREDOC)
+	{
 		redir->type = REDIR_HEREDOC;
+		redir->file = heredoc_handler(file);
+	}
 	else
 	{
 		free(redir);
 		return (NULL);
 	}
-	redir->file = ft_strdup(file);
+	if (redir->type != REDIR_HEREDOC) // heredoc file is already set and malloced
+		redir->file = ft_strdup(file);
 	redir->next = NULL;
 	return (redir);
 }
