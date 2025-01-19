@@ -21,17 +21,19 @@ t_exec_error	recur_exec(t_shell *shell, t_ast_node *node);
 //a according exex_error status
 t_exec_error	return_status(int	status)
 {
-	int exit_status;
+    int exit_status;
 
-	if (WIFEXITED(status) == true)
-			return (EXEC_SUCCESS);
-	else 
-		exit_status = WEXITSTATUS(status);
-	g_sig_offset = exit_status;
-	if (exit_status == 128)
-		return (EXEC_ERR_FATAL);
-	else
-		return (EXEC_ERR_NON_FATAL);
+    if (WIFEXITED(status))
+    {
+        exit_status = WEXITSTATUS(status);
+        if (exit_status == 0)
+            return (EXEC_SUCCESS);
+        else if (exit_status == 127) // 127 is the exit status for command not found
+            return (EXEC_NOT_FOUND);
+        else
+            return (EXEC_ERR_NON_FATAL);
+    }
+    return (EXEC_ERR_FATAL);
 }
 
 t_exec_error	start_command(t_shell *shell, t_ast_node *node)
@@ -95,7 +97,7 @@ t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 	else if (node->type == NODE_OR)
 	{
 		status = recur_exec(shell, node->data.logical_op.left);
-		if (status != EXEC_NOT_FOUND)
+		if (status == EXEC_SUCCESS)
 			return (status);
 		return (recur_exec(shell, node->data.logical_op.right));
 	}

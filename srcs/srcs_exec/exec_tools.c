@@ -24,6 +24,8 @@ void	exit_exec_status(t_exec_error	status)
 		exit(1);
 	if (status == EXEC_ERR_FILE)
 		exit(1);
+	if (status == EXEC_NOT_FOUND)
+		exit(127);
 	ft_printf("missing status in exit_exec_status function\n");
 	exit(1);
 }
