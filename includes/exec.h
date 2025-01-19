@@ -73,6 +73,7 @@ void					exit_exec_status(t_exec_error	status);
 void					link_pipe(t_ast_node *node, t_shell *shell);
 void					close_used_fds(t_shell *shell, t_ast_node *node);
 void					close_unused_pipes(t_ast_node *node, t_shell *shell);
+t_shell					init_subshell(t_shell	*shell, t_ast_node *node);
 
 t_exec_error			start_pipeline(t_shell *shell, t_ast_node *node);
 int						count_pipes(t_ast_node *node);

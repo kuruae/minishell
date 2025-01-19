@@ -133,11 +133,6 @@ t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 		i++;
 	}
 	i = 0;
-	while (i < shell->process_count)
-	{
-		waitpid(shell->pid[i], NULL, 0);
-		i++;
-	}
 	return (status);
 }
 

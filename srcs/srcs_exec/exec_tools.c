@@ -43,13 +43,13 @@ void	link_pipe(t_ast_node *node, t_shell *shell)
 	{
 		left->data.command.exec_data.out_type = PIPE_T;
 		left->data.command.exec_data.pipe_index_out = index;
-		ft_printf("command %s sends out to pipe %d\n", left->data.command.command, index);	
+		//ft_printf("command %s sends out to pipe %d\n", left->data.command.command, index);	
 	}
 	if (right->type == NODE_COMMAND)
 	{
 		right->data.command.exec_data.in_type = PIPE_T;
 		right->data.command.exec_data.pipe_index_in = index;
-		ft_printf("command %s takes in from pipe %d\n", right->data.command.command, index);	
+		//ft_printf("command %s takes in from pipe %d\n", right->data.command.command, index);	
 	}
 	if (left->type == NODE_PIPE)
 	{
@@ -58,7 +58,7 @@ void	link_pipe(t_ast_node *node, t_shell *shell)
 			last_command = last_command->data.pipe.right;
 		last_command->data.command.exec_data.out_type = PIPE_T;
 		last_command->data.command.exec_data.pipe_index_out = index;
-		ft_printf("command %s sends out to pipe %d\n", last_command->data.command.command, index);	
+		//ft_printf("command %s sends out to pipe %d\n", last_command->data.command.command, index);	
 	}
 }
 
@@ -101,4 +101,20 @@ void	close_unused_pipes(t_ast_node *node, t_shell *shell)
 		}
 		i++;
 	}
+}
+
+t_shell	init_subshell(t_shell	*shell, t_ast_node *node)
+{
+	t_shell	sub_shell;
+
+	sub_shell.envp = shell->envp;
+	sub_shell.exit_status = 0;
+	sub_shell.line = NULL;
+	sub_shell.dir = shell->dir;
+	sub_shell.process_count = count_pipes(node) + 1;
+	sub_shell.pipe_count = count_pipes(node);
+	sub_shell.pipe_index = 0;
+	sub_shell.process_index = 0;
+	sub_shell.root_node = node;
+	return (sub_shell);
 }

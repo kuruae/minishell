@@ -58,22 +58,22 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 	return (return_status(child_status));
 }
 
-t_exec_error exec_subshell(t_shell *shell, t_ast_node *node)
-{
-    pid_t pid;
-    int status;
+t_exec_error start_subshell(t_shell *shell, t_ast_node *node)
+{	
+	int status;
+	int	i;
+	t_shell subshell;
 
-    pid = fork();
-    if (pid == -1)
-        return (EXEC_ERR_FATAL);
-    if (pid == 0)
-    {
-        // Child process
-        exit(recur_exec(shell, node));
-    }
-    // Parent process
-    waitpid(pid, &status, 0);
-    return return_status(status);
+
+	i = 0;
+	subshell = init_subshell(shell, node);
+	status = recur_exec(&subshell, node);
+	while (i < subshell.process_count)
+	{
+		waitpid(subshell.pid[i], &status, 0);
+		i++;
+	}
+	return (return_status(status));
 }
 
 
@@ -100,7 +100,7 @@ t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 		return (recur_exec(shell, node->data.logical_op.right));
 	}
 	else if (node->type == NODE_SUBSHELL)
-		return (exec_subshell(shell, node->data.subshell.command));
+		return (start_subshell(shell, node->data.subshell.command));
 	else
 		ft_printf("this version only suports pipes and commands\n");
 	return (EXIT_SUCCESS);
@@ -110,11 +110,19 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 
+	int i;
+
+	i = 0;
 	shell->process_count = count_pipes(node) + 1;
 	shell->pipe_count = count_pipes(node);
 	shell->pipe_index = 0;
 	shell->process_index = 0;
 	shell->root_node = node;
 	status = recur_exec(shell, node);
+	while (i < shell->process_count)
+	{
+		waitpid(shell->pid[i], NULL, 0);
+		i++;
+	}
 	return (status);
 }
