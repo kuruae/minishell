@@ -115,7 +115,7 @@ char	**transform_args(char **args, char	*command, int argc)
 
 void	exec_command(t_shell *shell, t_ast_node *node)
 {
-    ft_printf("Entered exec_command\n");
+    //ft_printf("Entered exec_command\n");
     
     // char *command;
     char **argv_exec;

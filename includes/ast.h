@@ -67,7 +67,7 @@ typedef struct s_ast_node
 
 		struct
 		{
-			struct s_ast_node	*command;
+			struct s_ast_node	*command; // a bit confusing, because this can be pipe or logical operator
 		} subshell;
 
 		struct
