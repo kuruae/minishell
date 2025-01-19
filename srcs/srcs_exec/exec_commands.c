@@ -148,4 +148,9 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	if (status == EXEC_ERR_FATAL)
 		exit(1);
 	free(paths);
+	if (status == EXEC_NOT_FOUND)
+    {
+        ft_putstr_fd("total error: command not found\n", 2);
+        exit_exec_status(status);
+    }
 }
