@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/17 18:55:11 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/19 15:40:37 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,11 @@ void	add_redir(t_ast_node *node, t_redir *redir)
 }
 
 
-/* parse_redir: Parses all redirections for a command or subshell
- * @parser: Current parser state
- * @node: The AST node to attach redirections to
+/**
+ * Parses all redirections for a command or subshell
+ * 
+ * @param parser	Current parser state
+ * @param node		The AST node to attach redirections to
  *
  * Processes all consecutive redirections like:
  * - Input redirection (<)
@@ -38,7 +40,7 @@ void	add_redir(t_ast_node *node, t_redir *redir)
  * - Append redirection (>>)
  * - Here-document (<<)
  *
- * Returns: true on success, false on failure
+ * @return true on success, false on failure
  */
 bool	parse_redir(t_parser *parser, t_ast_node *node)
 {
@@ -63,9 +65,10 @@ bool	parse_redir(t_parser *parser, t_ast_node *node)
 }
 
 
-
-/* parse_subshell: Parses a subshell expression (commands within parentheses)
- * @parser: Current parser state
+/**
+ * Parses a subshell expression (commands within parentheses)
+ * 
+ * @param parser Current parser state
  *
  * Processing steps:
  * 1. Validates and consumes opening parenthesis
@@ -73,7 +76,7 @@ bool	parse_redir(t_parser *parser, t_ast_node *node)
  * 3. Validates and consumes closing parenthesis
  * 4. Handles any redirections that follow the subshell
  *
- * Returns: A new AST node of type NODE_SUBSHELL or NULL on failure
+ * @return A new AST node of type NODE_SUBSHELL or NULL on failure
  */
 t_ast_node *parse_subshell(t_parser *parser)
 {
@@ -174,8 +177,10 @@ static t_error create_argv_exec(t_ast_node *node)
 }
 
 
-/* parse_command: Parses a single command or subshell expression
- * @parser: Current parser state
+/**
+ * Parses a single command or subshell expression
+ * 
+ * @param parser Current parser state
  *
  * This function handles two cases:
  * 1. Subshell expressions starting with '(' 
@@ -185,8 +190,11 @@ static t_error create_argv_exec(t_ast_node *node)
  * - Stores the command name
  * - Collects all arguments
  * - Handles any redirections (>, <, >>, <<)
- *
- * Returns: A new AST node of type NODE_COMMAND or NULL on failure
+ * - Expands environment variables and wildcard patterns
+ * - Creates an argv_exec array for execve
+ * - Sets the command data structure
+ * 
+ * @return A new AST node of type NODE_COMMAND or NULL on failure
  */
 t_ast_node *parse_command(t_parser *parser)
 {
@@ -237,8 +245,10 @@ t_ast_node *parse_command(t_parser *parser)
 
 
 
-/* parse_pipe: Parses pipe sequences (cmd1 | cmd2 | cmd3)
- * @parser: Current parser state
+/** 
+ * Parses pipe sequences (cmd1 | cmd2 | cmd3)
+ * 
+ * @param parser Current parser state
  *
  * Creates a binary tree of pipe operations where:
  * - Left child is the command/subshell before the pipe
@@ -252,7 +262,7 @@ t_ast_node *parse_command(t_parser *parser)
  *     / \
  *  cmd1  cmd2
  *
- * Returns: Root node of the pipe sequence or NULL on failure
+ * @return Root node of the pipe sequence or NULL on failure
  */
 t_ast_node	*parse_pipe(t_parser *parser)
 {
@@ -290,9 +300,10 @@ static t_error testing_pointer_parse_pipe(t_parser *parser, t_ast_node **left)
 }
 
 
-
-/* parse_logic: Parses logical operators (&& and ||)
- * @parser: Current parser state
+/**
+ * Parses logical operators (&& and ||)
+ * 
+ * @param parser Current parser state
  *
  * Handles logical AND (&&) and OR (||) operations by:
  * 1. First parsing the leftmost pipe sequence or command
@@ -308,7 +319,7 @@ static t_error testing_pointer_parse_pipe(t_parser *parser, t_ast_node **left)
  *     /  \
  *  cmd1  cmd2
  *
- * Returns: Root node of the logical operation tree or NULL on failure
+ * @return Root node of the logical operation tree or NULL on failure
  */
 t_ast_node *parse_logic(t_parser *parser)
 {
@@ -354,15 +365,18 @@ static t_error  start_ast(t_parser *parser, t_ast_node **root)
 }
 
 
-/* ast_handler: Entry point for parsing a token stream
- * @tokens: Linked list of lexical tokens
+/**
+ * Entry point for parsing a token stream
+ * 
+ * @param tokens Linked list of lexical tokens
+ * @param env    Environment variables
  *
  * Main parser function that:
  * 1. Initializes parser state
  * 2. Starts parsing from highest level (logical operations)
  * 3. Builds complete AST for the input command line
  *
- * Returns: Root node of the complete AST or NULL on failure
+ * @return: Root node of the complete AST or NULL on failure
  */
 t_ast_node	*ast_handler(t_token *tokens, char ***env)
 { 

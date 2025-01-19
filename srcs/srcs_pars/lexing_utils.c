@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 00:41:04 by kuru              #+#    #+#             */
-/*   Updated: 2025/01/17 01:07:18 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/19 15:02:21 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,6 @@ static int	handle_quotes_len(char *line)
 	return (i);
 }
 
-/* 
-* @TODO: this part reminds me we will probably need to
-* handle escape characters in the future (e.g. \', \$, etc.)
-*/
 int	get_tok_word_len(char *line)
 {
 	int len;
