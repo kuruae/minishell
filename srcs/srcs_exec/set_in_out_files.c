@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 01:08:11 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/13 16:15:34 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/20 03:44:13 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,18 @@ int	open_infile(t_ast_node	*node)
 	return (EXEC_SUCCESS);
 }
 
-int	open_outfile(t_ast_node	*node, bool second)
+int	open_outfile(t_ast_node	*node, t_redir *redir)
 {
 	int	out_file;
 
 	//ft_printf("opening out file\n");
-
+	
 	//ft_printf("Setting new Out file to %s\n", node->redirections->file);
-	if (second == true)
-		out_file = open(node->redirections->next->file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	
+	if (redir->type == REDIR_APPEND)
+		out_file = open(redir->file, O_CREAT | O_RDWR | O_APPEND, 0644);
 	else
-		out_file = open(node->redirections->file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+		out_file = open(redir->file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (out_file == -1)
 		return (perror("total error: output file"), EXEC_ERR_FILE);
 	node->data.command.exec_data.out_type = FILE_T;
@@ -94,11 +95,11 @@ t_exec_error	set_input_output(t_shell *shell, t_ast_node *node)
 		status = open_infile(node);
 		if (status == EXEC_ERR_FILE)
 			return (status);
-		if (node->redirections->next && node->redirections->next->type == REDIR_OUTPUT)
-			status = open_outfile(node, true);
+		if (node->redirections->next && (node->redirections->next->type == REDIR_OUTPUT || node->redirections->next->type == REDIR_APPEND))
+			status = open_outfile(node, node->redirections->next);
 	}
-	if (node->redirections && node->redirections->type == REDIR_OUTPUT)
-		status = open_outfile(node, false);
+	if (node->redirections && (node->redirections->type == REDIR_OUTPUT || node->redirections->type == REDIR_APPEND))
+		status = open_outfile(node, node->redirections);
 	if (status == EXEC_ERR_FILE)
 		return (status);
 	set_pipes(node, shell);
