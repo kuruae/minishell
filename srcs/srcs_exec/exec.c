@@ -41,7 +41,7 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 	t_exec_error	status;
 	pid_t			child_pid;
 
-	status = builtin_parent(node, shell);
+	status = builtin_parent(node, shell); 
 	if (status != EXEC_NOT_FOUND)
 		return (status);
 	child_pid = fork();
@@ -130,10 +130,15 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	shell->pipe_index = 0;
 	shell->process_index = 0;
 	shell->root_node = node;
+	signal(SIGQUIT, ctl_back_handler);
+	// if pipe count == 0 && status == BUILTIN
+		// return execbuiltin
 	status = recur_exec(shell, node);
 	i = 0;
 	while (i < shell->process_count)
 	{
+		fprintf(stderr, ">>>> %p\n", &shell->pid[i]);
+		fprintf(stderr, ">>>value> %d\n", &shell->pid[i]);
 		waitpid(shell->pid[i], &child_status, 0);
 		g_sig_offset = WEXITSTATUS(child_status);
 		i++;

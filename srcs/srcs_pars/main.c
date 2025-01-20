@@ -112,6 +112,8 @@ t_error readline_loop(t_shell *shell)
 	shell->line = readline(PROMPT);
 	while (shell->line)
 	{
+		if (!shell->line)
+            break;
 		if (!is_line_empty(shell->line))
 		{
 			routine_status = user_intput_routine(shell);
@@ -121,8 +123,10 @@ t_error readline_loop(t_shell *shell)
 				ft_putstr_fd("minishell: syntax error\n", STDERR_FILENO);
 		}
 		free(shell->line);
+		get_signal();
 		shell->line = readline(PROMPT);
 	}
+	g_sig_offset = 131;
 	return (CTRL_D);
 }
 char ***copy_env(char **envp)
@@ -162,7 +166,7 @@ int	main(int argc, char **argv, char **envp)
 	if (status == ERR_FATAL)
 		return(clean_up_end(&shell), EXIT_FAILURE);
 	if (status == CTRL_D)
-		g_sig_offset = 0;
+		g_sig_offset = 131;
 	clean_up_end(&shell);
 	return (0);
 }

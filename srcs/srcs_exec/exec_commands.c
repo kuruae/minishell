@@ -82,7 +82,6 @@ t_exec_error	try_command(char **paths, char **args, char **env, t_ast_node *node
 		i++;
 		free(command_path);
 	}
-	ft_putstr_fd("total error: command not found\n", 2);
 	return (EXEC_NOT_FOUND);
 }
 
