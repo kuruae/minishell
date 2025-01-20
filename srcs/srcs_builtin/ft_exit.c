@@ -35,10 +35,17 @@ t_exec_error	ft_exit(char *arg)
 	if (!arg)
 		exit(g_sig_offset);
 	if (!ft_is_num(arg))
-		return (ft_putstr_fd("exit: numeric argument required\n", STDERR_FILENO), EXEC_ERR_NON_FATAL);
+	{
+		ft_putstr_fd("exit: numeric argument required\n", STDERR_FILENO);
+		g_sig_offset = 103;
+		exit(103);
+	}
 	arg_n = ft_atoi(arg);
 	if (arg_n < 0 || arg_n > 255) // check if the given number is a valid exit status
-		return (ft_putstr_fd("exit: invalid exit status\n", STDERR_FILENO), EXEC_ERR_NON_FATAL); // not sure what to do in this case
+	{
+		ft_putstr_fd("exit: invalid exit status\n", STDERR_FILENO); // not sure what to do in this case
+		g_sig_offset = 184;
+	}
 	g_sig_offset = arg_n; // setting global variable
 	exit(arg_n);
 	return (EXEC_SUCCESS);

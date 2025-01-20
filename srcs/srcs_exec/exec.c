@@ -40,7 +40,6 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 	pid_t			child_pid;
-	int				child_status;
 
 	status = builtin_parent(node, shell);
 	if (status != EXEC_NOT_FOUND)
@@ -56,13 +55,13 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 		ft_printf("Child process did not exit properly\n");
 		exit(1);
 	}
-	waitpid(child_pid, &child_status, 0);
-	return (return_status(child_status));
+	shell->pid[shell->process_index++] = child_pid;
+	return (EXEC_NOT_FOUND);
 }
 
 t_exec_error start_subshell(t_shell *shell, t_ast_node *node)
 {	
-	int		status;
+	int		child_status;
 	int		i;
 	t_shell	subshell;
 	pid_t	pid;
@@ -76,16 +75,18 @@ t_exec_error start_subshell(t_shell *shell, t_ast_node *node)
 			return (EXEC_ERR_FATAL);
 		if (pid == 0)
 			exit(recur_exec(&subshell, node));
-		waitpid(pid, &status, 0);
-		return (return_status(status));
+		waitpid(pid, &child_status, 0);
+		g_sig_offset = WEXITSTATUS(child_status);
+		return (return_status(g_sig_offset));
 	}
 	recur_exec(&subshell, node);
 	while (i < subshell.process_count)
 	{
-		waitpid(subshell.pid[i], &status, 0);
+		waitpid(subshell.pid[i], &child_status, 0);
+		g_sig_offset = WEXITSTATUS(child_status);
 		i++;
 	}
-	return (return_status(status));
+	return (return_status(g_sig_offset));
 }
 
 
@@ -121,7 +122,8 @@ t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
-	int i;
+	int 			i;
+	int				child_status;
 
 	shell->process_count = count_pipes(node) + 1;
 	shell->pipe_count = count_pipes(node);
@@ -132,7 +134,8 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	i = 0;
 	while (i < shell->process_count)
 	{
-		waitpid(shell->pid[i], NULL, 0);
+		waitpid(shell->pid[i], &child_status, 0);
+		g_sig_offset = WEXITSTATUS(child_status);
 		i++;
 	}
 	return (status);
