@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/19 05:26:54 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/20 02:19:57 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,24 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 
 t_exec_error start_subshell(t_shell *shell, t_ast_node *node)
 {	
-	int status;
-	int	i;
-	t_shell subshell;
-
+	int		status;
+	int		i;
+	t_shell	subshell;
+	pid_t	pid;
 
 	i = 0;
 	subshell = init_subshell(shell, node);
-	status = recur_exec(&subshell, node);
+	if (subshell.pipe_count == 0)
+	{
+		pid = fork();
+		if (pid == -1)
+			return (EXEC_ERR_FATAL);
+		if (pid == 0)
+			exit(recur_exec(&subshell, node));
+		waitpid(pid, &status, 0);
+		return (return_status(status));
+	}
+	recur_exec(&subshell, node);
 	while (i < subshell.process_count)
 	{
 		waitpid(subshell.pid[i], &status, 0);
@@ -90,7 +100,7 @@ t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 	else if (node->type == NODE_AND)
 	{
 		status = recur_exec(shell, node->data.logical_op.left);
-		if (status != EXEC_SUCCESS)
+		if (status == EXEC_ERR_FATAL)
 			return (status);
 		return (recur_exec(shell, node->data.logical_op.right));
 	}
@@ -111,16 +121,15 @@ t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
-
 	int i;
 
-	i = 0;
 	shell->process_count = count_pipes(node) + 1;
 	shell->pipe_count = count_pipes(node);
 	shell->pipe_index = 0;
 	shell->process_index = 0;
 	shell->root_node = node;
 	status = recur_exec(shell, node);
+	i = 0;
 	while (i < shell->process_count)
 	{
 		waitpid(shell->pid[i], NULL, 0);

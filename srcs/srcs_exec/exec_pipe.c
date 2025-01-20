@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/13 16:26:26 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/20 01:56:46 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,6 @@ t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 		close(shell->pipes[i][1]);
 		i++;
 	}
-	i = 0;
 	return (status);
 }
 
