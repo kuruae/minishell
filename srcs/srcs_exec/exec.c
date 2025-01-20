@@ -40,7 +40,6 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 	pid_t			child_pid;
-	int				child_status;
 
 	status = builtin_parent(node, shell);
 	if (status != EXEC_NOT_FOUND)
@@ -56,8 +55,8 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 		ft_printf("Child process did not exit properly\n");
 		exit(1);
 	}
-	waitpid(child_pid, &child_status, 0);
-	return (return_status(child_status));
+	shell->pid[shell->process_index++] = child_pid;
+	return (EXEC_NOT_FOUND);
 }
 
 t_exec_error start_subshell(t_shell *shell, t_ast_node *node)
