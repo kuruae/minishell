@@ -6,32 +6,45 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:20:49 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/09 16:57:11 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/20 14:48:21 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-
-static bool is_pattern_matching(const char *pattern, const char *name)
+/**
+ * Checks if a given name matches a pattern with wildcard support
+ *
+ * @param pattern	The pattern string, cam contain wildcards
+ * @param name		The string to be matched against the pattern
+ * 
+ * algorithm:
+ * 1. character by character comparison until '*' is found
+ * 2. on '*' encounter:
+ * 		- skip consecutive '*' characters
+ * 		- if pattern ends with '*', rest of name matches
+ * 		- otherwise, recursively try matching remaining
+ * 			pattern at each position in the name
+ * 3. of no '*', exact character matching is required
+ *
+ * * recursion:
+ *   - each '*' spawns multiple recursive calls
+ *   - each call tries matching remaining pattern at
+ * 		different positions
+ *   - returns true if any recursive path finds a match
+ * 
+ * @return true if the name matches the pattern, else false
+ */
+static bool	is_pattern_matching(const char *pattern, const char *name)
 {
-	// Simple pattern matching implementation
-	// Returns true if 'name' matches 'pattern'
-	
 	while (*pattern && *name)
 	{
 		if (*pattern == '*')
 		{
 			pattern++;
-			// Skip consecutive stars
 			while (*pattern == '*')
 				pattern++;
-				
-			// If star is the last char, rest of name automatically matches
 			if (!*pattern)
 				return (true);
-				
-			// Try matching the rest of the pattern at each position
 			while (*name)
 			{
 				if (is_pattern_matching(pattern, name))
@@ -42,12 +55,9 @@ static bool is_pattern_matching(const char *pattern, const char *name)
 		}
 		else if (*pattern != *name)
 			return (false);
-			
 		pattern++;
 		name++;
 	}
-	
-	// Both should be at end for a match
 	while (*pattern == '*')
 		pattern++;
 	return (!*pattern && !*name);
@@ -62,13 +72,11 @@ static int	count_matching_patterns(const char *pattern)
 	dir = opendir(".");
 	if (!dir)
 		return (0);
-
 	count = 0;
 	while ((entry = readdir(dir)))
 	{
 		if (entry->d_name[0] == '.' && pattern[0] != '.')
-			continue;
-			
+			continue ;
 		if (is_pattern_matching(pattern, entry->d_name))
 			count++;
 	}
@@ -76,45 +84,42 @@ static int	count_matching_patterns(const char *pattern)
 	return (count);
 }
 
-static void fill_matches(char **matches, const char *pattern)
+static void	fill_matches(char **matches, const char *pattern)
 {
-	DIR             *dir;
-	struct dirent   *entry;
-	int             i;
+	DIR				*dir;
+	struct dirent	*entry;
+	int				i;
 
 	dir = opendir(".");
 	if (!dir)
-		return;
-
+		return ;
 	i = 0;
 	while ((entry = readdir(dir)))
 	{
 		if (entry->d_name[0] == '.' && pattern[0] != '.')
-			continue;
-			
+			continue ;
 		if (is_pattern_matching(pattern, entry->d_name))
 			matches[i++] = ft_strdup(entry->d_name);
 	}
 	closedir(dir);
 }
 
-static char **bubble_sort_matches(char **matches, int count)
+static char	**bubble_sort_matches(char **matches, int count)
 {
-	int     i;
-	int     j;
-	char    *tmp;
+	int		i;
+	int		j;
+	char	*tmp;
 
 	if (!matches || count <= 0)
 		return (matches);
-		
 	i = 0;
 	while (i < count - 1)
 	{
 		j = 0;
 		while (j < count - 1 - i)
 		{
-			if (ft_strncmp(matches[j], matches[j + 1], 
-				ft_strlen(matches[j]) + 1) > 0)
+			if (ft_strncmp(matches[j], matches[j + 1],
+					ft_strlen(matches[j]) + 1) > 0)
 			{
 				tmp = matches[j];
 				matches[j] = matches[j + 1];
@@ -126,7 +131,6 @@ static char **bubble_sort_matches(char **matches, int count)
 	}
 	return (matches);
 }
-
 
 static char	**return_pattern_as_is(const char *pattern)
 {
@@ -142,7 +146,6 @@ static char	**return_pattern_as_is(const char *pattern)
 	return (matches);
 }
 
-
 static char	**expand_wildcard(const char *pattern)
 {
 	char	**matches;
@@ -150,11 +153,9 @@ static char	**expand_wildcard(const char *pattern)
 
 	if (!ft_strchr(pattern, '*'))
 		return (return_pattern_as_is(pattern));
-
 	count = count_matching_patterns(pattern);
 	if (count == 0)
 		return (return_pattern_as_is(pattern));
-
 	matches = malloc(sizeof(char *) * (count + 1));
 	if (!matches)
 		return (NULL);
@@ -180,7 +181,7 @@ t_error	start_wildcard_expansion(t_ast_node *node)
 	{
 		expanded = expand_wildcard(node->data.command.args[i]);
 		if (!expanded)
-			return (ERR_FATAL);
+			return (FAILURE);
 			
 		for (j = 0; expanded[j]; j++)
 			total_args++;
@@ -194,7 +195,7 @@ t_error	start_wildcard_expansion(t_ast_node *node)
 	// Allocate new argument array
 	new_args = malloc(sizeof(char *) * (total_args + 1));
 	if (!new_args)
-		return (ERR_FATAL);
+		return (ERR_MALLOC);
 
 	// Fill new argument array
 	k = 0;
@@ -204,7 +205,7 @@ t_error	start_wildcard_expansion(t_ast_node *node)
 		if (!expanded)
 		{
 			free(new_args);
-			return (ERR_FATAL);
+			return (FAILURE);
 		}
 		
 		for (j = 0; expanded[j]; j++)

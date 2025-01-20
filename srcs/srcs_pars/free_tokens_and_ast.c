@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_tokens_and_ast.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 18:20:35 by emagnani          #+#    #+#             */
-/*   Updated: 2025/01/13 16:34:15 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/20 15:05:42 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	free_lexing(t_token *tokens)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	if (!tokens)
 		return ;
