@@ -6,13 +6,13 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 23:56:06 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/14 18:07:05 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/20 14:59:48 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_token_type get_token_type(char *line)
+static t_token_type	get_token_type(char *line)
 {
 	if (*line == '<')
 	{
@@ -33,24 +33,23 @@ static t_token_type get_token_type(char *line)
 		return (TOK_PIPE);
 	}
 	if (ft_strncmp(line, "&&", 2) == 0)
-			return (TOK_AND);
+		return (TOK_AND);
 	if (*line == '(')
 		return (TOK_PAR_OPEN);
 	if (*line == ')')
 		return (TOK_PAR_CLOSE);
-	else
-		return (TOK_WORD);
+	return (TOK_WORD);
 }
-
 
 size_t	get_token_len(char *line, t_token_type type)
 {
-	int len;
+	int	len;
 
 	if (type == TOK_PIPE || type == TOK_REDIR_IN || type == TOK_REDIR_OUT
-				|| type == TOK_PAR_CLOSE || type == TOK_PAR_OPEN)
+		|| type == TOK_PAR_CLOSE || type == TOK_PAR_OPEN)
 		len = 1;
-	else if (type == TOK_APPEND || type == TOK_HEREDOC || type == TOK_OR || type == TOK_AND)
+	else if (type == TOK_APPEND || type == TOK_HEREDOC
+		|| type == TOK_OR || type == TOK_AND)
 		len = 2;
 	else
 		len = get_tok_word_len(line);
@@ -59,23 +58,23 @@ size_t	get_token_len(char *line, t_token_type type)
 
 t_token	*get_all_tokens_from_word(char *line)
 {
-	size_t		token_len;
-	t_token_type token_type;
+	size_t			token_len;
+	t_token_type	token_type;
 
 	token_type = get_token_type(line);
 	token_len = get_token_len(line, token_type);
 	return (create_token(line, token_len, token_type));
 }
 
-t_token *lexing(char *line)
+t_token	*lexing(char *line)
 {
-	t_token *tokens;
-	t_token *current;
-	int 	i;
+	t_token	*tokens;
+	t_token	*current;
+	int		i;
 
 	tokens = NULL;
 	i = 0;
-	while(line[i])
+	while (line[i])
 	{
 		if (ft_isspace(line[i]))
 			i++;
@@ -83,10 +82,7 @@ t_token *lexing(char *line)
 		{
 			current = get_all_tokens_from_word(line + i);
 			if (!current)
-			{
-				free_tokens(tokens);
-				return (NULL);
-			}
+				return (free_tokens(tokens), NULL);
 			add_new_token(&tokens, current);
 			i += ft_strlen(current->value);
 		}
@@ -98,5 +94,3 @@ t_token *lexing(char *line)
 	}
 	return (tokens);
 }
-
-
