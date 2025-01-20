@@ -3,31 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/19 04:54:55 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/20 17:25:38 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	g_sig_offset = 0;
-
-// int	parse_line(t_shell *shell)
-// {
-// 	char	**args;
-// 	int		i;
-
-// 	args = ft_split(shell->line, ' ');
-// 	i = 0;
-// 	while (args[i])
-// 	{
-// 		printf("args[%d] = %s\n", i, args[i]);
-// 		i++;
-// 	}
-// 	return (0);
-// }
 
 static const char *get_token_type_str(t_token_type type)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 00:41:04 by kuru              #+#    #+#             */
-/*   Updated: 2025/01/17 01:07:18 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/20 15:02:22 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static bool	is_metacharacter(char *str)
 	if (ft_strncmp(str, "&&", 2) == 0)
 		return (true);
 	if (str[0] == '|' || str[0] == '<' || str[0] == '>' || str[0] == '('
-			|| str[0] == ')')
+		|| str[0] == ')')
 		return (true);
 	return (false);
 }
@@ -26,7 +26,7 @@ static int	handle_quotes_len(char *line)
 {
 	char	quote_type;
 	int		i;
-	
+
 	i = 1;
 	quote_type = line[0];
 	while (line[i] && line[i] != quote_type)
@@ -34,13 +34,9 @@ static int	handle_quotes_len(char *line)
 	return (i);
 }
 
-/* 
-* @TODO: this part reminds me we will probably need to
-* handle escape characters in the future (e.g. \', \$, etc.)
-*/
 int	get_tok_word_len(char *line)
 {
-	int len;
+	int	len;
 	int	i;
 
 	len = ft_strlen(line);
@@ -52,54 +48,4 @@ int	get_tok_word_len(char *line)
 		i++;
 	}
 	return (i);
-}
-
-t_token *create_token(char *value, size_t len, t_token_type type)
-{
-	t_token *token;
-
-	token = malloc(sizeof(t_token));
-	if (!token)
-		return NULL;
-	token->expands = false;
-	if (type == TOK_WORD && value[0] == '$' && len > 1)
-		token->expands = true;
-	token->value = ft_substr(value, 0, len);
-	if (!token->value)
-	{
-		free(token);
-		return NULL;
-	}
-	token->type = type;
-	token->next = NULL;
-	return token;
-}
-
-void	add_new_token(t_token **tokens, t_token *new_token)
-{
-	t_token *tmp;
-
-	if (!*tokens)
-	{
-		*tokens = new_token;
-		return ;
-	}
-	tmp = *tokens;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new_token;
-}
-
-void	free_tokens(t_token *tokens)
-{
-	t_token *tmp;
-
-	while (tokens)
-	{
-		tmp = tokens;
-		tokens = tokens->next;
-		if (tmp->value)
-			free(tmp->value);
-		free(tmp);
-	}
 }
