@@ -63,7 +63,7 @@ t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 	}
 	if (node->type == NODE_COMMAND)	
 	{
-		status = builtin_parent(node, shell);
+		status = builtin(node, shell);
 		if (status != EXEC_NOT_FOUND)
 			return (status);
 		status = exec_command_pipe(shell, node);

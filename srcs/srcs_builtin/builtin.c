@@ -25,64 +25,37 @@ void	free_all(char **arg)
 }
 
 
-//this function is for the builtin commands that have to be executed in the parrent
-t_exec_error	builtin_parent(t_ast_node *node, t_shell *shell)
-{
-	t_exec_error	status;
-	char			*command;
-	char			**args;
-	int				argc;
-	char			***envp;
-
-	command = node->data.command.command;
-	args = node->data.command.args;
-	argc = node->data.command.arg_count;
-	envp = shell->envp;
-	if (!command) 
-	{
-		ft_printf("Command is NULL\n");
-		return EXEC_ERR_FATAL;
-	}
-	if (ft_strcmp(command, "cd") == 0)
-		status = ft_cd(args, argc, &shell->dir, envp);
-	else if (ft_strcmp(command, "export") == 0)
-		status = ft_export(args, argc, envp);
-	else if (ft_strcmp(command, "unset") == 0)
-		status = ft_unset(args, argc, *envp);
-	else
-		status = EXEC_NOT_FOUND;
-	return (status);
-}
-
+/*
+This function is for the builtin commands.
+I compare each builtin with the command given in the node.
+Once I find a match I call the corresponding function.
+If no match is found I return EXEC_NOT_FOUND.
+*/
 t_exec_error	builtin(t_ast_node *node, t_shell *shell)
 {
 	t_exec_error	status;
 	char			*command;
 	char			**args;
 	int				argc;
-	char			***envp;
 
 	command = node->data.command.command;
 	args = node->data.command.args;
 	argc = node->data.command.arg_count;
-	envp = shell->envp;
-	if (!command) 
-	{
-		ft_printf("Command is NULL\n");
-		return EXEC_ERR_FATAL;
-	}
-	(void)argc;
-	if (ft_strcmp(command, "echo") == 0)
+	status = EXEC_NOT_FOUND;
+	if (ft_strcmp(command, "cd") == 0)
+		status = ft_cd(args, argc, &shell->dir, shell->envp);
+	else if (ft_strcmp(command, "export") == 0)
+		status = ft_export(args, argc, shell->envp);
+	else if (ft_strcmp(command, "unset") == 0)
+		status = ft_unset(args, argc, *shell->envp);
+	else if (ft_strcmp(command, "echo") == 0)
 		status = ft_echo(args, argc);
 	else if (ft_strcmp(command, "pwd") == 0)
 		status = ft_pwd(&shell->dir);
 	else if (ft_strcmp(command, "env") == 0)
-		status = ft_env(*envp, argc);
-	// else if (ft_strcmp(command, "exit") == 0)
-	// 	status = ft_exit(args[1]);
-	else
-		status = EXEC_NOT_FOUND;
-	//ft_printf("end of builtin function\n");
+		status = ft_env(*shell->envp, argc);
+	else if (ft_strcmp(command, "exit") == 0)
+		status = ft_exit(args[1]);
 	return (status);
 }
 
