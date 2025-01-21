@@ -57,13 +57,14 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 	status = builtin(node, shell); 
 	if (status != EXEC_NOT_FOUND)
 	{
-		shell->process_count = 0;
+		shell->process_count -= 1;
 		return (status);
 	}
 	child_pid = fork();
 	if (child_pid == -1)
 		return (perror("total error: fork:"), EXEC_ERR_FATAL);
 	shell->pid[shell->process_index++] = child_pid;
+	shell->process_count++;
 	if (child_pid == 0)
 	{
 		exec_command(shell, node);
@@ -139,7 +140,7 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	int 			i;
 	int				child_status;
 
-	shell->process_count = count_pipes(node) + 1;
+	shell->process_count = 0;
 	shell->pipe_count = count_pipes(node);
 	shell->pipe_index = 0;
 	shell->process_index = 0;

@@ -11,21 +11,43 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-t_exec_error exec_command_pipe(t_shell *shell, t_ast_node *node)
-{
-	pid_t pid;
 
-	pid = fork();
-	if (pid == -1)
-		return (EXEC_ERR_FATAL);
-	if (pid == 0)
+/*
+	In a pipeline the command is executed a bit differently 
+	as we can not launch the builtins in the parents anymore.
+
+	We can therefore start directly with a child process
+
+	The only exeption is when the command is the last in the pipeline
+	-> in this case the out_type wont be PIPE_T
+	we therefore have to check if the command is a builtin
+*/
+t_exec_error start_command_pipe(t_shell *shell, t_ast_node *node)
+{
+	t_exec_error	status;
+	pid_t			child_pid;
+
+	// if (node->data.command.exec_data.out_type != PIPE_T)
+	// {
+	// 	status = builtin(node, shell);
+	// 	if (status != EXEC_NOT_FOUND)
+	// 		return (status);
+	// }
+	child_pid = fork();
+	if (child_pid == -1)
+		return (perror("total error: fork:"), EXEC_ERR_FATAL);
+	shell->pid[shell->process_index++] = child_pid;
+	shell->process_count++;
+	if (child_pid == 0)
 	{
-		// Child process
+		status = builtin(node, shell);
+		if (status != EXEC_NOT_FOUND)
+			exit_exec_status(status);
 		exec_command(shell, node);
-		exit(1); // Should not reach here
+		ft_printf("Child process did not exit properly\n");
+		exit(1);
 	}
-	shell->pid[shell->process_index++] = pid;
-	return (EXEC_SUCCESS);
+	return (EXEC_NOT_FOUND);
 }
 // t_exec_error	exec_command_pipe(t_shell *shell, t_ast_node *node)
 // {
@@ -63,10 +85,7 @@ t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 	}
 	if (node->type == NODE_COMMAND)	
 	{
-		status = builtin(node, shell);
-		if (status != EXEC_NOT_FOUND)
-			return (status);
-		status = exec_command_pipe(shell, node);
+		status = start_command_pipe(shell, node);
 		return (status);
 	}
 	return (EXEC_SUCCESS);
