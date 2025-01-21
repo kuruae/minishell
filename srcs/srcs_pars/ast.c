@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/21 18:07:00 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:57:09 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ static t_error count_and_process_args(t_parser *parser, t_ast_node **node)
 	return (SUCCESS);
 }
 
-static t_error create_argv_exec(t_ast_node *node)
+t_error create_argv_exec(t_ast_node *node)
 {
 	int i;
 	

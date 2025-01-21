@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/20 03:43:06 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/21 19:10:29 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 
+	all_expands_handler(node, *shell->envp);
+	create_argv_exec(node);
 	if (node->type == NODE_COMMAND)
 		return (start_command(shell, node));
 	else if (node->type == NODE_PIPE)

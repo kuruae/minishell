@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 03:04:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/21 18:37:13 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:51:31 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,30 +145,28 @@ static char	*expand_env_vars(const char *str, char **env)
  * 
  * @return SUCCESS or ERR_MALLOC
  */
-char	**start_dollar_expansion(char **argv, char **env)
+t_error	start_dollar_expansion(t_ast_node *node, char **env)
 {
 	char	*expanded;
 	int		i;
 
-	if (argv)
+	expanded = expand_env_vars(node->data.command.command, env);
+	if (!expanded)
+		return (ERR_MALLOC);
+	free(node->data.command.command);
+	node->data.command.command = expanded;
+	if (node->data.command.args)
 	{
 		i = 0;
-		while (argv[i])
+		while (i < node->data.command.arg_count)
 		{
-			printf("Expanding %s\n", argv[i]);
-			expanded = expand_env_vars(argv[i], env);
+			expanded = expand_env_vars(node->data.command.args[i], env);
 			if (!expanded)
-				return (NULL);
-			free(argv[i]);
-			argv[i] = expanded;
-			i++;
-		}
-		i = 0;
-		while (argv[i])
-		{
-			printf("Expanded %s\n", argv[i]);
+				return (ERR_MALLOC);
+			free(node->data.command.args[i]);
+			node->data.command.args[i] = expanded;
 			i++;
 		}
 	}
-	return (argv);
+	return (SUCCESS);
 }

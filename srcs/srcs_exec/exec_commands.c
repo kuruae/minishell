@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/21 18:41:23 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/21 19:02:15 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,12 +129,8 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 		exit(1);
     }
 	// command = node->data.command.command;
-	// argc = node->data.command.arg_count;
-	argv_exec = all_expands_handler(node->data.command.argv_exec, (*shell->envp));
-	for (int i = 0; argv_exec[i]; i++)
-	{
-		ft_printf("argv_exec[%d]: %s\n", i, argv_exec[i]);
-	}
+	// argc = node->data.command.arg_count;z
+	argv_exec = node->data.command.argv_exec;
 	if (set_input_output(shell, node) == EXEC_ERR_FILE)
 		exit(1);
 	//as now the used fds are redirected with dup2 we can close all fds we opened (pipes, in or out_files)
