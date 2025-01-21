@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/19 15:40:37 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/21 18:07:00 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,8 +232,8 @@ t_ast_node *parse_command(t_parser *parser)
 		return (err_free_and_return(parser, node));
 
 	// Check for expansions
-	if (all_expands_handler(node, parser) == FAILURE)
-		return (err_free_and_return(parser, node));
+	// if (all_expands_handler(node, parser) == FAILURE)
+		// return (err_free_and_return(parser, node));
 
 	if (create_argv_exec(node) != SUCCESS)
 		return (err_free_and_return(parser, node));

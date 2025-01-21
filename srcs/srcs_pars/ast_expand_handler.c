@@ -3,62 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   ast_expand_handler.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:01:57 by emagnani          #+#    #+#             */
-/*   Updated: 2025/01/13 16:54:32 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/21 18:36:09 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static bool	has_dollar_expansion(t_ast_node *node)
+static bool	has_dollar_expansion(char **argv)
 {
 	int	i;
 
-	if (ft_strchr(node->data.command.command, '$'))
-		return (true);
-	if (node->data.command.args)
+	if (!argv)
+		return (false);
+	i = 0;
+	while (argv[i])
 	{
-		i = 0;
-		while (node->data.command.args[i])
-		{
-			if (ft_strchr(node->data.command.args[i], '$'))
-				return (true);
-			i++;
-		}
+		if (ft_strchr(argv[i], '$'))
+			return (true);
+		i++;
 	}
 	return (false);
 }
 
-static bool	has_wildcard_expansion(t_ast_node *node)
-{
-	int	i;
+// static bool	has_wildcard_expansion(char **argv)
+// {
+// 	int	i;
 
-	if (node->data.command.args)
-	{
-		i = 0;
-		while (node->data.command.args[i])
-		{
-			if (ft_strchr(node->data.command.args[i], '*'))
-				return (true);
-			i++;
-		}
-	}
-	return (false);
-}
+// 	if (!argv)
+// 		return (false);
+// 	i = 1;
+// 	while (argv[i])
+// 	{
+// 		if (ft_strchr(argv[i], '*'))
+// 			return (true);
+// 		i++;
+// 	}
+// 	return (false);
+// }
 
-t_error	all_expands_handler(t_ast_node *node, t_parser *parser)
+char	**all_expands_handler(char **argv, char **env)
 {
-	if (has_dollar_expansion(node))
-	{
-		if (start_dollar_expansion(node, parser->env) != SUCCESS)
-			return (FAILURE);
-	}
-	if (has_wildcard_expansion(node))
-	{
-		if (start_wildcard_expansion(node) != SUCCESS)
-			return (FAILURE);
-	}
-	return (SUCCESS);
+	if (has_dollar_expansion(argv))
+		return (start_dollar_expansion(argv, env));
+	// if (has_wildcard_expansion(argv))
+	// {
+	// 	if (start_wildcard_expansion(argv) != SUCCESS)
+	// 		return (FAILURE);
+	// }
+	return (argv);
 }
