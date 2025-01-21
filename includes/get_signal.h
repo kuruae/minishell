@@ -18,5 +18,5 @@
 int		get_signal(void);
 void	ctl_c_handler(int sig);
 void	ctl_d_handler(int sig);
-// int ctl_backslash_handler(int sig);
+void	ctl_back_handler(int sig);
 #endif

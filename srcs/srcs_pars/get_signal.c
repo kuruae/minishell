@@ -19,6 +19,7 @@ int	get_signal(void)
 	return (0);
 }
 
+
 void	ctl_c_handler(int sig)
 {
 	(void)sig;
@@ -41,6 +42,5 @@ void	ctl_back_handler(int sig)
 {
 	(void)sig;
 	g_sig_offset = 131;
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGQUIT, ctl_back_handler);
+	exit(131);
 }

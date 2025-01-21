@@ -82,7 +82,6 @@ t_exec_error	try_command(char **paths, char **args, char **env, t_ast_node *node
 		i++;
 		free(command_path);
 	}
-	ft_putstr_fd("total error: command not found\n", 2);
 	return (EXEC_NOT_FOUND);
 }
 
@@ -115,11 +114,7 @@ char	**transform_args(char **args, char	*command, int argc)
 
 void	exec_command(t_shell *shell, t_ast_node *node)
 {
-    //ft_printf("Entered exec_command\n");
-    
-    // char *command;
     char **argv_exec;
-    // int argc;
     char **paths;
     t_exec_error status;
 
@@ -128,19 +123,11 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 		ft_printf("Invalid node or command\n");
 		exit(1);
     }
-	// command = node->data.command.command;
-	// argc = node->data.command.arg_count;
 	argv_exec = node->data.command.argv_exec;
 	if (set_input_output(shell, node) == EXEC_ERR_FILE)
 		exit(1);
 	//as now the used fds are redirected with dup2 we can close all fds we opened (pipes, in or out_files)
 	close_used_fds(shell, node);
-	//first check if command is builtin
-	status = builtin(node, shell);
-	if (status != EXEC_NOT_FOUND)
-		exit_exec_status(status);
-	// only continues when the command wasnt found in the builtins
-	// argc += 1; //adjusting argc (as now agv inludes the command)
 	paths = get_paths(*shell->envp);
 	if (!paths)
 		exit(1);
