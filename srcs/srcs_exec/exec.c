@@ -141,6 +141,7 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 
 	shell->process_count =  count_pipes(node) + 1;
 	shell->pipe_count = count_pipes(node);
+	ft_printf("pipe count: %d\n", shell->pipe_count);
 	shell->pipe_index = 0;
 	shell->process_index = 0;
 	shell->root_node = node;

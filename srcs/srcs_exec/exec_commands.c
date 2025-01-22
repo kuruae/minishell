@@ -126,8 +126,8 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	argv_exec = node->data.command.argv_exec;
 	if (set_input_output(shell, node) == EXEC_ERR_FILE)
 		exit(1);
+	close_unused_pipes(node, shell);
 	//as now the used fds are redirected with dup2 we can close all fds we opened (pipes, in or out_files)
-	close_used_fds(shell, node);
 	if (shell->pipeline == true)
 	{
 		status = builtin(node, shell);

@@ -42,6 +42,13 @@ t_exec_error  start_command_pipe(t_shell *shell, t_ast_node *node)
 		ft_printf("Child process did not exit properly\n");
 		exit(1);
 	}
+	else
+	{
+		if (node->data.command.exec_data.in_type == PIPE_T)
+			close(shell->pipes[node->data.command.exec_data.pipe_index_in][0]);
+		if (node->data.command.exec_data.out_type == PIPE_T)
+			close(shell->pipes[node->data.command.exec_data.pipe_index_out][1]);
+	}
 	return (EXEC_SUCCESS);
 }
 // t_exec_error	exec_command_pipe(t_shell *shell, t_ast_node *node)
@@ -96,7 +103,7 @@ t_exec_error	init_pipeline(t_shell *shell, t_ast_node *node)
 	status = EXEC_SUCCESS;
 	if (pipe(shell->pipes[shell->pipe_index]) == -1)
 		return (EXEC_ERR_PIPE);
-	//ft_printf("Succesfuly setted pipe %d\n", shell->pipe_index);
+	ft_printf("Succesfuly setted pipe %d\n", shell->pipe_index);
 	link_pipe(node, shell); //this function sets all the data in the commands that use this pipe
 	shell->pipe_index++;
 	if (node->data.pipe.left->type == NODE_PIPE)
@@ -141,12 +148,6 @@ t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 		return (status);
 	status = exec_pipeline(shell, node);
 	//here i close all the pipes (this part should onl be reached by the parrent)
-	while (i < shell->pipe_count)
-	{
-		close(shell->pipes[i][0]);
-		close(shell->pipes[i][1]);
-		i++;
-	}
 	return (status);
 }
 
