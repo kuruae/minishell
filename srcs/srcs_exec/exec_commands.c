@@ -131,8 +131,6 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	if (shell->pipeline == true)
 	{
 		status = builtin(node, shell);
-		ft_printf("builtin status: %d\n", status);
-		ft_printf("process count: %d\n", shell->process_count);
 		if (status != EXEC_NOT_FOUND)
 			exit_exec_status(status);
 	}
