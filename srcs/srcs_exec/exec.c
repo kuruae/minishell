@@ -145,6 +145,7 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	shell->pipe_index = 0;
 	shell->process_index = 0;
 	shell->root_node = node;
+	shell->pipeline = false;
 	// if pipe count == 0 && status == BUILTIN
 		// return execbuiltin
 	status = recur_exec(shell, node);

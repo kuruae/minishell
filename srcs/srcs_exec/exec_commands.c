@@ -128,6 +128,12 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 		exit(1);
 	//as now the used fds are redirected with dup2 we can close all fds we opened (pipes, in or out_files)
 	close_used_fds(shell, node);
+	if (shell->pipeline == true)
+	{
+		status = builtin(node, shell);
+		if (status != EXEC_NOT_FOUND)
+			exit_exec_status(status);
+	}
 	paths = get_paths(*shell->envp);
 	if (!paths)
 		exit(1);

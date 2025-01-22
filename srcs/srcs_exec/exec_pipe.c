@@ -22,9 +22,8 @@
 	-> in this case the out_type wont be PIPE_T
 	we therefore have to check if the command is a builtin
 */
-t_exec_error start_command_pipe(t_shell *shell, t_ast_node *node)
+t_exec_error  start_command_pipe(t_shell *shell, t_ast_node *node)
 {
-	t_exec_error	status;
 	pid_t			child_pid;
 
 	// if (node->data.command.exec_data.out_type != PIPE_T)
@@ -40,9 +39,6 @@ t_exec_error start_command_pipe(t_shell *shell, t_ast_node *node)
 	shell->process_count++;
 	if (child_pid == 0)
 	{
-		status = builtin(node, shell);
-		if (status != EXEC_NOT_FOUND)
-			exit_exec_status(status);
 		exec_command(shell, node);
 		ft_printf("Child process did not exit properly\n");
 		exit(1);
@@ -77,18 +73,20 @@ t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 	if (node->type == NODE_PIPE)
 	{
 		status = exec_pipeline(shell, node->data.pipe.left);
-		if (status != EXEC_SUCCESS)
-			 return (status);
+		if (status == EXEC_ERR_FATAL)
+			return (status);
 		status = exec_pipeline(shell, node->data.pipe.right);
-		if (status != EXEC_SUCCESS)
-			 return (status);
+		if (status == EXEC_ERR_FATAL)
+			return (status);
+		// 	 return (status);
 	}
 	if (node->type == NODE_COMMAND)	
 	{
 		status = start_command_pipe(shell, node);
-		return (status);
+		if (status == EXEC_ERR_FATAL)
+			return (status);
 	}
-	return (EXEC_SUCCESS);
+	return (status);
 }
 
 t_exec_error	init_pipeline(t_shell *shell, t_ast_node *node)
@@ -138,14 +136,13 @@ t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 	int				i;
 
 	i = 0;
+	shell->pipeline = true;
 	status = init_pipeline(shell, node);
 	if (status != EXEC_SUCCESS)
 		return (status);
 	status = exec_pipeline(shell, node);
-	if (status != EXEC_SUCCESS)
-		return (status);
 	//here i close all the pipes (this part should onl be reached by the parrent)
-	while (i < shell->pipe_count)
+	while (i <= shell->pipe_count)
 	{
 		close(shell->pipes[i][0]);
 		close(shell->pipes[i][1]);
