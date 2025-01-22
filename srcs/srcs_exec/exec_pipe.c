@@ -36,7 +36,6 @@ t_exec_error  start_command_pipe(t_shell *shell, t_ast_node *node)
 	if (child_pid == -1)
 		return (perror("total error: fork:"), EXEC_ERR_FATAL);
 	shell->pid[shell->process_index++] = child_pid;
-	shell->process_count++;
 	if (child_pid == 0)
 	{
 		exec_command(shell, node);
