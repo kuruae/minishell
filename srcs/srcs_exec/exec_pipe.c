@@ -42,7 +42,7 @@ t_exec_error  start_command_pipe(t_shell *shell, t_ast_node *node)
 		ft_printf("Child process did not exit properly\n");
 		exit(1);
 	}
-	return (EXEC_NOT_FOUND);
+	return (EXEC_SUCCESS);
 }
 // t_exec_error	exec_command_pipe(t_shell *shell, t_ast_node *node)
 // {

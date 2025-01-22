@@ -14,6 +14,7 @@
 
 void	exit_exec_status(t_exec_error	status)
 {
+	ft_printf("exiting process with status %d\n", status);
 	if (status == EXEC_ERR_FATAL)
 		exit(128);
 	if (status == EXEC_SUCCESS)

@@ -152,9 +152,11 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	i = 0;
 	while (i < shell->process_count)
 	{
+		ft_printf("waiting for process %d\n", i);
 		waitpid(shell->pid[i], &child_status, 0);
 		g_sig_offset = WEXITSTATUS(child_status);
 		i++;
 	}
+	ft_printf("Finished waiting loop status = %d\n", status);
 	return (status);
 }
