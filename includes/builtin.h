@@ -28,7 +28,6 @@ typedef struct s_directory
 	char	home_path[MAX_PATH];
 }	t_directory;
 
-t_exec_error	builtin_parent(t_ast_node *node, t_shell *shell);
 t_exec_error	builtin(t_ast_node *node, t_shell *shell);
 t_exec_error	ft_echo(char **args, int argc);
 t_exec_error	ft_pwd(t_directory *dir);

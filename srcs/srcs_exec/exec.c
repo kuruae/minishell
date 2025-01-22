@@ -36,27 +36,41 @@ t_exec_error	return_status(int	status)
     return (EXEC_ERR_FATAL);
 }
 
+/*
+	First we have to handle builtins 
+	beacause they are not executed in a child process
+	
+	If the command was a builtin I set the process count to 0
+	(as there is no child process needed)
+
+	If the builtin function returns EXEC_NOT_FOUND we keep going
+	-> Now we can create a fork as we will exec the system commands in a child process
+
+	The exec command functions handles the execution 
+	and when successful it will make the child process exit
+*/
 t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 	pid_t			child_pid;
 
-	status = builtin_parent(node, shell);
+	status = builtin(node, shell); 
 	if (status != EXEC_NOT_FOUND)
+	{
+		shell->process_count -= 1;
 		return (status);
+	}
 	child_pid = fork();
 	if (child_pid == -1)
 		return (perror("total error: fork:"), EXEC_ERR_FATAL);
-	//child process:
+	shell->pid[shell->process_index++] = child_pid;
 	if (child_pid == 0)
 	{
 		exec_command(shell, node);
-		//normally it should not reach here
-		ft_printf("Child process did not exit properly\n");
-		exit(1);
+		ft_printf("Command not found\n");
+		exit(127);
 	}
-	shell->pid[shell->process_index++] = child_pid;
-	return (EXEC_NOT_FOUND);
+	return (EXEC_SUCCESS);
 }
 
 t_exec_error start_subshell(t_shell *shell, t_ast_node *node)
@@ -127,11 +141,12 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	int 			i;
 	int				child_status;
 
-	shell->process_count = count_pipes(node) + 1;
+	shell->process_count =  count_pipes(node) + 1;
 	shell->pipe_count = count_pipes(node);
 	shell->pipe_index = 0;
 	shell->process_index = 0;
 	shell->root_node = node;
+	shell->pipeline = false;
 	status = recur_exec(shell, node);
 	i = 0;
 	while (i < shell->process_count)

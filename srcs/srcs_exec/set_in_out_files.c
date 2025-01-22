@@ -86,6 +86,7 @@ t_exec_error	set_input_output(t_shell *shell, t_ast_node *node)
 
 	(void)shell;
 	//first i set all data
+	status = EXEC_SUCCESS;
 	if (node->data.command.exec_data.in_type == STD_T)
 		node->data.command.exec_data.in_file = STDIN_FILENO;
 	if (node->data.command.exec_data.out_type == STD_T)

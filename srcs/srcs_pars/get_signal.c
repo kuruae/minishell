@@ -12,14 +12,22 @@
 
 #include "minishell.h"
 
-int	get_signal(void)
+int	get_signal_interactive(void)
 {
-	signal(SIGINT, ctl_c_handler);
+	signal(SIGINT, ctl_c_handler_interactive);
 	signal(SIGQUIT, SIG_IGN);
 	return (0);
 }
 
-void	ctl_c_handler(int sig)
+int	get_signal_exec(void)
+{
+	signal(SIGQUIT, ctl_back_handler);
+	signal(SIGINT, ctl_c_handler_exec);
+	return (0);
+}
+
+
+void	ctl_c_handler_interactive(int sig)
 {
 	(void)sig;
 	rl_redisplay();
@@ -28,7 +36,18 @@ void	ctl_c_handler(int sig)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
-	signal(SIGINT, ctl_c_handler);
+	signal(SIGINT, ctl_c_handler_interactive);
+}
+
+void	ctl_c_handler_exec(int sig)
+{
+	(void)sig;
+	rl_redisplay();
+	ft_printf("\n");
+	g_sig_offset = 130;
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	signal(SIGINT, ctl_c_handler_exec);
 }
 
 /**
@@ -41,6 +60,6 @@ void	ctl_back_handler(int sig)
 {
 	(void)sig;
 	g_sig_offset = 131;
-	signal(SIGQUIT, SIG_IGN);
 	signal(SIGQUIT, ctl_back_handler);
+	exit(131);
 }

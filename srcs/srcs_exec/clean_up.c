@@ -40,6 +40,7 @@ void	clean_up_end(t_shell *shell)
 {
 	free_envp(shell->envp);
 	rl_clear_history();
+	
 }
 
 void	clean_up_node(t_ast_node *node)
