@@ -131,7 +131,7 @@ int	count_pipes(t_ast_node *node)
 
 t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 {
-	t_exec_error	status;
+ 	t_exec_error	status;
 	int				i;
 
 	i = 0;
@@ -141,7 +141,7 @@ t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 		return (status);
 	status = exec_pipeline(shell, node);
 	//here i close all the pipes (this part should onl be reached by the parrent)
-	while (i <= shell->pipe_count)
+	while (i < shell->pipe_count)
 	{
 		close(shell->pipes[i][0]);
 		close(shell->pipes[i][1]);

@@ -67,10 +67,10 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 	if (child_pid == 0)
 	{
 		exec_command(shell, node);
-		ft_printf("Child process did not exit properly\n");
-		exit(1);
+		ft_printf("Command not found\n");
+		exit(127);
 	}
-	return (EXEC_NOT_FOUND);
+	return (EXEC_SUCCESS);
 }
 
 t_exec_error start_subshell(t_shell *shell, t_ast_node *node)
@@ -140,23 +140,18 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	int				child_status;
 
 	shell->process_count =  count_pipes(node) + 1;
-	ft_printf("process count: %d\n", shell->process_count);
 	shell->pipe_count = count_pipes(node);
 	shell->pipe_index = 0;
 	shell->process_index = 0;
 	shell->root_node = node;
 	shell->pipeline = false;
-	// if pipe count == 0 && status == BUILTIN
-		// return execbuiltin
 	status = recur_exec(shell, node);
 	i = 0;
 	while (i < shell->process_count)
 	{
-		ft_printf("waiting for process %d\n", i);
 		waitpid(shell->pid[i], &child_status, 0);
 		g_sig_offset = WEXITSTATUS(child_status);
 		i++;
 	}
-	ft_printf("Finished waiting loop status = %d\n", status);
 	return (status);
 }
