@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 02:36:00 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/08 18:35:11 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/23 17:18:03 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@ bool	should_expand(t_quote_depth depth);
 char	*ft_strjoinch(char *s1, char c);
 void    update_quote_depth(t_quote_depth *depth, char c);
 t_error	start_dollar_expansion(t_ast_node *node, char **env);
+char	*expand_env_vars(const char *str, char **env);
 
 #endif

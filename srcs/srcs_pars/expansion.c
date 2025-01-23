@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 03:04:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/20 17:18:40 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/23 17:18:41 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ static char	*process_expansion(const char *str, size_t *i, char **env)
  * 
  * @return the expanded string
  */
-static char	*expand_env_vars(const char *str, char **env)
+char	*expand_env_vars(const char *str, char **env)
 {
 	char			*result;
 	char			*expansion;

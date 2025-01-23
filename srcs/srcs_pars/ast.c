@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/19 15:40:37 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/23 17:22:54 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ bool	parse_redir(t_parser *parser, t_ast_node *node)
 		if (!parser->current || parser->current->type != TOK_WORD)
 			return (false);
 
-		redir = create_redir_node(redir_token, parser->current->value);
+		redir = create_redir_node(redir_token, parser->current->value, parser->env);
 		if (!redir)
 			return (false);
 		add_redir(node, redir);
