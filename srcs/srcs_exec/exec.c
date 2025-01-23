@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/21 19:10:29 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/23 00:57:08 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,10 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 	pid_t			child_pid;
+	int				wait_status;
 
+	all_expands_handler(node, *shell->envp);
+	create_argv_exec(node);
 	status = builtin(node, shell); 
 	if (status != EXEC_NOT_FOUND)
 	{
@@ -69,6 +72,11 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 		exec_command(shell, node);
 		ft_printf("Command not found\n");
 		exit(127);
+	}
+	if (!shell->pipeline)
+	{
+		waitpid(child_pid, &wait_status, 0);
+		g_sig_offset = WEXITSTATUS(status);
 	}
 	return (EXEC_SUCCESS);
 }
@@ -108,8 +116,6 @@ t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 
-	all_expands_handler(node, *shell->envp);
-	create_argv_exec(node);
 	if (node->type == NODE_COMMAND)
 		return (start_command(shell, node));
 	else if (node->type == NODE_PIPE)

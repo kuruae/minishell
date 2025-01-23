@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_expand_handler.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:01:57 by emagnani          #+#    #+#             */
-/*   Updated: 2025/01/21 18:52:28 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/23 00:23:06 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ static bool	has_dollar_expansion(t_ast_node *node)
 {
 	int	i;
 
+	if (!node->data.command.command)
+		return (false);
 	if (ft_strchr(node->data.command.command, '$'))
 		return (true);
 	if (node->data.command.args)

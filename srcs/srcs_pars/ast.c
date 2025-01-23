@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/21 18:57:09 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/22 21:33:19 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,14 @@ t_error create_argv_exec(t_ast_node *node)
 {
 	int i;
 	
+	// free previous argv_exec if it exists
+	if (node->data.command.argv_exec)
+	{
+		i = 0;
+		while (node->data.command.argv_exec[i])
+			free(node->data.command.argv_exec[i++]);
+		free(node->data.command.argv_exec);
+	}
 	// Allocate space for command + NULL terminator
 	node->data.command.argv_exec = malloc(sizeof(char *) * 
 		(node->data.command.arg_count + 2));
