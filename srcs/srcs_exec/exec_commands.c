@@ -12,6 +12,12 @@
 
 #include "minishell.h"
 
+/*
+	When someone manually removes the PATH variable from the environment
+	This function would return NULL
+	However this would it make it impossible for me to know if a malloc failed or the PATH is not there
+	Thats why I return the string "null" in case of a missing PATH variable 
+*/
 char	**get_paths(char **env)
 {
 	int		i;
@@ -34,7 +40,7 @@ char	**get_paths(char **env)
 		i++;
 	}
 	if (!path_value)
-		return (NULL);
+		return (ft_split(ft_strdup("null"), ':'));
 	paths = ft_split(path_value, ':');
 	return (free(path_value), paths);
 }
@@ -61,10 +67,15 @@ void	setting_std_in_out(t_ast_node *node)
 
 t_exec_error		try_absolute_path(char **args, char **env, t_ast_node *node)
 {
-	if (access(args[0], F_OK | X_OK) == 0) // checking if file exist and exec permission
+	if (access(args[0], F_OK) == 0) // checking if file exist and exec permission
 	{
-		setting_std_in_out(node);
-		execve(args[0], args, env);
+		 if (access(args[0], X_OK) == 0) // checking if file has exec permission
+        {
+            setting_std_in_out(node);
+            execve(args[0], args, env);
+        }
+        else
+            return (perror("total error"), EXEC_ERR_ACCESS);
 	}
 	return (EXEC_NOT_FOUND);
 }
@@ -76,7 +87,8 @@ t_exec_error	try_command(char **paths, char **args, char **env, t_ast_node *node
 	char	*path;
 
 	i = 0;
-	try_absolute_path(args, env, node);
+	if (try_absolute_path(args, env, node) == EXEC_ERR_ACCESS)
+		return (EXEC_ERR_ACCESS);
 	while (paths[i])
 	{
 		path = ft_strjoin(paths[i], "/");
@@ -84,10 +96,15 @@ t_exec_error	try_command(char **paths, char **args, char **env, t_ast_node *node
 		free(path);
 		if (!command_path)
 			return (free(command_path), EXEC_ERR_FATAL);
-		if (access(command_path, F_OK | X_OK) == 0) // checking if file exist and exec permission
+		if (access(command_path, F_OK) == 0) // checking if file exist and exec permission
 		{
-			setting_std_in_out(node);
-			execve(command_path, args, env);
+			if (access(command_path, X_OK) == 0)
+			{
+				setting_std_in_out(node);
+				execve(command_path, args, env);
+			}
+			else
+				return (perror("total error"), free(command_path), EXEC_ERR_ACCESS);
 			return (free(command_path), EXEC_SUCCESS);
 		}
 		i++;
@@ -138,7 +155,6 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	if (set_input_output(shell, node) == EXEC_ERR_FILE)
 		exit(1);
 	close_unused_pipes(node, shell);
-	//as now the used fds are redirected with dup2 we can close all fds we opened (pipes, in or out_files)
 	if (shell->pipeline == true)
 	{
 		status = builtin(node, shell);
@@ -153,8 +169,6 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 		exit(1);
 	free(paths);
 	if (status == EXEC_NOT_FOUND)
-    {
         ft_putstr_fd("total error: command not found\n", 2);
-        exit_exec_status(status);
-    }
+	exit_exec_status(status);
 }

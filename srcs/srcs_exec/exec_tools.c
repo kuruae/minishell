@@ -21,7 +21,7 @@ void	exit_exec_status(t_exec_error	status)
 	if (status == EXEC_ERR_NON_FATAL)
 		exit(1);
 	if (status == EXEC_ERR_ACCESS)
-		exit(1);
+		exit(126);
 	if (status == EXEC_ERR_FILE)
 		exit(1);
 	if (status == EXEC_NOT_FOUND)
