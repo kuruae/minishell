@@ -68,6 +68,7 @@ void	close_used_fds(t_shell *shell, t_ast_node *node)
 {
 	t_exec_data	*data;
 
+
 	(void)shell;
 	data = &node->data.command.exec_data;
 	if (data->in_type == FILE_T)

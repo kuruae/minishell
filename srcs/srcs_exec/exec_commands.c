@@ -47,7 +47,6 @@ void	setting_std_in_out(t_ast_node *node)
 	if (node->data.command.exec_data.in_type == FILE_T)
 	{
 		in_file = node->data.command.exec_data.in_file;
-		ft_printf("fd_in: %d\n", in_file);
 		dup2(in_file, STDIN_FILENO);
 		close(in_file);
 	}
@@ -59,6 +58,17 @@ void	setting_std_in_out(t_ast_node *node)
 	}
 }
 
+
+t_exec_error		try_absolute_path(char **args, char **env, t_ast_node *node)
+{
+	if (access(args[0], F_OK | X_OK) == 0) // checking if file exist and exec permission
+	{
+		setting_std_in_out(node);
+		execve(args[0], args, env);
+	}
+	return (EXEC_NOT_FOUND);
+}
+
 t_exec_error	try_command(char **paths, char **args, char **env, t_ast_node *node)
 {
 	char	*command_path;
@@ -66,6 +76,7 @@ t_exec_error	try_command(char **paths, char **args, char **env, t_ast_node *node
 	char	*path;
 
 	i = 0;
+	try_absolute_path(args, env, node);
 	while (paths[i])
 	{
 		path = ft_strjoin(paths[i], "/");
@@ -126,8 +137,8 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	argv_exec = node->data.command.argv_exec;
 	if (set_input_output(shell, node) == EXEC_ERR_FILE)
 		exit(1);
+	close_unused_pipes(node, shell);
 	//as now the used fds are redirected with dup2 we can close all fds we opened (pipes, in or out_files)
-	close_used_fds(shell, node);
 	if (shell->pipeline == true)
 	{
 		status = builtin(node, shell);
