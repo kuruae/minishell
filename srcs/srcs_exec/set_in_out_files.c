@@ -76,8 +76,7 @@ void set_pipes(t_ast_node *node, t_shell *shell)
 	 		perror("dup2 for Pipe_OUT failed");
 			exit(1);
 		}
-		}
-	close_unused_pipes(node, shell);
+	}
 }
 
 t_exec_error	set_input_output(t_shell *shell, t_ast_node *node)

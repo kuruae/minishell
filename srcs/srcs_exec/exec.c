@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/23 00:57:08 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/24 16:34:55 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,7 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 		return (perror("total error: fork:"), EXEC_ERR_FATAL);
 	shell->pid[shell->process_index++] = child_pid;
 	if (child_pid == 0)
-	{
 		exec_command(shell, node);
-		ft_printf("Command not found\n");
-		exit(127);
-	}
 	if (!shell->pipeline)
 	{
 		waitpid(child_pid, &wait_status, 0);

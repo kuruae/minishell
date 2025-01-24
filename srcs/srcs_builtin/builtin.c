@@ -31,6 +31,24 @@ I compare each builtin with the command given in the node.
 Once I find a match I call the corresponding function.
 If no match is found I return EXEC_NOT_FOUND.
 */
+
+void	set_sig_offset(t_exec_error status)
+{
+	if (status == EXEC_ERR_FATAL)
+		g_sig_offset = 128;
+	if (status == EXEC_SUCCESS)
+		g_sig_offset = 0;
+	if (status == EXEC_ERR_NON_FATAL)
+		g_sig_offset = 1;
+	if (status == EXEC_ERR_ACCESS)
+		g_sig_offset = 1;
+	if (status == EXEC_ERR_FILE)
+		g_sig_offset = 1;
+	if (status == EXEC_NOT_FOUND)
+		g_sig_offset = 127;
+}
+
+
 t_exec_error	builtin(t_ast_node *node, t_shell *shell)
 {
 	t_exec_error	status;
@@ -56,6 +74,7 @@ t_exec_error	builtin(t_ast_node *node, t_shell *shell)
 		status = ft_env(*shell->envp, argc);
 	else if (ft_strcmp(command, "exit") == 0)
 		status = ft_exit(args[1]);
+	set_sig_offset(status);
 	return (status);
 }
 
