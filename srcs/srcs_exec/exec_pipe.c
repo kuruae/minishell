@@ -32,6 +32,8 @@ t_exec_error  start_command_pipe(t_shell *shell, t_ast_node *node)
 	// 	if (status != EXEC_NOT_FOUND)
 	// 		return (status);
 	// }
+	if (set_infile_outfile(shell, node) == EXEC_ERR_FILE)
+		return (set_sig_offset(EXEC_ERR_FILE), EXEC_ERR_FILE);
 	child_pid = fork();
 	if (child_pid == -1)
 		return (perror("total error: fork:"), EXEC_ERR_FATAL);
@@ -146,7 +148,6 @@ t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 	if (status != EXEC_SUCCESS)
 		return (status);
 	status = exec_pipeline(shell, node);
-	//here i close all the pipes (this part should onl be reached by the parrent)
 	return (status);
 }
 

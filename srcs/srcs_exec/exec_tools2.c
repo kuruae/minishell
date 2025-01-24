@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   exec_tools2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/03 16:40:58 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/18 02:49:52 by jbaumfal         ###   ########.fr       */
+/*   Created: 2025/01/24 18:39:42 by jbaumfal          #+#    #+#             */
+/*   Updated: 2025/01/24 19:41:57 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_exec_error	ft_pwd(t_directory *dir, int fd_out)
-{
-	if (getcwd(dir->current_path, MAX_PATH) == NULL)
-		return (perror("pwd error"), EXEC_ERR_NON_FATAL);
-	else
-		ft_putstr_fd(dir->current_path, fd_out);
-	ft_putchar_fd('\n', fd_out);
-	return (EXEC_SUCCESS);
-}
+void close_used_pipes(t_shell *shell, t_ast
+	if (data->in_type == PIPE_T)
+		close(shell->pipes[data->pipe_index_in][1]);
+	if (data->out_type == PIPE_T)
+		close(shell->pipes[data->pipe_index_out][0]);

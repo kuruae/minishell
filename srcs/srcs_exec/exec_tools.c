@@ -75,10 +75,6 @@ void	close_used_fds(t_shell *shell, t_ast_node *node)
 		close(data->in_file);
 	if (data->out_type == FILE_T)
 		close(data->out_file);
-	if (data->in_type == PIPE_T)
-		close(shell->pipes[data->pipe_index_in][1]);
-	if (data->out_type == PIPE_T)
-		close(shell->pipes[data->pipe_index_out][0]);
 }
 
 void	close_unused_pipes(t_ast_node *node, t_shell *shell)

@@ -54,7 +54,9 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 	t_exec_error	status;
 	pid_t			child_pid;
 
-	status = builtin(node, shell); 
+	if (set_infile_outfile(shell, node) == EXEC_ERR_FILE)
+		return (set_sig_offset(EXEC_ERR_FILE), EXEC_ERR_FILE);
+	status = builtin(node, shell, node->data.command.exec_data.out_file); 
 	if (status != EXEC_NOT_FOUND)
 	{
 		shell->process_count -= 1;

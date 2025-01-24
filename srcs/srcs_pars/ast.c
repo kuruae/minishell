@@ -239,7 +239,7 @@ t_ast_node *parse_command(t_parser *parser)
 		return (err_free_and_return(parser, node));
 
 	set_command_data(node);
-	
+
 	return node;
 }
 

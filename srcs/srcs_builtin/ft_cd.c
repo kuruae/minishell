@@ -58,8 +58,6 @@ t_exec_error	ft_cd(char **args, int argc, t_directory *dir, char ***envp)
 	}
 	if (getcwd(cache, MAX_PATH) == NULL) //saving old_path variable in the cache
 		return (perror("total error: cd"), EXEC_ERR_NON_FATAL);
-	if (getcwd(cache, MAX_PATH) == NULL) //saving old_path variable in the cache
-		return (perror("total error: cd"), EXEC_ERR_NON_FATAL);
 	if (argc == 0) // when there is only cd written it redirects to the home directory
 	{
 		if(!get_home(*envp)) // whe use this sub function to look for the HOME= variable in envp

@@ -67,7 +67,8 @@ t_exec_error			start_exec(t_shell *shell, t_ast_node *node);
 
 void					exec_command(t_shell *shell, t_ast_node *node);
 
-t_exec_error			set_input_output(t_shell *shell, t_ast_node *node);
+t_exec_error			set_infile_outfile(t_shell *shell, t_ast_node *node);
+void					set_pipes(t_ast_node *node, t_shell *shell);
 
 void					exit_exec_status(t_exec_error	status);
 void					link_pipe(t_ast_node *node, t_shell *shell);

@@ -45,11 +45,12 @@ char	**get_paths(char **env)
 	return (free(path_value), paths);
 }
 
-void	setting_std_in_out(t_ast_node *node)
+void	dup2_infile_outfile(t_ast_node *node, t_shell *shell)
 {
 	int	in_file;
 	int	out_file;
 
+	(void)shell;
 	if (node->data.command.exec_data.in_type == FILE_T)
 	{
 		in_file = node->data.command.exec_data.in_file;
@@ -65,14 +66,14 @@ void	setting_std_in_out(t_ast_node *node)
 }
 
 
-t_exec_error		try_absolute_path(char **args, char **env, t_ast_node *node)
+t_exec_error		try_absolute_path(char **args, t_shell *shell, t_ast_node *node)
 {
 	if (access(args[0], F_OK) == 0) // checking if file exist and exec permission
 	{
 		 if (access(args[0], X_OK) == 0) // checking if file has exec permission
         {
-            setting_std_in_out(node);
-            execve(args[0], args, env);
+            dup2_infile_outfile(node, shell);
+            execve(args[0], args, *shell->envp);
         }
         else
             return (perror("total error"), EXEC_ERR_ACCESS);
@@ -80,14 +81,14 @@ t_exec_error		try_absolute_path(char **args, char **env, t_ast_node *node)
 	return (EXEC_NOT_FOUND);
 }
 
-t_exec_error	try_command(char **paths, char **args, char **env, t_ast_node *node)
+t_exec_error	try_command(char **paths, char **args, t_shell *shell, t_ast_node *node)
 {
 	char	*command_path;
 	int		i;
 	char	*path;
 
 	i = 0;
-	if (try_absolute_path(args, env, node) == EXEC_ERR_ACCESS)
+	if (try_absolute_path(args, shell, node) == EXEC_ERR_ACCESS)
 		return (EXEC_ERR_ACCESS);
 	while (paths[i])
 	{
@@ -100,8 +101,9 @@ t_exec_error	try_command(char **paths, char **args, char **env, t_ast_node *node
 		{
 			if (access(command_path, X_OK) == 0)
 			{
-				setting_std_in_out(node);
-				execve(command_path, args, env);
+				dup2_infile_outfile(node, shell);
+				close_used_fds(shell, node);
+				execve(command_path, args, *shell->envp);
 			}
 			else
 				return (perror("total error"), free(command_path), EXEC_ERR_ACCESS);
@@ -152,19 +154,18 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 		exit(1);
     }
 	argv_exec = node->data.command.argv_exec;
-	if (set_input_output(shell, node) == EXEC_ERR_FILE)
-		exit(1);
+	set_pipes(node, shell);
 	close_unused_pipes(node, shell);
 	if (shell->pipeline == true)
 	{
-		status = builtin(node, shell);
+		status = builtin(node, shell, node->data.command.exec_data.out_file);
 		if (status != EXEC_NOT_FOUND)
 			exit_exec_status(status);
 	}
 	paths = get_paths(*shell->envp);
 	if (!paths)
 		exit(1);
-	status = try_command(paths, argv_exec, *shell->envp, node);
+	status = try_command(paths, argv_exec, shell, node);
 	if (status == EXEC_ERR_FATAL)
 		exit(1);
 	free(paths);
