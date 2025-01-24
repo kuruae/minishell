@@ -72,7 +72,5 @@ t_exec_error	ft_cd(char **args, int argc, t_directory *dir, char ***envp)
 	ft_strlcpy(dir->old_path, cache, ft_strlen(cache) + 1); // copying cache to old path after directory was succesfully changed
 	if (getcwd(dir->current_path, MAX_PATH) == NULL) // setting the new current_path variable
 		return (perror("cd error"), EXEC_ERR_NON_FATAL);
-	//ft_printf("new directory: %s\nold directory: %s\n", dir->current_path, dir->old_path);
 	return (update_pwd(envp, dir));
-	//return (EXEC_SUCCESS);
 }
