@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:09:16 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/23 17:23:07 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/24 17:06:55 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_redir	*create_redir_node(t_token *token, char *file, char **env)
 		free(redir);
 		return (NULL);
 	}
-	if (redir->type != REDIR_HEREDOC) // heredoc file is already set and malloced
+	if (redir->type != REDIR_HEREDOC)
 		redir->file = ft_strdup(file);
 	redir->next = NULL;
 	return (redir);
