@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/20 03:43:06 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/25 18:45:47 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,36 +70,63 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 		exec_command(shell, node);
 	return (EXEC_SUCCESS);
 }
-
-t_exec_error start_subshell(t_shell *shell, t_ast_node *node)
+t_exec_error	start_subshell(t_shell *shell, t_ast_node *node)
 {	
-	int		child_status;
-	int		i;
-	t_shell	subshell;
-	pid_t	pid;
+    int     child_status;
+    pid_t   pid;
+    t_shell subshell;
+	t_exec_error status;
 
-	i = 0;
-	subshell = init_subshell(shell, node);
-	if (subshell.pipe_count == 0)
-	{
-		pid = fork();
-		if (pid == -1)
-			return (EXEC_ERR_FATAL);
-		if (pid == 0)
-			exit(recur_exec(&subshell, node));
-		waitpid(pid, &child_status, 0);
-		g_sig_offset = WEXITSTATUS(child_status);
-		return (return_status(g_sig_offset));
-	}
-	recur_exec(&subshell, node);
-	while (i < subshell.process_count)
-	{
-		waitpid(subshell.pid[i], &child_status, 0);
-		g_sig_offset = WEXITSTATUS(child_status);
-		i++;
-	}
-	return (return_status(g_sig_offset));
+    // Initialize subshell with parent shell context
+    subshell = init_subshell(shell, node->data.subshell.command);
+    
+    pid = fork();
+    if (pid == -1)
+        return (EXEC_ERR_FATAL);
+    
+    if (pid == 0)  // Child process
+    {
+        // Recursively execute subshell command with full context
+        status = recur_exec(&subshell, subshell.root_node);
+        exit_exec_status(status);
+    }
+    
+    // Parent process waits for subshell
+    waitpid(pid, &child_status, 0);
+    
+    // Set global exit status and return appropriate status
+    g_sig_offset = WEXITSTATUS(child_status);
+    return (return_status(child_status));
 }
+// t_exec_error start_subshell(t_shell *shell, t_ast_node *node)
+// {	
+// 	int		child_status;
+// 	int		i;
+// 	t_shell	subshell;
+// 	pid_t	pid;
+
+// 	i = 0;
+// 	subshell = init_subshell(shell, node);
+// 	if (subshell.pipe_count == 0)
+// 	{
+// 		pid = fork();
+// 		if (pid == -1)
+// 			return (EXEC_ERR_FATAL);
+// 		if (pid == 0)
+// 			exit(recur_exec(&subshell, node));
+// 		waitpid(pid, &child_status, 0);
+// 		g_sig_offset = WEXITSTATUS(child_status);
+// 		return (return_status(g_sig_offset));
+// 	}
+// 	recur_exec(&subshell, node);
+// 	while (i < subshell.process_count)
+// 	{
+// 		waitpid(subshell.pid[i], &child_status, 0);
+// 		g_sig_offset = WEXITSTATUS(child_status);
+// 		i++;
+// 	}
+// 	return (return_status(g_sig_offset));
+// }
 
 
 t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/13 16:50:23 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/25 17:03:52 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,7 @@ t_shell					init_subshell(t_shell	*shell, t_ast_node *node);
 
 t_exec_error			start_pipeline(t_shell *shell, t_ast_node *node);
 int						count_pipes(t_ast_node *node);
+
+void 					close_used_pipes(t_shell *shell, t_ast_node *node);
 
 #endif

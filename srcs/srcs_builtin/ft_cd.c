@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:02:26 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/20 03:06:12 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/25 19:48:08 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,19 +51,25 @@ t_exec_error	ft_cd(char **args, int argc, t_directory *dir, char ***envp)
 {
 	char	cache[MAX_PATH];
 
+	
 	if (argc > 1)
 	{
 		return(ft_putstr_fd("total error: cd: too many arguments", 2),
 		ft_putchar_fd('\n', 2), EXEC_ERR_NON_FATAL);
 	}
 	if (getcwd(cache, MAX_PATH) == NULL) //saving old_path variable in the cache
-		return (perror("total error: cd"), EXEC_ERR_NON_FATAL);
+		ft_strlcpy(cache, dir->current_path, MAX_PATH);
 	if (argc == 0) // when there is only cd written it redirects to the home directory
 	{
 		if(!get_home(*envp)) // whe use this sub function to look for the HOME= variable in envp
 			ft_putstr_fd("total error: cd: no home variable", 2);
 		ft_strlcpy(dir->home_path, get_home(*envp), MAX_PATH);
 		chdir(dir->home_path);
+	}
+	else if (ft_strcmp(args[0], "..") == 0)
+	{
+		if (chdir(dir->old_path) == -1)
+			return (perror("total error: cd"), EXEC_ERR_NON_FATAL);
 	}
 	else if (chdir(args[0]) == -1)
 		return (perror("total error: cd"), EXEC_ERR_NON_FATAL);

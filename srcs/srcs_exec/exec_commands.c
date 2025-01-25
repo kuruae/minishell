@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_commands.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/16 16:00:52 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/25 17:28:13 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,6 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 		exit(1);
     }
 	argv_exec = node->data.command.argv_exec;
-	set_pipes(node, shell);
 	close_unused_pipes(node, shell);
 	if (shell->pipeline == true)
 	{

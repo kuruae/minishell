@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 01:08:11 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/20 03:44:13 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/25 18:12:46 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,6 @@ int	open_infile(t_ast_node	*node)
 int	open_outfile(t_ast_node	*node, t_redir *redir)
 {
 	int	out_file;
-
-	ft_printf("opening out file\n");
-	
-	ft_printf("Setting new Out file to %s\n", node->redirections->file);
 	
 	if (redir->type == REDIR_APPEND)
 		out_file = open(redir->file, O_CREAT | O_RDWR | O_APPEND, 0644);
@@ -61,6 +57,8 @@ void set_pipes(t_ast_node *node, t_shell *shell)
 			perror("dup2 for Pipe_IN failed");
 			exit(1);
 		}
+		close(shell->pipes[data->pipe_index_in][0]);
+		close(shell->pipes[data->pipe_index_in][1]);
 	}
 	if (data->out_type == PIPE_T)
 	{
@@ -70,6 +68,8 @@ void set_pipes(t_ast_node *node, t_shell *shell)
 	 		perror("dup2 for Pipe_OUT failed");
 			exit(1);
 		}
+		close(shell->pipes[data->pipe_index_out][1]);
+		close(shell->pipes[data->pipe_index_out][0]);
 	}
 }
 

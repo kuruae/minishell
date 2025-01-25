@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/20 01:56:46 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/25 18:00:40 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ t_exec_error  start_command_pipe(t_shell *shell, t_ast_node *node)
 	shell->pid[shell->process_index++] = child_pid;
 	if (child_pid == 0)
 	{
+		set_pipes(node, shell);
 		exec_command(shell, node);
 		ft_printf("Child process did not exit properly\n");
 		exit(1);
@@ -47,9 +48,15 @@ t_exec_error  start_command_pipe(t_shell *shell, t_ast_node *node)
 	else
 	{
 		if (node->data.command.exec_data.in_type == PIPE_T)
+		{
+			ft_printf("closing pipe %d in parrent\n", node->data.command.exec_data.pipe_index_in);
 			close(shell->pipes[node->data.command.exec_data.pipe_index_in][0]);
+		}
 		if (node->data.command.exec_data.out_type == PIPE_T)
+		{
+			ft_printf("closing pipe %d in parrent\n", node->data.command.exec_data.pipe_index_in);
 			close(shell->pipes[node->data.command.exec_data.pipe_index_out][1]);
+		}
 	}
 	return (EXEC_SUCCESS);
 }
@@ -137,6 +144,19 @@ int	count_pipes(t_ast_node *node)
 	return (counter);
 }
 
+void	close_all_pipes(t_shell *shell)
+{
+	int	i;
+
+	i = 0;
+	while (i < shell->pipe_count)
+	{
+		close(shell->pipes[i][0]);
+		close(shell->pipes[i][1]);
+		i++;
+	}
+}
+
 t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 {
  	t_exec_error	status;
@@ -148,6 +168,7 @@ t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 	if (status != EXEC_SUCCESS)
 		return (status);
 	status = exec_pipeline(shell, node);
+	//close_all_pipes(shell);
 	return (status);
 }
 
