@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_signal.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 11:57:23 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/20 15:05:12 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/26 20:49:14 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	get_signal_interactive(void)
 int	get_signal_exec(void)
 {
 	signal(SIGQUIT, ctl_back_handler);
-	signal(SIGINT, ctl_c_handler_exec);
+	signal(SIGINT, ctl_c_handler_interactive);
 	return (0);
 }
 
@@ -30,7 +30,6 @@ int	get_signal_exec(void)
 void	ctl_c_handler_interactive(int sig)
 {
 	(void)sig;
-	rl_redisplay();
 	ft_printf("\n");
 	g_sig_offset = 130;
 	rl_replace_line("", 0);
@@ -42,12 +41,11 @@ void	ctl_c_handler_interactive(int sig)
 void	ctl_c_handler_exec(int sig)
 {
 	(void)sig;
-	rl_redisplay();
-	ft_printf("\n");
-	g_sig_offset = 130;
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	signal(SIGINT, ctl_c_handler_exec);
+	// write(1, "\n", 1);
+	exit(130);
+	// rl_on_new_line();
+    // rl_replace_line("", 0);
+    // rl_redisplay();
 }
 
 /**
@@ -59,6 +57,7 @@ void	ctl_c_handler_exec(int sig)
 void	ctl_back_handler(int sig)
 {
 	(void)sig;
+	write(2, "Quit (core dumped)\n", 18);
 	g_sig_offset = 131;
 	signal(SIGQUIT, ctl_back_handler);
 	exit(131);

@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/25 18:45:47 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/26 19:03:59 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,16 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	while (i < shell->process_count)
 	{
 		waitpid(shell->pid[i], &child_status, 0);
-		g_sig_offset = WEXITSTATUS(child_status);
+		if (WIFSIGNALED(child_status))
+        {
+            if (WTERMSIG(child_status) == SIGQUIT)
+			{
+                write(2, "Quit (core dumped)\n", 19);
+				g_sig_offset = 131;
+			}
+		}
+		else if (WIFEXITED(child_status))
+            g_sig_offset = WEXITSTATUS(child_status);
 		i++;
 	}
 	return (status);
