@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:04:43 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/02 15:19:14 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/27 02:51:43 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_exec_error	ft_export(char **args, int argc, char ***envp);
 t_exec_error	ft_unset(char **args, int argc, char **envp);
 t_exec_error	ft_cd(char **args, int argc, t_directory *dir, char ***envp);
 t_exec_error	ft_env(char **envp, int argc, int fd_out);
-t_exec_error	ft_exit(char *arg);
+t_exec_error	ft_exit(char **args, int argc);
 void			free_all(char **arg);\
 void			set_sig_offset(t_exec_error status);
 #endif

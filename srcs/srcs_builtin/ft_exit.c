@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:25:20 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/15 17:47:43 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/27 03:47:14 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,32 @@ bool	ft_is_num(char *str) // function that checks if a string consist only of di
 	return (true);
 }
 
-t_exec_error	ft_exit(char *arg)
+t_exec_error	ft_exit(char **args, int argc)
 {
 	int	arg_n;
 
-	if (!arg)
-		exit(g_sig_offset);
-	if (!ft_is_num(arg))
+	if (!args)
+	{
+		ft_putstr_fd("exit\n", STDERR_FILENO);
+		exit(0);
+	}
+	if (argc > 1)
+	{
+		ft_putstr_fd("exit\n", STDERR_FILENO);
+		ft_putstr_fd("total error: exit: too many arguments\n", STDERR_FILENO);
+		exit(1);
+	}
+	if (!ft_is_num(args[0]))
 	{
 		ft_putstr_fd("exit: numeric argument required\n", STDERR_FILENO);
 		g_sig_offset = 103;
 		exit(103);
 	}
-	arg_n = ft_atoi(arg);
+	arg_n = ft_atoi(args[0]);
 	if (arg_n < 0 || arg_n > 255) // check if the given number is a valid exit status
 	{
-		ft_putstr_fd("exit: invalid exit status\n", STDERR_FILENO); // not sure what to do in this case
-		g_sig_offset = 184;
+		ft_putstr_fd("total error: exit: invalid exit status\n", STDERR_FILENO); // not sure what to do in this case
+		arg_n = 184;
 	}
 	g_sig_offset = arg_n; // setting global variable
 	exit(arg_n);

@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:24:56 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/20 03:18:08 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/27 02:52:10 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ t_exec_error	builtin(t_ast_node *node, t_shell *shell, int fd_out)
 	else if (ft_strcmp(command, "env") == 0)
 		status = ft_env(*shell->envp, argc, fd_out);
 	else if (ft_strcmp(command, "exit") == 0)
-		status = ft_exit(args[1]);
+		status = ft_exit(args, argc);
 	set_sig_offset(status);
 	return (status);
 }
