@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 20:42:09 by kuru              #+#    #+#             */
-/*   Updated: 2025/01/18 23:36:21 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/27 01:19:20 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,10 @@ static void	fill_heredoc(int fd, char *delimiter)
 
 char	*heredoc_handler(char *delimiter)
 {
+	pid_t 	pid;
 	int		fd;
 	char	*heredoc_filename;
+	int		status;
 
 	heredoc_filename = get_heredoc_filename();
 	fd = open(heredoc_filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
@@ -110,7 +112,22 @@ char	*heredoc_handler(char *delimiter)
 		free(heredoc_filename);
 		return (NULL);
 	}
-	fill_heredoc(fd, delimiter);
-	close(fd);
+	pid	= fork();
+	if (pid < 0)
+		return (NULL);
+	if (pid == 0)
+	{
+		get_signal_heredoc();
+		fill_heredoc(fd, delimiter);
+		close(fd);
+	}
+	else
+	{
+		signal(SIGINT, SIG_IGN);
+		close(fd);
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			g_sig_offset = WEXITSTATUS(status);
+	}
 	return (heredoc_filename);
 }

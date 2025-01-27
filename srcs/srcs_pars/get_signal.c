@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 11:57:23 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/26 20:49:14 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/27 01:19:59 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,3 +62,17 @@ void	ctl_back_handler(int sig)
 	signal(SIGQUIT, ctl_back_handler);
 	exit(131);
 }
+
+void ctl_c_handler_heredoc(int sig)
+{
+    (void)sig;
+    write(2, "\n", 1);
+    exit(130);
+}
+
+void get_signal_heredoc(void)
+{
+    signal(SIGINT, ctl_c_handler_heredoc); // a function you define that breaks out of heredoc
+    signal(SIGQUIT, ctl_back_handler);
+}
+

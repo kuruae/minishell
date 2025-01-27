@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/25 18:00:40 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/26 23:21:21 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,9 +160,7 @@ void	close_all_pipes(t_shell *shell)
 t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 {
  	t_exec_error	status;
-	int				i;
 
-	i = 0;
 	shell->pipeline = true;
 	status = init_pipeline(shell, node);
 	if (status != EXEC_SUCCESS)
