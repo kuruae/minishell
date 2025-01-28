@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 20:42:09 by kuru              #+#    #+#             */
-/*   Updated: 2025/01/27 02:30:40 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:41:47 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,11 @@ static void	fill_heredoc(int fd, char *delimiter)
 	char	*line;
 	char	*end_heredoc;
 
+	if (!delimiter)
+        exit(1);
 	end_heredoc = ft_strjoin(delimiter, "\n");
+	if (!end_heredoc)
+		exit(1);
 	ft_putstr_fd("heredoc> ", STDOUT_FILENO);
 	line = get_next_line(STDIN_FILENO);
 	while (line && ft_strcmp(line, end_heredoc))
@@ -114,20 +118,27 @@ char	*heredoc_handler(char *delimiter)
 	}
 	pid	= fork();
 	if (pid < 0)
+	{
+		free(heredoc_filename);
 		return (NULL);
+	}
 	if (pid == 0)
 	{
 		get_signal_heredoc();
 		fill_heredoc(fd, delimiter);
 		close(fd);
+		exit(0);
 	}
-	else
+    signal(SIGINT, SIG_IGN);
+    close(fd);
+    waitpid(pid, &status, 0);
+    if (WIFSIGNALED(status))
 	{
-		signal(SIGINT, SIG_IGN);
-		close(fd);
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			g_sig_offset = WEXITSTATUS(status);
+		// unlink(heredoc_filename);
+		// free(heredoc_filename);
+		g_sig_offset = 128 + WTERMSIG(status);
+		return (heredoc_filename);
 	}
+	g_sig_offset = WEXITSTATUS(status);
 	return (heredoc_filename);
 }

@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/26 20:51:33 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/28 17:44:53 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,10 @@ t_error readline_loop(t_shell *shell)
 		}
 		free(shell->line);
 		get_signal_interactive();
-		shell->line = readline(PROMPT);
+		if (g_sig_offset != 130)
+			shell->line = readline(PROMPT);
+		else
+			shell->line = readline("");
 	}
 	g_sig_offset = 131;
 	return (CTRL_D);

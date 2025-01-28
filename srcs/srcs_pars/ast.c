@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/19 15:40:37 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/28 17:25:59 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,6 @@ t_ast_node *parse_command(t_parser *parser)
 	   // Handle any redirections that come BEFORE the command
 	if (!parse_redir(parser, node))
 		return (err_free_and_return(parser, node));
-
 	// If we hit EOF or a special token after redirections without finding a command
 	if (!parser->current || parser->current->type != TOK_WORD)
 		return (err_free_and_return(parser, node));

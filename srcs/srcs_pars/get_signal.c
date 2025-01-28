@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 11:57:23 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/27 01:19:59 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/28 17:47:41 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	ctl_c_handler_exec(int sig)
 {
 	(void)sig;
 	// write(1, "\n", 1);
+	signal(SIGINT, ctl_c_handler_interactive);
 	exit(130);
 	// rl_on_new_line();
     // rl_replace_line("", 0);
@@ -66,7 +67,10 @@ void	ctl_back_handler(int sig)
 void ctl_c_handler_heredoc(int sig)
 {
     (void)sig;
-    write(2, "\n", 1);
+    write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
     exit(130);
 }
 
