@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 14:55:12 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/27 00:24:37 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:06:30 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,6 @@ void	ctl_c_handler_interactive(int sig);
 void	ctl_c_handler_exec(int sig);
 void	ctl_d_handler(int sig);
 void	ctl_back_handler(int sig);
-void	get_signal_heredoc(void);
+int     get_signal_heredoc(void);
+int     ignore_parent_signals(void);
 #endif

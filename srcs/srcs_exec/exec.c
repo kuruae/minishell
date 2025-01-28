@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/26 19:03:59 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:18:07 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	int 			i;
 	int				child_status;
 
+	ignore_parent_signals();
 	shell->process_count =  count_pipes(node) + 1;
 	shell->pipe_count = count_pipes(node);
 	shell->pipe_index = 0;
