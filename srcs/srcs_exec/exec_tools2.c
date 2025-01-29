@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 18:39:42 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/25 16:51:13 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/30 00:58:23 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,4 +21,22 @@ void close_used_pipes(t_shell *shell, t_ast_node *node)
 		close(shell->pipes[data->pipe_index_in][1]);
 	if (data->out_type == PIPE_T)
 		close(shell->pipes[data->pipe_index_out][0]);
+}
+
+bool	is_directory(char *path)
+{
+	int i;
+
+	if (!path)
+		return (false);
+	i = 0;
+	while (path[i + 1])
+		i++;
+	if (path[i] == '/')
+	{
+		g_sig_offset = 126;
+		return (true);
+	}
+	else
+		return (false);
 }

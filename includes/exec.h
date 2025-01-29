@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/25 17:03:52 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:13:13 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,6 @@ t_exec_error			start_pipeline(t_shell *shell, t_ast_node *node);
 int						count_pipes(t_ast_node *node);
 
 void 					close_used_pipes(t_shell *shell, t_ast_node *node);
+bool					is_directory(char *path);
 
 #endif

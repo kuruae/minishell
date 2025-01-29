@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/29 16:44:55 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/30 00:18:13 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,11 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 	t_exec_error	status;
 	pid_t			child_pid;
 
+	if (is_directory(node->data.command.command) == true)
+	{
+		ft_putstr_fd("total error: is a directory\n", 2);
+		return (EXEC_NOT_FOUND);
+	}
 	if (set_infile_outfile(shell, node) == EXEC_ERR_FILE)
 		return (set_sig_offset(EXEC_ERR_FILE), EXEC_ERR_FILE);
 	status = builtin(node, shell, node->data.command.exec_data.out_file); 
@@ -133,6 +138,8 @@ t_exec_error	start_subshell(t_shell *shell, t_ast_node *node)
 t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
+
+	//ft_printf("starting recur exec with node type: %d\n", node->type);
 
 	if (node->type == NODE_COMMAND)
 		return (start_command(shell, node));

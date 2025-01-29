@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/29 16:46:44 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/30 00:24:07 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,11 @@ t_exec_error  start_command_pipe(t_shell *shell, t_ast_node *node)
 {
 	pid_t			child_pid;
 
-	// if (node->data.command.exec_data.out_type != PIPE_T)
-	// {
-	// 	status = builtin(node, shell);
-	// 	if (status != EXEC_NOT_FOUND)
-	// 		return (status);
-	// }
+	if (is_directory(node->data.command.command) == true)
+	{
+		ft_putstr_fd("total error: is a directory\n", 2);
+		return (EXEC_NOT_FOUND);
+	}
 	if (set_infile_outfile(shell, node) == EXEC_ERR_FILE)
 		return (set_sig_offset(EXEC_ERR_FILE), EXEC_ERR_FILE);
 	get_signal_exec();
@@ -49,15 +48,9 @@ t_exec_error  start_command_pipe(t_shell *shell, t_ast_node *node)
 	else
 	{
 		if (node->data.command.exec_data.in_type == PIPE_T)
-		{
-			ft_printf("closing pipe %d in parrent\n", node->data.command.exec_data.pipe_index_in);
 			close(shell->pipes[node->data.command.exec_data.pipe_index_in][0]);
-		}
 		if (node->data.command.exec_data.out_type == PIPE_T)
-		{
-			ft_printf("closing pipe %d in parrent\n", node->data.command.exec_data.pipe_index_in);
 			close(shell->pipes[node->data.command.exec_data.pipe_index_out][1]);
-		}
 	}
 	return (EXEC_SUCCESS);
 }
