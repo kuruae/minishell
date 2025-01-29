@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/20 17:25:38 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:44:03 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ t_error readline_loop(t_shell *shell)
             break;
 		if (!is_line_empty(shell->line))
 		{
+			g_sig_offset = 0;
 			get_signal_exec();
 			routine_status = user_intput_routine(shell);
 			if (routine_status == ERR_FATAL)

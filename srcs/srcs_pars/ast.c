@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/29 02:50:47 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/29 18:47:16 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,19 @@
 void	add_redir(t_ast_node *node, t_redir *redir)
 {
 	t_redir *tmp;
+	t_redir	*head;
 
 	if (!node->redirections)
 	{
 		node->redirections = redir;
 		return ;
 	}
+	head = node->redirections;
 	tmp = node->redirections;
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = redir;
+	redir->head = head;
 }
 
 
@@ -42,11 +45,11 @@ void	add_redir(t_ast_node *node, t_redir *redir)
  *
  * @return true on success, false on failure
  */
-bool	parse_redir(t_parser *parser, t_ast_node *node)
+bool parse_redir(t_parser *parser, t_ast_node *node)
 {
 	t_token *redir_token;
 	t_redir *redir;
-	t_redir	*last_redir;
+
 	while (parser->current && _parser_is_token_type_redir(parser->current->type))
 	{
 		redir_token = parser->current;
@@ -56,30 +59,20 @@ bool	parse_redir(t_parser *parser, t_ast_node *node)
 			return (false);
 
 		redir = create_redir_node(redir_token, parser->current->value, parser->env);
-		if (!redir)
+		if (!redir || g_sig_offset == 130)
+		{
+			if (g_sig_offset == 130)
+				node->non_fatal_null = true;
 			return (false);
+		}
 
-		last_redir = node->redirections;
-		while (last_redir)
-		{
-			if (last_redir->next && last_redir->next->type == redir->type)
-				last_redir = last_redir->next;
-			else
-				break;
-		}
-		if (last_redir && last_redir->type == redir->type)
-		{
-			redir->next = last_redir->next;
-			free(last_redir->file);
-			free(last_redir);
-		}
-		else
-			add_redir(node, redir);
+		// Check if this is happening correctly
+		add_redir(node, redir);
+		
 		paser_advance(parser);
 	}
 	return (true);
 }
-
 
 /**
  * Parses a subshell expression (commands within parentheses)
@@ -410,6 +403,7 @@ t_ast_node	*ast_handler(t_token *tokens, char ***env)
 	parser.current = tokens;
 	parser.env = *env;
 	parser.err_status = SUCCESS;
+	root->non_fatal_null = false;
 
 	if (start_ast(&parser, &root) == FAILURE)
 		return (NULL);

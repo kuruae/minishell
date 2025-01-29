@@ -33,6 +33,7 @@ typedef struct s_redir
 	} type;
 	char			*file;  // File to redirect to/from
 	struct s_redir	*next;  // Next redirection
+	struct s_redir	*head;  // Head of the redirection list
 } t_redir;
 
 typedef struct s_parser
@@ -48,6 +49,7 @@ typedef struct s_ast_node
 {
 	t_node_type	type;  // Type of the node    
 	t_redir		*redirections;  // All nodes can have redirections
+	bool		non_fatal_null;
 	union
 	{
 		struct
