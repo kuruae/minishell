@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/29 14:08:54 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:48:35 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 		shell->process_count -= 1;
 		return (status);
 	}
+	get_signal_exec();
 	child_pid = fork();
 	if (child_pid == -1)
 		return (perror("total error: fork:"), EXEC_ERR_FATAL);
@@ -172,6 +173,7 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	shell->pipeline = false;
 	status = recur_exec(shell, node);
 	i = 0;
+	get_signal_exec();
 	while (i < shell->process_count)
 	{
 		waitpid(shell->pid[i], &child_status, 0);
@@ -179,7 +181,7 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
         {
             if (WTERMSIG(child_status) == SIGQUIT)
 			{
-                write(2, "Quit (core dumped)\n", 19);
+ //               write(2, "Quit (core dumped)\n", 19);
 				g_sig_offset = 131;
 			}
 		}

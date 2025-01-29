@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 20:42:09 by kuru              #+#    #+#             */
-/*   Updated: 2025/01/29 12:25:25 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/29 16:07:38 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ char	*heredoc_handler(char *delimiter)
 		free(heredoc_filename);
 		return (NULL);
 	}
+	get_signal_heredoc();
 	pid	= fork();
 	if (pid < 0)
 	{
@@ -124,12 +125,11 @@ char	*heredoc_handler(char *delimiter)
 	}
 	if (pid == 0)
 	{
-		get_signal_heredoc();
 		fill_heredoc(fd, delimiter);
 		close(fd);
 		exit(0);
 	}
-    signal(SIGINT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
     close(fd);
     waitpid(pid, &status, 0);
     if (WIFSIGNALED(status))
