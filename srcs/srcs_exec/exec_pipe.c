@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/26 23:21:21 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/29 16:46:44 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ t_exec_error  start_command_pipe(t_shell *shell, t_ast_node *node)
 	// }
 	if (set_infile_outfile(shell, node) == EXEC_ERR_FILE)
 		return (set_sig_offset(EXEC_ERR_FILE), EXEC_ERR_FILE);
+	get_signal_exec();
 	child_pid = fork();
 	if (child_pid == -1)
 		return (perror("total error: fork:"), EXEC_ERR_FATAL);
