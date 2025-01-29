@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/24 18:55:01 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/29 02:50:47 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ bool	parse_redir(t_parser *parser, t_ast_node *node)
 {
 	t_token *redir_token;
 	t_redir *redir;
-
+	t_redir	*last_redir;
 	while (parser->current && _parser_is_token_type_redir(parser->current->type))
 	{
 		redir_token = parser->current;
@@ -58,7 +58,23 @@ bool	parse_redir(t_parser *parser, t_ast_node *node)
 		redir = create_redir_node(redir_token, parser->current->value, parser->env);
 		if (!redir)
 			return (false);
-		add_redir(node, redir);
+
+		last_redir = node->redirections;
+		while (last_redir)
+		{
+			if (last_redir->next && last_redir->next->type == redir->type)
+				last_redir = last_redir->next;
+			else
+				break;
+		}
+		if (last_redir && last_redir->type == redir->type)
+		{
+			redir->next = last_redir->next;
+			free(last_redir->file);
+			free(last_redir);
+		}
+		else
+			add_redir(node, redir);
 		paser_advance(parser);
 	}
 	return (true);
@@ -223,7 +239,13 @@ t_ast_node *parse_command(t_parser *parser)
 
 	// If we hit EOF or a special token after redirections without finding a command
 	if (!parser->current || parser->current->type != TOK_WORD)
-		return (err_free_and_return(parser, node));
+	{
+		node->data.command.command = ft_strdup("");
+		node->data.command.args = NULL;
+		node->data.command.arg_count = 0;
+		set_command_data(node);
+		return (node);
+	}
 
 	// Store command name and advance
 	node->data.command.command = ft_strdup(parser->current->value);
