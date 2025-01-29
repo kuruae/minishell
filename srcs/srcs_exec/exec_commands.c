@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/28 18:55:01 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/29 13:37:33 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,8 @@ void	exec_command(t_shell *shell, t_ast_node *node)
     char **paths;
     t_exec_error status;
 
-	get_signal_exec();
+	signal(SIGINT, SIG_DFL);
+    signal(SIGQUIT, SIG_DFL);
 	if (!node || !node->data.command.command)
 	{
 		ft_printf("Invalid node or command\n");
