@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:09:16 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/29 17:44:23 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/30 17:17:51 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,11 @@ t_redir	*create_redir_node(t_token *token, char *file, char **env)
 	{
 		redir->type = REDIR_HEREDOC;
 		redir->file = heredoc_handler(file, env);
+		if (!redir->file)
+		{
+			free(redir);
+			return (NULL);
+		}
 	}
 	else
 	{

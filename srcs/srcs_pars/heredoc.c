@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 20:42:09 by kuru              #+#    #+#             */
-/*   Updated: 2025/01/23 17:35:44 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/30 18:11:12 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ static void	fill_heredoc(int fd, char *delimiter, char **env)
 	line = get_next_line(STDIN_FILENO);
 	while (line && ft_strcmp(line, end_heredoc))
 	{
+		if (g_sig_offset == 130)
+			break ;
 		if (is_expansion_on(delimiter))
 			line = expand_env_vars(line, env);
 		write(fd, line, ft_strlen(line));
@@ -85,5 +87,11 @@ char	*heredoc_handler(char *delimiter, char **env)
 	}
 	fill_heredoc(fd, delimiter, env);
 	close(fd);
+	if (g_sig_offset == 130)
+	{
+		unlink(heredoc_filename);
+		free(heredoc_filename);
+		return (NULL);
+	}
 	return (heredoc_filename);
 }

@@ -61,7 +61,8 @@ typedef enum e_error
 	ERR_FATAL,
 	ERR_MALLOC,
 	ERR_SYNTAX,
-	FAILURE
+	FAILURE,
+	CTRL_C = 130
 }	t_error;
 
 # include "lexing.h"

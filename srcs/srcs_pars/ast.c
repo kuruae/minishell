@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/30 16:56:45 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/30 17:27:14 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,9 +223,8 @@ t_ast_node *parse_command(t_parser *parser)
 		return (NULL);
 
 	   // Handle any redirections that come BEFORE the command
-	if (!parse_redir(parser, node))
+	if (!parse_redir(parser, node) || g_sig_offset == 130)
 		return (err_free_and_return(parser, node));
-
 	// If we hit EOF or a special token after redirections without finding a command
 	if (!parser->current || parser->current->type != TOK_WORD)
 	{
@@ -296,6 +295,8 @@ t_ast_node	*parse_pipe(t_parser *parser)
 			return (err_free_and_return(parser, left));
 		node->data.pipe.left = left;
 		node->data.pipe.right = parse_command(parser);
+		if (parser->err_status == FAILURE)
+			return (err_free_and_return(parser, node));
 		if (!node->data.pipe.right)
 			return (err_free_and_return(parser, node));
 		left = node;
