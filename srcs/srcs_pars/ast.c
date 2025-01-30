@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/29 18:47:16 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/30 16:56:45 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,7 @@ bool parse_redir(t_parser *parser, t_ast_node *node)
 
 		redir = create_redir_node(redir_token, parser->current->value, parser->env);
 		if (!redir || g_sig_offset == 130)
-		{
-			if (g_sig_offset == 130)
-				node->non_fatal_null = true;
 			return (false);
-		}
 
 		// Check if this is happening correctly
 		add_redir(node, redir);
@@ -403,7 +399,6 @@ t_ast_node	*ast_handler(t_token *tokens, char ***env)
 	parser.current = tokens;
 	parser.env = *env;
 	parser.err_status = SUCCESS;
-	root->non_fatal_null = false;
 
 	if (start_ast(&parser, &root) == FAILURE)
 		return (NULL);

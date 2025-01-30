@@ -49,7 +49,6 @@ typedef struct s_ast_node
 {
 	t_node_type	type;  // Type of the node    
 	t_redir		*redirections;  // All nodes can have redirections
-	bool		non_fatal_null;
 	union
 	{
 		struct
