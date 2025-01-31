@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/31 18:36:00 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/31 18:41:01 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ static t_error process_single_arg(t_parser *parser, t_ast_node **node)
 {
 	char	**new_args;
 	int		i;
+
 	if (!parser->current || parser->current->type != TOK_WORD)
 		return (SUCCESS);
 
@@ -124,6 +125,7 @@ static t_error process_single_arg(t_parser *parser, t_ast_node **node)
 	if (!new_args)
 		return (ERR_FATAL);
 
+	i = 0;
 	while (i < (*node)->data.command.arg_count)
 	{
 		new_args[i] = (*node)->data.command.args[i];
