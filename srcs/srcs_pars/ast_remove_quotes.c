@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 16:05:23 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/16 16:08:03 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/23 17:31:15 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	skip_quote_if_needed(char *str, int i, t_quote_depth *state)
 	return (i);
 }
 
-static char	*remove_quotes_from_string(char *str)
+char	*remove_quotes_from_string(char *str)
 {
 	int				i;
 	int				j;

@@ -33,6 +33,7 @@ typedef struct s_redir
 	} type;
 	char			*file;  // File to redirect to/from
 	struct s_redir	*next;  // Next redirection
+	struct s_redir	*head;  // Head of the redirection list
 } t_redir;
 
 typedef struct s_parser
@@ -79,7 +80,7 @@ typedef struct s_ast_node
 } t_ast_node;
 
 bool	_parser_is_token_type_redir(t_token_type type);
-t_redir	*create_redir_node(t_token *token, char *file);
+t_redir	*create_redir_node(t_token *token, char *file, char **env);
 t_ast_node *create_ast_node(t_node_type type);
 void free_ast(t_ast_node *node);
 void	paser_advance(t_parser *parser);
@@ -96,9 +97,12 @@ void debug_print_ast(t_ast_node *node, int depth);
 t_ast_node	*err_free_and_return(t_parser *parser, t_ast_node *node);
 t_node_type	get_node_type(t_token_type token_type);
 t_error	all_expands_handler(t_ast_node *node, char **env);
+t_error create_argv_exec(t_ast_node *node);
 t_error	remove_quotes_handler(t_ast_node *node);
 void set_command_data(t_ast_node *node);
-char	*heredoc_handler(char *delimiter);
-t_error create_argv_exec(t_ast_node *node);
+char	*heredoc_handler(char *delimiter, char **env);
+char	*remove_quotes_from_string(char *str);
+unsigned int	lcg_rand(unsigned int *seed);
+void	uint_to_hex(unsigned int n, char *hex);
 
 #endif

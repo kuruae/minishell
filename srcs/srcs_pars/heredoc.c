@@ -3,55 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 20:42:09 by kuru              #+#    #+#             */
-/*   Updated: 2025/01/18 23:36:21 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/30 18:11:12 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/**
- * Converts an unsigned integer to its hexadecimal string representation
- * 
- * @param num      The unsigned integer to convert
- * @param hex_str  Output buffer for the hex string
- * 
- * Converts each 4-bit chunk of the input number into a hex character (0-f)
- * and stores it in the provided buffer. Adds null terminator at the end.
- */
-static void	uint_to_hex(unsigned int num, char *hex_str)
-{
-	const char	hex_chars[] = "0123456789abcdef";
-	int			i;
-
-	i = HEX_STRING_LEN - 1;
-	while (i >= 0)
-	{
-		hex_str[i] = hex_chars[num & HEX_MASK];
-		num >>= 4;
-		i--;
-	}
-	hex_str[HEX_STRING_LEN] = '\0';
-}
-
-/**
- * Linear Congruential Generator (LCG) for pseudo-random number generation
- * 
- * @param seed  Pointer to the seed value that will be updated
- * @return      The next pseudo-random number in the sequence
- * 
- * Uses the formula: next = (seed * 1664525 + 1013904223) % UINT32_MAX
- * Parameters chosen for good statistical properties
- * We use this to generate unique filenames for heredoc temporary files
- * in case we need to create multiple heredocs in the same session.
- */
-static unsigned int	lcg_rand(unsigned int *seed)
-{
-	return ((*seed * 1664525 + 1013904223) % UINT32_MAX);
-}
-
 /**
  * Generates a unique filename for heredoc temporary files
  * 
@@ -79,16 +38,32 @@ static char	*get_heredoc_filename(void)
 	return (filename);
 }
 
-static void	fill_heredoc(int fd, char *delimiter)
+static bool	is_expansion_on(char *delemiter)
+{
+	if (!delemiter)
+		return (true);
+	if (delemiter[0] == '\'' && delemiter[ft_strlen(delemiter) - 1] == '\'')
+		return (false);
+	return (true);
+}
+
+static void	fill_heredoc(int fd, char *delimiter, char **env)
 {
 	char	*line;
 	char	*end_heredoc;
+	char	*quoteless_delimiter;
 
-	end_heredoc = ft_strjoin(delimiter, "\n");
+	quoteless_delimiter = remove_quotes_from_string(delimiter);
+	end_heredoc = ft_strjoin(quoteless_delimiter, "\n");
+	free(quoteless_delimiter);
 	ft_putstr_fd("heredoc> ", STDOUT_FILENO);
 	line = get_next_line(STDIN_FILENO);
 	while (line && ft_strcmp(line, end_heredoc))
 	{
+		if (g_sig_offset == 130)
+			break ;
+		if (is_expansion_on(delimiter))
+			line = expand_env_vars(line, env);
 		write(fd, line, ft_strlen(line));
 		ft_putstr_fd("heredoc> ", STDOUT_FILENO);
 		free(line);
@@ -98,7 +73,7 @@ static void	fill_heredoc(int fd, char *delimiter)
 	free(end_heredoc);
 }
 
-char	*heredoc_handler(char *delimiter)
+char	*heredoc_handler(char *delimiter, char **env)
 {
 	int		fd;
 	char	*heredoc_filename;
@@ -110,7 +85,13 @@ char	*heredoc_handler(char *delimiter)
 		free(heredoc_filename);
 		return (NULL);
 	}
-	fill_heredoc(fd, delimiter);
+	fill_heredoc(fd, delimiter, env);
 	close(fd);
+	if (g_sig_offset == 130)
+	{
+		unlink(heredoc_filename);
+		free(heredoc_filename);
+		return (NULL);
+	}
 	return (heredoc_filename);
 }

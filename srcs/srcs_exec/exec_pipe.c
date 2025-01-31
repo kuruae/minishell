@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/20 01:56:46 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/29 02:37:47 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,9 +138,7 @@ int	count_pipes(t_ast_node *node)
 t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 {
  	t_exec_error	status;
-	int				i;
 
-	i = 0;
 	shell->pipeline = true;
 	status = init_pipeline(shell, node);
 	if (status != EXEC_SUCCESS)
