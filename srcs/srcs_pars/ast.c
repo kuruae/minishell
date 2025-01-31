@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:04:19 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/30 17:27:14 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:36:00 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ bool parse_redir(t_parser *parser, t_ast_node *node)
 		if (!redir || g_sig_offset == 130)
 			return (false);
 
-		// Check if this is happening correctly
 		add_redir(node, redir);
 		
 		paser_advance(parser);
@@ -114,31 +113,39 @@ t_ast_node *parse_subshell(t_parser *parser)
 }
 
 
-static t_error count_and_process_args(t_parser *parser, t_ast_node **node)
+static t_error process_single_arg(t_parser *parser, t_ast_node **node)
 {
-	int args_count;
-	int i;
+	char	**new_args;
+	int		i;
+	if (!parser->current || parser->current->type != TOK_WORD)
+		return (SUCCESS);
 
-	args_count = count_args(parser->current);
-	if (args_count > 0)
+	new_args = malloc(sizeof(char *) * ((*node)->data.command.arg_count + 2));
+	if (!new_args)
+		return (ERR_FATAL);
+
+	while (i < (*node)->data.command.arg_count)
 	{
-		(*node)->data.command.args = malloc(sizeof(char *) * (args_count + 1));
-		if (!(*node)->data.command.args)
-		{
-			free((*node)->data.command.command);
-			return (ERR_FATAL);
-		}
-		
-		i = 0;
-		while (parser->current && parser->current->type == TOK_WORD && i < args_count)
-		{
-			(*node)->data.command.args[i] = ft_strdup(parser->current->value);
-			paser_advance(parser);
-			i++;
-		}
-		(*node)->data.command.args[i] = NULL;
-		(*node)->data.command.arg_count = args_count;
+		new_args[i] = (*node)->data.command.args[i];
+		i++;
 	}
+
+	new_args[(*node)->data.command.arg_count] = ft_strdup(parser->current->value);
+	if (!new_args[(*node)->data.command.arg_count])
+	{
+		free(new_args);
+		return (ERR_FATAL);
+	}
+
+	new_args[(*node)->data.command.arg_count + 1] = NULL;
+
+	free((*node)->data.command.args);
+
+	(*node)->data.command.args = new_args;
+	(*node)->data.command.arg_count++;
+
+	paser_advance(parser);
+
 	return (SUCCESS);
 }
 
@@ -239,12 +246,21 @@ t_ast_node *parse_command(t_parser *parser)
 	node->data.command.command = ft_strdup(parser->current->value);
 	paser_advance(parser);
 
-	if (count_and_process_args(parser, &node) != SUCCESS)
-		return (err_free_and_return(parser, node));
-
-	// Parse any redirections that follow the command
-	if (!parse_redir(parser, node))
-	   return (err_free_and_return(parser, node));
+	while (parser->current)
+	{
+		if (parser->current->type == TOK_WORD)
+		{
+			if (process_single_arg(parser, &node) == ERR_FATAL)
+				return (err_free_and_return(parser, node));
+		}
+		else if (_parser_is_token_type_redir(parser->current->type))
+		{
+			if (!parse_redir(parser, node) || g_sig_offset == 130)
+				return (err_free_and_return(parser, node));
+		}
+		else
+			break;
+	}
 
 	if (remove_quotes_handler(node) != SUCCESS)
 		return (err_free_and_return(parser, node));
@@ -297,7 +313,7 @@ t_ast_node	*parse_pipe(t_parser *parser)
 		node->data.pipe.right = parse_command(parser);
 		if (parser->err_status == FAILURE)
 			return (err_free_and_return(parser, node));
-		if (!node->data.pipe.right)
+			if (!node->data.pipe.right)
 			return (err_free_and_return(parser, node));
 		left = node;
 	}

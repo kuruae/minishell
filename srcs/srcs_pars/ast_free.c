@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_free.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:35:28 by emagnani          #+#    #+#             */
-/*   Updated: 2025/01/17 20:10:20 by kuru             ###   ########.fr       */
+/*   Updated: 2025/01/31 17:07:01 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,17 @@ static void	free_command_node(t_ast_node *node)
 {
 	int	i;
 
-	free(node->data.command.command);
+	if (!node)
+		return ;
+	if (node->data.command.command)
+		free(node->data.command.command);
 	if (node->data.command.args)
 	{
 		i = 0;
 		while (i < node->data.command.arg_count)
 		{
-			free(node->data.command.args[i]);
+			if (node->data.command.args[i])
+				free(node->data.command.args[i]);
 			i++;
 		}
 		free(node->data.command.args);
@@ -32,7 +36,8 @@ static void	free_command_node(t_ast_node *node)
 		i = 0;
 		while (node->data.command.argv_exec[i])
 		{
-			free(node->data.command.argv_exec[i]);
+			if (node->data.command.argv_exec[i])
+				free(node->data.command.argv_exec[i]);
 			i++;
 		}
 		free(node->data.command.argv_exec);
@@ -44,13 +49,16 @@ static void	free_redir(t_ast_node *node)
 	t_redir	*next;
 	t_redir	*redir;
 
+	if (!node)
+		return ;
 	redir = node->redirections;
 	while (redir)
 	{
 		next = redir->next;
 		if (redir->type == REDIR_HEREDOC)
 			unlink(redir->file);
-		free(redir->file);
+		if (redir->file)
+			free(redir->file);
 		free(redir);
 		redir = next;
 	}
@@ -69,9 +77,7 @@ void	free_ast(t_ast_node *node)
 		free_ast(node->data.pipe.right);
 	}
 	else if (node->type == NODE_SUBSHELL)
-	{
 		free_ast(node->data.subshell.command);
-	}
 	else if (node->type == NODE_AND || node->type == NODE_OR)
 	{
 		free_ast(node->data.logical_op.left);
