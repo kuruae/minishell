@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_free.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:35:28 by emagnani          #+#    #+#             */
-/*   Updated: 2025/01/31 17:07:01 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/01 00:16:04 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ static void	free_command_node(t_ast_node *node)
 {
 	int	i;
 
-	if (!node)
-		return ;
 	if (node->data.command.command)
 		free(node->data.command.command);
 	if (node->data.command.args)
@@ -36,8 +34,7 @@ static void	free_command_node(t_ast_node *node)
 		i = 0;
 		while (node->data.command.argv_exec[i])
 		{
-			if (node->data.command.argv_exec[i])
-				free(node->data.command.argv_exec[i]);
+			free(node->data.command.argv_exec[i]);
 			i++;
 		}
 		free(node->data.command.argv_exec);

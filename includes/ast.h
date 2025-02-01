@@ -80,12 +80,9 @@ typedef struct s_ast_node
 } t_ast_node;
 
 bool	_parser_is_token_type_redir(t_token_type type);
-t_redir	*create_redir_node(t_token *token, char *file, char **env);
 t_ast_node *create_ast_node(t_node_type type);
 void free_ast(t_ast_node *node);
 void	paser_advance(t_parser *parser);
-void	add_redir(t_ast_node *node, t_redir *redir);
-bool	parse_redir(t_parser *parser, t_ast_node *node);
 t_ast_node	*parse_command(t_parser *parser);
 t_ast_node	*parse_subshell(t_parser *parser);
 int	count_args(t_token *token);
@@ -104,5 +101,7 @@ char	*heredoc_handler(char *delimiter, char **env);
 char	*remove_quotes_from_string(char *str);
 unsigned int	lcg_rand(unsigned int *seed);
 void	uint_to_hex(unsigned int n, char *hex);
+bool parse_redir(t_parser *parser, t_ast_node *node);
+t_error pointer_parse_pipe(t_parser *parser, t_ast_node **left);
 
 #endif

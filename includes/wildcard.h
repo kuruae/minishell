@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:16:31 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/04 16:19:05 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/01 00:55:03 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,8 @@
 
 
 t_error	start_wildcard_expansion(t_ast_node *node);
+char	**bubble_sort_matches(char **matches, int count);
+bool	is_pattern_matching(const char *pattern, const char *name);
+char	**expand_wildcard(const char *pattern);
 
 #endif

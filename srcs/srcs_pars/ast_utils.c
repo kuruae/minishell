@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:09:16 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/30 17:17:51 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/01 01:07:58 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,47 +23,6 @@ t_ast_node	*create_ast_node(t_node_type type)
 	node->redirections = NULL;
 	ft_memset(&node->data, 0, sizeof(node->data));
 	return (node);
-}
-
-bool	_parser_is_token_type_redir(t_token_type type)
-{
-	return (type == TOK_REDIR_IN || type == TOK_REDIR_OUT
-		|| type == TOK_APPEND || type == TOK_HEREDOC);
-}
-
-t_redir	*create_redir_node(t_token *token, char *file, char **env)
-{
-	t_redir	*redir;
-
-	redir = malloc(sizeof(t_redir));
-	if (!redir)
-		return (NULL);
-	if (token->type == TOK_REDIR_IN)
-		redir->type = REDIR_INPUT;
-	else if (token->type == TOK_REDIR_OUT)
-		redir->type = REDIR_OUTPUT;
-	else if (token->type == TOK_APPEND)
-		redir->type = REDIR_APPEND;
-	else if (token->type == TOK_HEREDOC)
-	{
-		redir->type = REDIR_HEREDOC;
-		redir->file = heredoc_handler(file, env);
-		if (!redir->file)
-		{
-			free(redir);
-			return (NULL);
-		}
-	}
-	else
-	{
-		free(redir);
-		return (NULL);
-	}
-	if (redir->type != REDIR_HEREDOC)
-		redir->file = ft_strdup(file);
-	redir->next = NULL;
-	redir->head = redir;
-	return (redir);
 }
 
 int	count_args(t_token *token)
