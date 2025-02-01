@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_free.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:35:28 by emagnani          #+#    #+#             */
-/*   Updated: 2025/02/01 00:16:04 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/01 16:41:17 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,21 @@ static void	free_redir(t_ast_node *node)
 	}
 }
 
+/**
+ * @brief Recursively frees an AST node and its children
+ *
+ * This function handles different types of nodes:
+ * - Command nodes: frees command-specific data
+ * - Pipe nodes: frees both left and right branches
+ * - Subshell nodes: frees the contained command
+ * - Logical nodes (AND/OR): frees both left and right operands
+ * 
+ * @param node Pointer to the AST node to be freed
+ * 
+ * The function first frees any redirections associated with the node,
+ * then processes the node according to its type, and finally frees
+ * the node itself.
+ */
 void	free_ast(t_ast_node *node)
 {
 	if (!node)

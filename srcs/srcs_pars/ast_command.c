@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 00:43:04 by kuru              #+#    #+#             */
-/*   Updated: 2025/02/01 01:18:57 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/01 16:36:46 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,20 @@ static t_error	init_empty_command(t_ast_node *node)
 	return (SUCCESS);
 }
 
+/**
+ * @brief Processes a single argument and adds it to the command's 
+ * argument list.
+ *
+ * This function checks if the current token in the parser is a word token.
+ * If it is, it duplicates the current argument list, adds the new argument
+ * to the list, and updates the command's argument count. 
+ * The parser is then advanced to the next token.
+ *
+ * @param parser A pointer to the parser structure.
+ * @param node A double pointer to the AST node representing the command.
+ * @return t_error Returns SUCCESS on successful processing,
+ * 	or ERR_MALLOC if memory allocation fails.
+ */
 static t_error	process_single_arg(t_parser *parser, t_ast_node **node)
 {
 	char	**new_args;
