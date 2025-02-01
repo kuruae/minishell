@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:24:56 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/20 03:18:08 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/27 02:52:10 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	set_sig_offset(t_exec_error status)
 }
 
 
-t_exec_error	builtin(t_ast_node *node, t_shell *shell)
+t_exec_error	builtin(t_ast_node *node, t_shell *shell, int fd_out)
 {
 	t_exec_error	status;
 	char			*command;
@@ -67,13 +67,13 @@ t_exec_error	builtin(t_ast_node *node, t_shell *shell)
 	else if (ft_strcmp(command, "unset") == 0)
 		status = ft_unset(args, argc, *shell->envp);
 	else if (ft_strcmp(command, "echo") == 0)
-		status = ft_echo(args, argc);
+		status = ft_echo(args, argc, fd_out);
 	else if (ft_strcmp(command, "pwd") == 0)
-		status = ft_pwd(&shell->dir);
+		status = ft_pwd(&shell->dir, fd_out);
 	else if (ft_strcmp(command, "env") == 0)
-		status = ft_env(*shell->envp, argc);
+		status = ft_env(*shell->envp, argc, fd_out);
 	else if (ft_strcmp(command, "exit") == 0)
-		status = ft_exit(args[1]);
+		status = ft_exit(args, argc);
 	set_sig_offset(status);
 	return (status);
 }

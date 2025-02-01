@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:02:26 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/20 03:06:12 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/01/26 17:32:24 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,14 @@ t_exec_error	ft_cd(char **args, int argc, t_directory *dir, char ***envp)
 {
 	char	cache[MAX_PATH];
 
+	
 	if (argc > 1)
 	{
 		return(ft_putstr_fd("total error: cd: too many arguments", 2),
 		ft_putchar_fd('\n', 2), EXEC_ERR_NON_FATAL);
 	}
 	if (getcwd(cache, MAX_PATH) == NULL) //saving old_path variable in the cache
-		return (perror("total error: cd"), EXEC_ERR_NON_FATAL);
-	if (getcwd(cache, MAX_PATH) == NULL) //saving old_path variable in the cache
-		return (perror("total error: cd"), EXEC_ERR_NON_FATAL);
+		ft_strlcpy(cache, dir->current_path, MAX_PATH);
 	if (argc == 0) // when there is only cd written it redirects to the home directory
 	{
 		if(!get_home(*envp)) // whe use this sub function to look for the HOME= variable in envp
@@ -68,7 +67,14 @@ t_exec_error	ft_cd(char **args, int argc, t_directory *dir, char ***envp)
 		chdir(dir->home_path);
 	}
 	else if (chdir(args[0]) == -1)
+	{
+		if (ft_strcmp(args[0], "..") == 0)
+		{
+			if (chdir(dir->old_path) == -1)
+				return (perror("total error: cd"), EXEC_ERR_NON_FATAL);
+		}
 		return (perror("total error: cd"), EXEC_ERR_NON_FATAL);
+	}
 	ft_strlcpy(dir->old_path, cache, ft_strlen(cache) + 1); // copying cache to old path after directory was succesfully changed
 	if (getcwd(dir->current_path, MAX_PATH) == NULL) // setting the new current_path variable
 		return (perror("cd error"), EXEC_ERR_NON_FATAL);

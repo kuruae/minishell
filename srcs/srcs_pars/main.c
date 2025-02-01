@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/30 17:30:09 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/01 18:13:06 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,6 @@ t_error readline_loop(t_shell *shell)
             break;
 		if (!is_line_empty(shell->line))
 		{
-			g_sig_offset = 0;
-			get_signal_exec();
 			routine_status = user_intput_routine(shell);
 			if (routine_status == ERR_FATAL)
 				return (ERR_FATAL);
@@ -130,6 +128,8 @@ t_error readline_loop(t_shell *shell)
 				ft_putstr_fd("minishell: syntax error\n", STDERR_FILENO);
 		}
 		free(shell->line);
+		if (g_sig_offset == 130)
+			ft_printf("\n");
 		get_signal_interactive();
 		shell->line = readline(PROMPT);
 	}

@@ -34,26 +34,26 @@ bool check_flag(char **args)
 }
 
 
-t_exec_error	ft_echo(char **args, int argc)
+t_exec_error	ft_echo(char **args, int argc, int fd_out)
 {
 	bool	n_flag;
 	int		i;
 
 	i = 0;
 	if (argc == 0)
-		return(ft_putchar_fd('\n', STDOUT_FILENO), EXEC_SUCCESS);
+		return(ft_putchar_fd('\n', fd_out), EXEC_SUCCESS);
 	n_flag = check_flag(args);
 	if (n_flag == true)
 		i++;
 	if (i < argc) // first string seperate as it has no space before
-		ft_putstr_fd(args[i++], STDOUT_FILENO);
+		ft_putstr_fd(args[i++], fd_out);
 	while (i < argc)
 	{
-		ft_putchar_fd(' ', STDOUT_FILENO); // adding aspace between words
-		ft_putstr_fd(args[i++], STDOUT_FILENO);
+		ft_putchar_fd(' ', fd_out); // adding aspace between words
+		ft_putstr_fd(args[i++], fd_out);
 	}
 	if (!n_flag) // only adding newline when there is no n_flag
-		ft_putchar_fd('\n', STDOUT_FILENO);
+		ft_putchar_fd('\n', fd_out);
 // If in the argument there are spaces at the end they should not be printed
 // The question is if we already print them before
 	return (EXEC_SUCCESS);

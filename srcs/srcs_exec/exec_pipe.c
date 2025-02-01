@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/29 02:37:47 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/01 18:22:05 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,21 @@ t_exec_error  start_command_pipe(t_shell *shell, t_ast_node *node)
 {
 	pid_t			child_pid;
 
-	// if (node->data.command.exec_data.out_type != PIPE_T)
-	// {
-	// 	status = builtin(node, shell);
-	// 	if (status != EXEC_NOT_FOUND)
-	// 		return (status);
-	// }
+	if (is_directory(node->data.command.command) == true)
+	{
+		ft_putstr_fd("total error: is a directory\n", 2);
+		return (EXEC_NOT_FOUND);
+	}
+	if (set_infile_outfile(shell, node) == EXEC_ERR_FILE)
+		return (set_sig_offset(EXEC_ERR_FILE), EXEC_ERR_FILE);
+	get_signal_exec();
 	child_pid = fork();
 	if (child_pid == -1)
 		return (perror("total error: fork:"), EXEC_ERR_FATAL);
 	shell->pid[shell->process_index++] = child_pid;
 	if (child_pid == 0)
 	{
+		set_pipes(node, shell);
 		exec_command(shell, node);
 		ft_printf("Child process did not exit properly\n");
 		exit(1);
@@ -135,6 +138,19 @@ int	count_pipes(t_ast_node *node)
 	return (counter);
 }
 
+void	close_all_pipes(t_shell *shell)
+{
+	int	i;
+
+	i = 0;
+	while (i < shell->pipe_count)
+	{
+		close(shell->pipes[i][0]);
+		close(shell->pipes[i][1]);
+		i++;
+	}
+}
+
 t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 {
  	t_exec_error	status;
@@ -144,7 +160,7 @@ t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 	if (status != EXEC_SUCCESS)
 		return (status);
 	status = exec_pipeline(shell, node);
-	//here i close all the pipes (this part should onl be reached by the parrent)
+	//close_all_pipes(shell);
 	return (status);
 }
 

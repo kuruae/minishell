@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tools.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 23:45:35 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/13 16:49:28 by enzo             ###   ########.fr       */
+/*   Updated: 2025/01/25 18:34:50 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	exit_exec_status(t_exec_error	status)
 	if (status == EXEC_ERR_NON_FATAL)
 		exit(1);
 	if (status == EXEC_ERR_ACCESS)
-		exit(1);
+		exit(126);
 	if (status == EXEC_ERR_FILE)
 		exit(1);
 	if (status == EXEC_NOT_FOUND)
@@ -75,10 +75,6 @@ void	close_used_fds(t_shell *shell, t_ast_node *node)
 		close(data->in_file);
 	if (data->out_type == FILE_T)
 		close(data->out_file);
-	if (data->in_type == PIPE_T)
-		close(shell->pipes[data->pipe_index_in][1]);
-	if (data->out_type == PIPE_T)
-		close(shell->pipes[data->pipe_index_out][0]);
 }
 
 void	close_unused_pipes(t_ast_node *node, t_shell *shell)

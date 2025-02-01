@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/24 16:34:55 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/01 18:21:55 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,20 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 	pid_t			child_pid;
 	int				wait_status;
 
-	all_expands_handler(node, *shell->envp);
-	create_argv_exec(node);
-	status = builtin(node, shell); 
+	if (is_directory(node->data.command.command) == true)
+	{
+		ft_putstr_fd("total error: is a directory\n", 2);
+		return (EXEC_NOT_FOUND);
+	}
+	if (set_infile_outfile(shell, node) == EXEC_ERR_FILE)
+		return (set_sig_offset(EXEC_ERR_FILE), EXEC_ERR_FILE);
+	status = builtin(node, shell, node->data.command.exec_data.out_file); 
 	if (status != EXEC_NOT_FOUND)
 	{
 		shell->process_count -= 1;
 		return (status);
 	}
+	get_signal_exec();
 	child_pid = fork();
 	if (child_pid == -1)
 		return (perror("total error: fork:"), EXEC_ERR_FATAL);
@@ -76,41 +82,68 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 	}
 	return (EXEC_SUCCESS);
 }
-
-t_exec_error start_subshell(t_shell *shell, t_ast_node *node)
+t_exec_error	start_subshell(t_shell *shell, t_ast_node *node)
 {	
-	int		child_status;
-	int		i;
-	t_shell	subshell;
-	pid_t	pid;
+    int     child_status;
+    t_shell subshell;
+	t_exec_error status;
+	int i;
 
+    // Initialize subshell with parent shell context
+    subshell = init_subshell(shell, node->data.subshell.command);
+	status = recur_exec(&subshell, node);
 	i = 0;
-	subshell = init_subshell(shell, node);
-	if (subshell.pipe_count == 0)
-	{
-		pid = fork();
-		if (pid == -1)
-			return (EXEC_ERR_FATAL);
-		if (pid == 0)
-			exit(recur_exec(&subshell, node));
-		waitpid(pid, &child_status, 0);
-		g_sig_offset = WEXITSTATUS(child_status);
-		return (return_status(g_sig_offset));
-	}
-	recur_exec(&subshell, node);
 	while (i < subshell.process_count)
 	{
 		waitpid(subshell.pid[i], &child_status, 0);
-		g_sig_offset = WEXITSTATUS(child_status);
+		if (WIFSIGNALED(child_status))
+        {
+            if (WTERMSIG(child_status) == SIGQUIT)
+				g_sig_offset = 131;
+		}
+		else if (WIFEXITED(child_status))
+            g_sig_offset = WEXITSTATUS(child_status);
 		i++;
 	}
-	return (return_status(g_sig_offset));
+	ft_printf("subshell finished\n");
+	return (status);
 }
+// t_exec_error start_subshell(t_shell *shell, t_ast_node *node)
+// {	
+// 	int		child_status;
+// 	int		i;
+// 	t_shell	subshell;
+// 	pid_t	pid;
+
+// 	i = 0;
+// 	subshell = init_subshell(shell, node);
+// 	if (subshell.pipe_count == 0)
+// 	{
+// 		pid = fork();
+// 		if (pid == -1)
+// 			return (EXEC_ERR_FATAL);
+// 		if (pid == 0)
+// 			exit(recur_exec(&subshell, node));
+// 		waitpid(pid, &child_status, 0);
+// 		g_sig_offset = WEXITSTATUS(child_status);
+// 		return (return_status(g_sig_offset));
+// 	}
+// 	recur_exec(&subshell, node);
+// 	while (i < subshell.process_count)
+// 	{
+// 		waitpid(subshell.pid[i], &child_status, 0);
+// 		g_sig_offset = WEXITSTATUS(child_status);
+// 		i++;
+// 	}
+// 	return (return_status(g_sig_offset));
+// }
 
 
 t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
+
+	//ft_printf("starting recur exec with node type: %d\n", node->type);
 
 	if (node->type == NODE_COMMAND)
 		return (start_command(shell, node));
@@ -151,10 +184,17 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	shell->pipeline = false;
 	status = recur_exec(shell, node);
 	i = 0;
+	get_signal_exec();
 	while (i < shell->process_count)
 	{
 		waitpid(shell->pid[i], &child_status, 0);
-		g_sig_offset = WEXITSTATUS(child_status);
+		if (WIFSIGNALED(child_status))
+        {
+            if (WTERMSIG(child_status) == SIGQUIT)
+				g_sig_offset = 131;
+		}
+		else if (WIFEXITED(child_status))
+            g_sig_offset = WEXITSTATUS(child_status);
 		i++;
 	}
 	return (status);

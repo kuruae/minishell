@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 20:42:09 by kuru              #+#    #+#             */
-/*   Updated: 2025/02/01 16:43:02 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/01 18:20:51 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,10 @@ static void	fill_heredoc(int fd, char *delimiter, char **env)
 
 char	*heredoc_handler(char *delimiter, char **env)
 {
+	pid_t 	pid;
 	int		fd;
 	char	*heredoc_filename;
+	int		status;
 
 	heredoc_filename = get_heredoc_filename();
 	fd = open(heredoc_filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
@@ -85,13 +87,29 @@ char	*heredoc_handler(char *delimiter, char **env)
 		free(heredoc_filename);
 		return (NULL);
 	}
-	fill_heredoc(fd, delimiter, env);
-	close(fd);
-	if (g_sig_offset == 130)
+	get_signal_heredoc();
+	pid	= fork();
+	if (pid < 0)
 	{
-		unlink(heredoc_filename);
 		free(heredoc_filename);
 		return (NULL);
 	}
+	if (pid == 0)
+	{
+		fill_heredoc(fd, delimiter, env);
+		close(fd);
+		exit(0);
+	}
+	signal(SIGINT, SIG_IGN);
+    close(fd);
+    waitpid(pid, &status, 0);
+    if (WIFSIGNALED(status))
+	{
+		unlink(heredoc_filename);
+		free(heredoc_filename);
+		g_sig_offset = 128 + WTERMSIG(status);
+		return (NULL);
+	}
+	g_sig_offset = WEXITSTATUS(status);
 	return (heredoc_filename);
 }
