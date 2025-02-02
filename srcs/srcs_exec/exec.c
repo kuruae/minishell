@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/02 01:18:56 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/02 17:14:59 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,6 @@
 #include "minishell.h"
 
 t_exec_error	recur_exec(t_shell *shell, t_ast_node *node);
-
-
-
-//this function is ment to transform the status of the child in to 
-//a according exex_error status
-t_exec_error	return_status(int	status)
-{
-    int exit_status;
-
-    if (WIFEXITED(status))
-    {
-        exit_status = WEXITSTATUS(status);
-        if (exit_status == 0)
-            return (EXEC_SUCCESS);
-        else if (exit_status == 127) // 127 is the exit status for command not found
-            return (EXEC_NOT_FOUND);
-        else
-            return (EXEC_ERR_NON_FATAL);
-    }
-    return (EXEC_ERR_FATAL);
-}
 
 /*
 	First we have to handle builtins 
@@ -79,12 +58,13 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 	shell->pid[shell->process_index++] = child_pid;
 	if (child_pid == 0)
 		exec_command(shell, node);
-	if (!shell->pipeline)
+	else
 	{
 		waitpid(child_pid, &wait_status, 0);
-		g_sig_offset = WEXITSTATUS(status);
+		analize_child_status(wait_status);
+		shell->process_count -= 1;
 	}
-	return (EXEC_SUCCESS);
+	return (return_exit_status(g_sig_offset));
 }
 t_exec_error	start_subshell(t_shell *shell, t_ast_node *node)
 {	
@@ -100,16 +80,9 @@ t_exec_error	start_subshell(t_shell *shell, t_ast_node *node)
 	while (i < subshell.process_count)
 	{
 		waitpid(subshell.pid[i], &child_status, 0);
-		if (WIFSIGNALED(child_status))
-        {
-            if (WTERMSIG(child_status) == SIGQUIT)
-				g_sig_offset = 131;
-		}
-		else if (WIFEXITED(child_status))
-            g_sig_offset = WEXITSTATUS(child_status);
+		analize_child_status(child_status);
 		i++;
 	}
-	ft_printf("subshell finished\n");
 	return (status);
 }
 // t_exec_error start_subshell(t_shell *shell, t_ast_node *node)
@@ -142,24 +115,22 @@ t_exec_error	start_subshell(t_shell *shell, t_ast_node *node)
 // 	return (return_status(g_sig_offset));
 // }
 
-static const char *node_type_to_string(t_node_type type)
-{
-    switch (type)
-    {
-        case NODE_COMMAND:   return "NODE_COMMAND";
-        case NODE_PIPE:      return "NODE_PIPE";
-        case NODE_AND:       return "NODE_AND";
-        case NODE_SUBSHELL:  return "NODE_SUBSHELL";
-        case NODE_OR:        return "NODE_OR";
-        default:            return "UNKNOWN_NODE_TYPE";
-    }
-}
+// static const char *node_type_to_string(t_node_type type)
+// {
+//     switch (type)
+//     {
+//         case NODE_COMMAND:   return "NODE_COMMAND";
+//         case NODE_PIPE:      return "NODE_PIPE";
+//         case NODE_AND:       return "NODE_AND";
+//         case NODE_SUBSHELL:  return "NODE_SUBSHELL";
+//         case NODE_OR:        return "NODE_OR";
+//         default:            return "UNKNOWN_NODE_TYPE";
+//     }
+// }
 
 t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
-
-	ft_printf("starting recur exec with node type: %s\n", node_type_to_string(node->type));
 
 	if (node->type == NODE_COMMAND)
 		return (start_command(shell, node));
