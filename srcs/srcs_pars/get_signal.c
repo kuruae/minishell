@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 11:57:23 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/30 00:53:03 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/02 21:48:22 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	ctl_c_handler_exec(int sig)
 {
     (void)sig;
 	g_sig_offset = 130;
+	write(1, "\n", 1);
 	signal(SIGINT, ctl_c_handler_exec);
 }
 
