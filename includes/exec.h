@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/29 18:13:13 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/02 17:14:37 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,6 @@ int						count_pipes(t_ast_node *node);
 
 void 					close_used_pipes(t_shell *shell, t_ast_node *node);
 bool					is_directory(char *path);
-
+t_exec_error			return_exit_status(int g_sig_offset);
+void					analize_child_status(int child_status);
 #endif
