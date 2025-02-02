@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/01 18:22:05 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/02 02:17:58 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ t_exec_error  start_command_pipe(t_shell *shell, t_ast_node *node)
 {
 	pid_t			child_pid;
 
+	if (all_expands_handler(node, *shell->envp) != SUCCESS)
+		return (EXEC_ERR_FATAL);
+	if (create_argv_exec(node) != SUCCESS)
+		return (EXEC_ERR_FATAL);
 	if (is_directory(node->data.command.command) == true)
 	{
 		ft_putstr_fd("total error: is a directory\n", 2);
