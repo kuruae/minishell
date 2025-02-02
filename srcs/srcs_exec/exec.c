@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/30 01:44:11 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/02 01:18:56 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,12 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 	pid_t			child_pid;
+	int				wait_status;
 
+	if (all_expands_handler(node, *shell->envp) != SUCCESS)
+		return (EXEC_ERR_FATAL);
+	if (create_argv_exec(node) != SUCCESS)
+		return (EXEC_ERR_FATAL);
 	if (is_directory(node->data.command.command) == true)
 	{
 		ft_putstr_fd("total error: is a directory\n", 2);
@@ -74,6 +79,11 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 	shell->pid[shell->process_index++] = child_pid;
 	if (child_pid == 0)
 		exec_command(shell, node);
+	if (!shell->pipeline)
+	{
+		waitpid(child_pid, &wait_status, 0);
+		g_sig_offset = WEXITSTATUS(status);
+	}
 	return (EXEC_SUCCESS);
 }
 t_exec_error	start_subshell(t_shell *shell, t_ast_node *node)
@@ -132,12 +142,24 @@ t_exec_error	start_subshell(t_shell *shell, t_ast_node *node)
 // 	return (return_status(g_sig_offset));
 // }
 
+static const char *node_type_to_string(t_node_type type)
+{
+    switch (type)
+    {
+        case NODE_COMMAND:   return "NODE_COMMAND";
+        case NODE_PIPE:      return "NODE_PIPE";
+        case NODE_AND:       return "NODE_AND";
+        case NODE_SUBSHELL:  return "NODE_SUBSHELL";
+        case NODE_OR:        return "NODE_OR";
+        default:            return "UNKNOWN_NODE_TYPE";
+    }
+}
 
 t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 
-	//ft_printf("starting recur exec with node type: %d\n", node->type);
+	ft_printf("starting recur exec with node type: %s\n", node_type_to_string(node->type));
 
 	if (node->type == NODE_COMMAND)
 		return (start_command(shell, node));

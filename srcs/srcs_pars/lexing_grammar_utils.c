@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing_grammar_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 17:31:55 by emagnani          #+#    #+#             */
-/*   Updated: 2025/01/16 18:10:12 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/01 00:26:07 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ bool	is_unclosed_quote(char *str)
 t_error	prev_and_after_par(t_token *current, t_token *prev)
 {
 	if (current->type == TOK_PAR_OPEN)
-	{	
+	{
 		if (prev && prev->type == TOK_WORD)
 			return (FAILURE);
 	}
 	else if (current->type == TOK_PAR_CLOSE)
-	{	
+	{
 		if (current->next && current->next->type == TOK_WORD)
 			return (FAILURE);
 	}

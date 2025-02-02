@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_remove_quotes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 16:05:23 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/29 12:27:09 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/01 18:21:40 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	skip_quote_if_needed(char *str, int i, t_quote_depth *state)
 	return (i);
 }
 
-static char	*remove_quotes_from_string(char *str)
+char	*remove_quotes_from_string(char *str)
 {
 	int				i;
 	int				j;

@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 03:04:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/20 17:18:40 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/01/24 17:57:26 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ static char	*get_env_value(const char *var_name, char **env)
  * 
  * skip the $ character and find the end of the variable name
  * then get the value of the variable from the environment
+ * $? returns the exit status of the last command
  * 
  * @return the expanded variable value
 */
@@ -81,27 +82,32 @@ static char	*process_expansion(const char *str, size_t *i, char **env)
 	return (value);
 }
 
-/**
- * Expand environment variables in a string
- * 
- * @param str the string to expand
- * @param env the environment variables
- * 
- * first create an empty string to store the result
- * then iterate over the string
- * 
- * at each character, update the quote depth
- * to know if we should expand the variable or not
- * 
- * if we find a $ character, process the variable expansion
- * otherwise, just append the character to the result
- * 
- * @return the expanded string
- */
-static char	*expand_env_vars(const char *str, char **env)
+static char	*process_dollar_var(const char *str, size_t *i,
+			char **env, char *result)
+{
+	char	*expansion;
+	char	*new_result;
+
+	expansion = process_expansion(str, i, env);
+	if (!expansion)
+		return (free(result), NULL);
+	new_result = ft_strjoin(result, expansion);
+	free(expansion);
+	return (new_result);
+}
+
+static char	*build_expanded_str(const char *str, size_t *i, char *result)
+{
+	char	*new_result;
+
+	new_result = ft_strjoinch(result, str[*i]);
+	(*i)++;
+	return (new_result);
+}
+
+char	*expand_env_vars(const char *str, char **env)
 {
 	char			*result;
-	char			*expansion;
 	t_quote_depth	depth;
 	size_t			i;
 
@@ -115,58 +121,14 @@ static char	*expand_env_vars(const char *str, char **env)
 		update_quote_depth(&depth, str[i]);
 		if (str[i] == '$' && should_expand(depth))
 		{
-			expansion = process_expansion(str, &i, env);
-			if (!expansion)
-				return (free(result), NULL);
-			result = ft_strjoin(result, expansion);
+			result = process_dollar_var(str, &i, env, result);
 			if (!result)
-			{
-				free(expansion);
 				return (NULL);
-			}
-			free(expansion);
 			continue ;
 		}
-		result = ft_strjoinch(result, str[i]);
+		result = build_expanded_str(str, &i, result);
 		if (!result)
 			return (NULL);
-		i++;
 	}
 	return (result);
-}
-
-/**
- * Start the dollar expansion process for a command node
- * 
- * @param node	the command node to expand
- * @param env	the environment variables
- * 
- * expand the command name and all arguments
- * 
- * @return SUCCESS or ERR_MALLOC
- */
-t_error	start_dollar_expansion(t_ast_node *node, char **env)
-{
-	char	*expanded;
-	int		i;
-
-	expanded = expand_env_vars(node->data.command.command, env);
-	if (!expanded)
-		return (ERR_MALLOC);
-	free(node->data.command.command);
-	node->data.command.command = expanded;
-	if (node->data.command.args)
-	{
-		i = 0;
-		while (i < node->data.command.arg_count)
-		{
-			expanded = expand_env_vars(node->data.command.args[i], env);
-			if (!expanded)
-				return (ERR_MALLOC);
-			free(node->data.command.args[i]);
-			node->data.command.args[i] = expanded;
-			i++;
-		}
-	}
-	return (SUCCESS);
 }
