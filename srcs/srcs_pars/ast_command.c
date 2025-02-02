@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 00:43:04 by kuru              #+#    #+#             */
-/*   Updated: 2025/02/02 01:20:26 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/02 21:47:45 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static t_error	handle_command_token(t_parser *parser,
 	}
 	else if (_parser_is_token_type_redir(parser->current->type))
 	{
-		if (!parse_redir(parser, node) || g_sig_offset == 130)
+		if (!parse_redir(parser, node))
 			return (ERR_FATAL);
 	}
 	else
@@ -130,7 +130,7 @@ t_ast_node	*parse_command(t_parser *parser)
 	node = create_ast_node(NODE_COMMAND);
 	if (!node)
 		return (NULL);
-	if (!parse_redir(parser, node) || g_sig_offset == 130)
+	if (!parse_redir(parser, node))
 		return (err_free_and_return(parser, node));
 	if (!parser->current || parser->current->type != TOK_WORD)
 	{

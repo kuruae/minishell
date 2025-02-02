@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/01 18:13:06 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/02 21:42:00 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static t_error	user_intput_routine(t_shell *shell)
 	if (!tokens)
 		return (ERR_SYNTAX);
 	ast = ast_handler(tokens, shell->envp);
-	if (g_sig_offset == 130 || !ast)
+	if (!ast)
 	{
 		free_user_input(tokens, ast);
 		return (CTRL_C);
@@ -128,8 +128,6 @@ t_error readline_loop(t_shell *shell)
 				ft_putstr_fd("minishell: syntax error\n", STDERR_FILENO);
 		}
 		free(shell->line);
-		if (g_sig_offset == 130)
-			ft_printf("\n");
 		get_signal_interactive();
 		shell->line = readline(PROMPT);
 	}

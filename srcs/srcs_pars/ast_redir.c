@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_redir.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 00:43:44 by kuru              #+#    #+#             */
-/*   Updated: 2025/02/01 01:14:15 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/02 21:45:52 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ bool	parse_redir(t_parser *parser, t_ast_node *node)
 			return (false);
 		redir = create_redir_node(redir_token,
 				parser->current->value, parser->env);
-		if (!redir || g_sig_offset == 130)
+		if (!redir)
 			return (false);
 		add_redir(node, redir);
 		paser_advance(parser);
