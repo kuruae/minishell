@@ -6,22 +6,24 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 01:08:11 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/25 18:12:46 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/02 22:50:38 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	open_infile(t_ast_node	*node)
+int	open_infile(t_ast_node	*node, t_redir *redir)
 {
 	int	in_file;
 
 	//ft_printf("opening infile\n");
 
 	//ft_printf("Setting new Infile to %s\n", node->redirections->file);
-	in_file = open(node->redirections->file, O_RDONLY);
+	in_file = open(redir->file, O_RDONLY);
 	if (in_file == -1)
 		return (perror("total error:  input file"), EXEC_ERR_FILE);
+	if (node->data.command.exec_data.in_file != STDIN_FILENO)
+		close(node->data.command.exec_data.in_file);
 	node->data.command.exec_data.in_type = FILE_T;
 	node->data.command.exec_data.in_file = in_file;
 	return (EXEC_SUCCESS);
@@ -72,29 +74,35 @@ void set_pipes(t_ast_node *node, t_shell *shell)
 		close(shell->pipes[data->pipe_index_out][0]);
 	}
 }
-
+/*
+	in this function i now set all redirections liked to a command node
+	
+	as there can be multiple ones i do this in a while loop
+	as soon as there is an error the loop stops and the folowing redirections arent considered
+	
+*/
 t_exec_error	set_infile_outfile(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
+	t_redir			*redir_pointer;
 
+	redir_pointer = &*node->redirections;
 	(void)shell;
-	//first i set all data
+
 	status = EXEC_SUCCESS;
 	if (node->data.command.exec_data.in_type == STD_T)
 		node->data.command.exec_data.in_file = STDIN_FILENO;
 	if (node->data.command.exec_data.out_type == STD_T)
 		node->data.command.exec_data.out_file = STDOUT_FILENO;
-	if (node->redirections && (node->redirections->type == REDIR_INPUT || node->redirections->type == REDIR_HEREDOC))
+	while (redir_pointer)
 	{
-		status = open_infile(node);
+		if (redir_pointer->type == REDIR_INPUT || redir_pointer->type == REDIR_HEREDOC)
+			status = open_infile(node, redir_pointer);
+		else if (redir_pointer->type == REDIR_OUTPUT || redir_pointer->type == REDIR_APPEND)
+			status = open_outfile(node, redir_pointer);
 		if (status == EXEC_ERR_FILE)
 			return (status);
-		if (node->redirections->next && (node->redirections->next->type == REDIR_OUTPUT || node->redirections->next->type == REDIR_APPEND))
-			status = open_outfile(node, node->redirections->next);
+		redir_pointer = &*redir_pointer->next;
 	}
-	if (node->redirections && (node->redirections->type == REDIR_OUTPUT || node->redirections->type == REDIR_APPEND))
-		status = open_outfile(node, node->redirections);
-	if (status == EXEC_ERR_FILE)
-		return (status);
-	return (EXEC_SUCCESS);
+	return (status);
 }
