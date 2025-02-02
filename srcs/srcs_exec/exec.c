@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/01 18:25:51 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/02 01:18:56 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,10 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 	pid_t			child_pid;
 	int				wait_status;
 
+	if (all_expands_handler(node, *shell->envp) != SUCCESS)
+		return (EXEC_ERR_FATAL);
+	if (create_argv_exec(node) != SUCCESS)
+		return (EXEC_ERR_FATAL);
 	if (is_directory(node->data.command.command) == true)
 	{
 		ft_putstr_fd("total error: is a directory\n", 2);
