@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:09:16 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/01 18:21:34 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/03 15:02:16 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,6 @@ void	set_command_data(t_ast_node *node)
 	node->data.command.exec_data.out_type = STD_T;
 	node->data.command.exec_data.in_file = STDIN_FILENO;
 	node->data.command.exec_data.out_file = STDOUT_FILENO;
-	node->data.command.exec_data.pipe_index_in = 0;
-	node->data.command.exec_data.pipe_index_out = 0;
+	node->data.command.exec_data.pipe_index_in = -1;
+	node->data.command.exec_data.pipe_index_out = -1;
 }

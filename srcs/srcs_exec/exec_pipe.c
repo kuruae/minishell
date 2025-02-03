@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/02 02:17:58 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/03 15:04:01 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 		status = exec_pipeline(shell, node->data.pipe.right);
 		if (status == EXEC_ERR_FATAL)
 			return (status);
-		// 	 return (status);
 	}
 	if (node->type == NODE_COMMAND)	
 	{
