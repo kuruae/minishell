@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/02 21:42:00 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/03 15:46:43 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,10 @@ static t_error	user_intput_routine(t_shell *shell)
 	test_lexing(shell->line); // debug function
 	tokens = lexing(shell->line);
 	if (!tokens)
+	{
+		g_sig_offset = 2;
 		return (ERR_SYNTAX);
+	}
 	ast = ast_handler(tokens, shell->envp);
 	if (!ast)
 	{

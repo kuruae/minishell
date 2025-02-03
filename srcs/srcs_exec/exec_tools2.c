@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 18:39:42 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/02 17:14:10 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/03 15:51:32 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,16 @@ bool	is_directory(char *path)
 	while (path[i + 1])
 		i++;
 	if (path[i] == '/')
+	{
+		g_sig_offset = 126;
+		return (true);
+	}
+	else if (path[i] == '.' && path[i - 1] == '/')
+	{
+		g_sig_offset = 126;
+		return (true);
+	}
+	else if (path[i] == '.' && path[i - 1] == '.' && path[i - 2] == '/')
 	{
 		g_sig_offset = 126;
 		return (true);
