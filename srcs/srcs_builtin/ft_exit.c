@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:25:20 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/28 13:38:26 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:06:30 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,9 @@ t_exec_error	ft_exit(char **args, int argc)
 	}
 	arg_n = ft_atoi(args[0]);
 	if (arg_n < 0 || arg_n > 255) // check if the given number is a valid exit status
-		arg_n = arg_n % 265;
+		arg_n = arg_n % 256;
 	g_sig_offset = arg_n; // setting global variable
+	ft_putstr_fd("exit\n", STDERR_FILENO);
 	exit(arg_n);
 	return (EXEC_SUCCESS);
 }
