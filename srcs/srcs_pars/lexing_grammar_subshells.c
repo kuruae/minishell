@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing_grammar_subshells.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:37:32 by emagnani          #+#    #+#             */
-/*   Updated: 2025/02/05 19:56:32 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/05 22:59:12 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_error	prev_and_after_par(t_token *current, t_token *prev)
 static bool	out_of_subshell_pipe(t_token_type type, int par_open, int par_close)
 {
 	if (par_close >= par_open && par_open > 0)
-	{		
+	{
 		if (type == TOK_PIPE)
 			return (false);
 	}

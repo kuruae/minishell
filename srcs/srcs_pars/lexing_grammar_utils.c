@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 17:31:55 by emagnani          #+#    #+#             */
-/*   Updated: 2025/02/05 22:55:51 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/05 22:58:37 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,19 @@ bool	is_redir(t_token_type type)
 
 bool	is_unclosed_quote(char *str)
 {
-    t_quote_depth	depth;
-    int		        i;
+	t_quote_depth	depth;
+	int				i;
 
-    depth.single_quotes = 0;
-    depth.double_quotes = 0;
-    i = 0;
-    while (str[i])
-    {
-        if (str[i] == '\'' && !depth.double_quotes)
-            depth.single_quotes = !depth.single_quotes;
-        else if (str[i] == '\"' && !depth.single_quotes)
-            depth.double_quotes = !depth.double_quotes;
-        i++;
-    }
-    return (depth.single_quotes || depth.double_quotes);
+	depth.single_quotes = 0;
+	depth.double_quotes = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'' && !depth.double_quotes)
+			depth.single_quotes = !depth.single_quotes;
+		else if (str[i] == '\"' && !depth.single_quotes)
+			depth.double_quotes = !depth.double_quotes;
+		i++;
+	}
+	return (depth.single_quotes || depth.double_quotes);
 }
