@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:24:56 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/27 02:52:10 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:10:59 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	free_all(char **arg)
 		free(arg[i++]);
 	free (arg);
 }
-
 
 /*
 This function is for the builtin commands.
@@ -47,7 +46,6 @@ void	set_sig_offset(t_exec_error status)
 	if (status == EXEC_NOT_FOUND)
 		g_sig_offset = 127;
 }
-
 
 t_exec_error	builtin(t_ast_node *node, t_shell *shell, int fd_out)
 {
@@ -77,4 +75,3 @@ t_exec_error	builtin(t_ast_node *node, t_shell *shell, int fd_out)
 	set_sig_offset(status);
 	return (status);
 }
-

@@ -6,13 +6,13 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 16:45:22 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/15 17:47:43 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:10:45 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		check_var(char *var)
+int	check_var(char *var)
 {
 	int	i;
 
@@ -23,10 +23,10 @@ int		check_var(char *var)
 			break ;
 		i++;
 	}
-	if (i == 0) // case when the variab;e starts with an '='
-		return (-1); // in this case an error is returned like in the real bash
-	if (!var[i]) // case when there is no '=' in the string
-		return (0); // in this case the function is suposed to do nothing -> no error
+	if (i == 0)
+		return (-1);
+	if (!var[i])
+		return (0);
 	return (i);
 }
 
@@ -46,9 +46,9 @@ char	**find_var(char	*var, char **envp)
 	return (NULL);
 }
 
-int	replace_var(char *var,char ***envp)
+int	replace_var(char *var, char ***envp)
 {
-	char **line;
+	char	**line;
 
 	line = find_var(var, *envp);
 	free(*line);
@@ -58,12 +58,10 @@ int	replace_var(char *var,char ***envp)
 	return (EXIT_SUCCESS);
 }
 
-
-
-int	add_var(char *var, char ***envp) // i add the variable at the end i dont know if thats how it should be
+int	add_var(char *var, char ***envp)
 {
-	int	i;
-	char **new_envp; // as the envp will become one yard longer we have to create a new array and malloc one line more
+	int		i;
+	char	**new_envp;
 
 	i = 0;
 	while ((*envp)[i])
@@ -91,10 +89,10 @@ t_exec_error	ft_export(char **args, int argc, char ***envp)
 		return (EXEC_SUCCESS);
 	while (args[i])
 	{
-		if (check_var(args[i]) == -1) // var starts with = -> error message
-			ft_putstr_fd("export: no valid identifier\n", 2); // in real bash the variable is mentioned (for this we would need a printf that prints on std_error)
-		else if (check_var(args[i]) == 0) // var has no = -> do nothinf
-				;
+		if (check_var(args[i]) == -1)
+			ft_putstr_fd("export: no valid identifier\n", 2);
+		else if (check_var(args[i]) == 0)
+			;
 		else if (find_var(args[i], *envp) != NULL)
 			replace_var(args[i], envp);
 		else

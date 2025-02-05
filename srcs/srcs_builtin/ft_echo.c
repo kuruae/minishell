@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:07:48 by jbaumfal          #+#    #+#             */
-/*   Updated: 2024/12/18 02:48:41 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:05:33 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,13 @@ void	echo_putstr_fd(char *s, int fd)
 	}
 }
 
-bool check_flag(char **args)
+bool	check_flag(char **args)
 {
 	if (ft_strcmp(args[0], "-n") == 0)
 		return (true);
 	else
 		return (false);
 }
-
 
 t_exec_error	ft_echo(char **args, int argc, int fd_out)
 {
@@ -41,20 +40,18 @@ t_exec_error	ft_echo(char **args, int argc, int fd_out)
 
 	i = 0;
 	if (argc == 0)
-		return(ft_putchar_fd('\n', fd_out), EXEC_SUCCESS);
+		return (ft_putchar_fd('\n', fd_out), EXEC_SUCCESS);
 	n_flag = check_flag(args);
 	if (n_flag == true)
 		i++;
-	if (i < argc) // first string seperate as it has no space before
+	if (i < argc)
 		ft_putstr_fd(args[i++], fd_out);
 	while (i < argc)
 	{
-		ft_putchar_fd(' ', fd_out); // adding aspace between words
+		ft_putchar_fd(' ', fd_out);
 		ft_putstr_fd(args[i++], fd_out);
 	}
-	if (!n_flag) // only adding newline when there is no n_flag
+	if (!n_flag)
 		ft_putchar_fd('\n', fd_out);
-// If in the argument there are spaces at the end they should not be printed
-// The question is if we already print them before
 	return (EXEC_SUCCESS);
 }
