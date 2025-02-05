@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:18:10 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 18:41:04 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 21:39:09 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,10 @@ void	clean_up_node(t_ast_node *node)
 		return ;
 	}
 }
+
 void	clean_up_child(t_shell *shell)
 {
-	t_shell *parrent_shell;
+	t_shell	*parrent_shell;
 
 	parrent_shell = shell;
 	free_envp(parrent_shell->envp);
