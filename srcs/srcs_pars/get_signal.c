@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_signal.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 11:57:23 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/02 21:48:22 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/04 22:24:35 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,11 @@ void	ctl_c_handler_exec(int sig)
 
 void ctl_c_handler_heredoc(int sig)
 {
-    //ft_printf("handeling ctl c as heredoc\n");
-	(void)sig;
+    (void)sig;
+    g_sig_offset = 130;
     write(1, "\n", 1);
-	// rl_replace_line("", 0);
-	// rl_on_new_line();
-	// rl_redisplay();
-	exit(130);
+    rl_replace_line("", 0);
+    rl_on_new_line();
 }
 
 /**
