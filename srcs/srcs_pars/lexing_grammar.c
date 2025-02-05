@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing_grammar.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 15:52:56 by emagnani          #+#    #+#             */
-/*   Updated: 2025/01/24 17:59:02 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/05 05:28:07 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,15 @@ static t_error	quotes_grammar_handler(t_token *current)
 	return (SUCCESS);
 }
 
-static t_error	redir_grammar_handler(t_token *current)
+static t_error	redir_grammar_handler(t_token *current, t_token *prev)
 {
 	if (!current->next || current->next->type != TOK_WORD)
 		return (FAILURE);
+	if (current->type != TOK_HEREDOC)
+	{
+		if (current->type != TOK_HEREDOC && !current->next->next && !prev)
+			return (FAILURE);
+	}
 	return (SUCCESS);
 }
 
@@ -57,7 +62,7 @@ t_error	grammar_handler(t_token *tokens)
 		if (current->type == TOK_WORD)
 			error = quotes_grammar_handler(current);
 		else if (is_redir(current->type))
-			error = redir_grammar_handler(current);
+			error = redir_grammar_handler(current, prev);
 		else if (is_operator(current->type))
 			error = op_grammar_handler(current, prev);
 		else if (current->type == TOK_PAR_CLOSE
