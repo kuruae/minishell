@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 15:32:57 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:55:15 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void					exec_command(t_shell *shell, t_ast_node *node);
 t_exec_error			set_infile_outfile(t_shell *shell, t_ast_node *node);
 void					set_pipes(t_ast_node *node, t_shell *shell);
 
-void					exit_exec_status(t_exec_error	status);
+void					exit_exec_status(t_exec_error	status, t_shell *shell);
 void					link_pipe(t_ast_node *node, t_shell *shell);
 void					close_used_fds(t_shell *shell, t_ast_node *node);
 void					close_unused_pipes(t_ast_node *node, t_shell *shell);

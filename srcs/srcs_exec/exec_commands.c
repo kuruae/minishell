@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_commands.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 17:51:31 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:55:29 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,12 +107,12 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	{
 		status = builtin(node, shell, node->data.command.exec_data.out_file);
 		if (status != EXEC_NOT_FOUND)
-			exit_exec_status(status);
+			exit_exec_status(status, shell);
 	}
 	status = try_com(argv_exec, shell, node);
 	if (status == EXEC_ERR_FATAL)
 		exit(1);
 	if (status == EXEC_NOT_FOUND)
 		ft_putstr_fd("total error: command not found\n", 2);
-	exit_exec_status(status);
+	exit_exec_status(status, shell);
 }
