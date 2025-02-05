@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/05 17:59:00 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:54:02 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static t_error	user_intput_routine(t_shell *shell)
 	t_token			*tokens;
 	t_ast_node		*ast;
 
-	//test_lexing(shell->line); // debug function
+	test_lexing(shell->line); // debug function
 	tokens = lexing(shell->line);
 	if (!tokens)
 	{
@@ -102,7 +102,7 @@ static t_error	user_intput_routine(t_shell *shell)
 		free_user_input(tokens, ast);
 		return (CTRL_C);
 	}
-	//debug_print_ast(ast, 0);
+	debug_print_ast(ast, 0);
 	add_history(shell->line);
 	append_history(1, HISTORY_FILE);
 	free_lexing(tokens);
@@ -163,10 +163,8 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
 	t_error	status;
-	// t_env env;
 	(void)argc;
 	(void)argv;
-	// env = init_env(envp); // envp is an array of strings btw (and i didnt know the p stands for pointer)
 	shell.exit_status = 0;
 	shell.envp = copy_env(envp);
 	shell.line = NULL; // maybe its better to copy the envp in a new table

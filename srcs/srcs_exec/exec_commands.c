@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 17:55:29 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:20:26 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	if (!node || !node->data.command.command)
 	{
 		ft_printf("Invalid node or command\n");
-		exit(1);
+		exit_exec_status(EXEC_ERR_NON_FATAL, shell);
 	}
 	argv_exec = node->data.command.argv_exec;
 	close_unused_pipes(node, shell);
@@ -110,8 +110,6 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 			exit_exec_status(status, shell);
 	}
 	status = try_com(argv_exec, shell, node);
-	if (status == EXEC_ERR_FATAL)
-		exit(1);
 	if (status == EXEC_NOT_FOUND)
 		ft_putstr_fd("total error: command not found\n", 2);
 	exit_exec_status(status, shell);

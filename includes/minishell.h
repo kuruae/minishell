@@ -48,10 +48,12 @@ typedef struct s_shell
 	int			pipes[MAX_PIPE_COUNT][2];
 	int			pipe_count;
 	int			pipe_index;
-	int			process_count; //amount of child processes
+	int			process_count;
 	int			process_index;
 	t_ast_node	*root_node;
 	bool		pipeline;
+	t_shell		*subshell;
+	t_shell		*parent_shell;
 }	t_shell;
 
 typedef enum e_error
