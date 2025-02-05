@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/03 15:46:43 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:47:01 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ static t_error	user_intput_routine(t_shell *shell)
 	debug_print_ast(ast, 0); // debug function
 	add_history(shell->line);
 	append_history(1, HISTORY_FILE);
-		status = start_exec(shell, ast);
+	status = start_exec(shell, ast);
 	if (status == EXEC_ERR_FATAL)
 		return (ERR_FATAL);
 	free_user_input(tokens, ast);
