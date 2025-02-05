@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 01:08:11 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 01:33:19 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:48:56 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,6 @@ int	open_infile(t_ast_node	*node, t_redir *redir, t_shell *shell)
 {
 	int	in_file;
 
-	//ft_printf("opening infile\n");
-
-	//ft_printf("Setting new Infile to %s\n", node->redirections->file);
 	if (node->data.command.exec_data.in_type == PIPE_T)
 		close(shell->pipes[node->data.command.exec_data.pipe_index_in][0]);
 	in_file = open(redir->file, O_RDONLY);
@@ -45,15 +42,12 @@ int	open_outfile(t_ast_node	*node, t_redir *redir, t_shell *shell)
 		return (perror("total error: output file"), EXEC_ERR_FILE);
 	node->data.command.exec_data.out_type = FILE_T;
 	node->data.command.exec_data.out_file = out_file;
-	//ft_printf("fd_out: %d\n", out_file);
 	return (EXEC_SUCCESS);
 }
 
-
-
-void set_pipes(t_ast_node *node, t_shell *shell)
+void	set_pipes(t_ast_node *node, t_shell *shell)
 {
-	t_exec_data *data;
+	t_exec_data	*data;
 
 	data = &node->data.command.exec_data;
 	if (data->in_type == PIPE_T)
@@ -68,45 +62,45 @@ void set_pipes(t_ast_node *node, t_shell *shell)
 	}
 	if (data->out_type == PIPE_T)
 	{
-		//ft_printf("dup2 for Pipe_OUT command: %s\n", node->data.command.command);
 		if (dup2(shell->pipes[data->pipe_index_out][1], STDOUT_FILENO) == -1)
 		{
-	 		perror("dup2 for Pipe_OUT failed");
+			perror("dup2 for Pipe_OUT failed");
 			exit(1);
 		}
 		close(shell->pipes[data->pipe_index_out][1]);
 		close(shell->pipes[data->pipe_index_out][0]);
 	}
 }
+
 /*
 	in this function i now set all redirections liked to a command node
 	
 	as there can be multiple ones i do this in a while loop
-	as soon as there is an error the loop stops and the folowing redirections arent considered
+	as soon as there is an error the loop stops and the folowing 
+	redirections arent considered
 	
 */
 t_exec_error	set_infile_outfile(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
-	t_redir			*redir_pointer;
+	t_redir			*redir;
 
-	redir_pointer = &*node->redirections;
+	redir = &*node->redirections;
 	(void)shell;
-
 	status = EXEC_SUCCESS;
 	if (node->data.command.exec_data.in_type == STD_T)
 		node->data.command.exec_data.in_file = STDIN_FILENO;
 	if (node->data.command.exec_data.out_type == STD_T)
 		node->data.command.exec_data.out_file = STDOUT_FILENO;
-	while (redir_pointer)
+	while (redir)
 	{
-		if (redir_pointer->type == REDIR_INPUT || redir_pointer->type == REDIR_HEREDOC)
-			status = open_infile(node, redir_pointer, shell);
-		else if (redir_pointer->type == REDIR_OUTPUT || redir_pointer->type == REDIR_APPEND)
-			status = open_outfile(node, redir_pointer, shell);
+		if (redir->type == REDIR_INPUT || redir->type == REDIR_HEREDOC)
+			status = open_infile(node, redir, shell);
+		else if (redir->type == REDIR_OUTPUT || redir->type == REDIR_APPEND)
+			status = open_outfile(node, redir, shell);
 		if (status == EXEC_ERR_FILE)
 			return (status);
-		redir_pointer = &*redir_pointer->next;
+		redir = &*redir->next;
 	}
 	return (status);
 }

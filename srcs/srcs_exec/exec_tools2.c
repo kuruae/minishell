@@ -6,13 +6,13 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 18:39:42 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/03 17:14:10 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:45:45 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void close_used_pipes(t_shell *shell, t_ast_node *node)
+void	close_used_pipes(t_shell *shell, t_ast_node *node)
 {
 	t_exec_data	*data;
 
@@ -25,7 +25,7 @@ void close_used_pipes(t_shell *shell, t_ast_node *node)
 
 bool	is_directory(char *path)
 {
-	int i;
+	int	i;
 
 	if (!path)
 		return (false);
@@ -66,13 +66,29 @@ t_exec_error	return_exit_status(int g_sig_offset)
 	return (EXEC_SUCCESS);
 }
 
-void analize_child_status(int child_status)
+void	analize_child_status(int child_status)
 {
 	if (WIFSIGNALED(child_status))
 	{
-    	if (WTERMSIG(child_status) == SIGQUIT)
+		if (WTERMSIG(child_status) == SIGQUIT)
 				g_sig_offset = 131;
 	}
 	else if (WIFEXITED(child_status))
-        g_sig_offset = WEXITSTATUS(child_status);
+		g_sig_offset = WEXITSTATUS(child_status);
+}
+
+t_exec_error	prepare_command(t_shell *shell, t_ast_node *node)
+{
+	if (all_expands_handler(node, *shell->envp) != SUCCESS)
+		return (EXEC_ERR_FATAL);
+	if (create_argv_exec(node) != SUCCESS)
+		return (EXEC_ERR_FATAL);
+	if (is_directory(node->data.command.command) == true)
+	{
+		ft_putstr_fd("total error: is a directory\n", 2);
+		return (EXEC_NOT_FOUND);
+	}
+	if (set_infile_outfile(shell, node) == EXEC_ERR_FILE)
+		return (set_sig_offset(EXEC_ERR_FILE), EXEC_ERR_FILE);
+	return (EXEC_SUCCESS);
 }

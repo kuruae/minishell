@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/02 17:14:37 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:32:57 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@
 
 # define MAX_PIPE_COUNT 256
 
-# define MAX_PROCESS_COUNT (MAX_PIPE_COUNT + 1)
+# define MAX_PROCESS_COUNT 257
 
 # define READ_END 0
 
 # define WRITE_END 1
 
-typedef enum	s_exec_error
+typedef enum s_exec_error
 {
 	EXEC_ERR_FATAL,
 	EXEC_ERR_NON_FATAL,
@@ -45,15 +45,12 @@ typedef enum s_command_redir
 
 typedef struct s_exec_dat
 {
-	//REDIRECTION
 	int				in_file;
 	int				out_file;
-	//PIPE
 	t_command_redir	in_type;
 	t_command_redir	out_type;
 	int				pipe_index_in;
 	int				pipe_index_out;
-	//PROCCESS
 	int				*status;
 }	t_exec_data;
 
@@ -79,8 +76,11 @@ t_shell					init_subshell(t_shell	*shell, t_ast_node *node);
 t_exec_error			start_pipeline(t_shell *shell, t_ast_node *node);
 int						count_pipes(t_ast_node *node);
 
-void 					close_used_pipes(t_shell *shell, t_ast_node *node);
+void					close_used_pipes(t_shell *shell, t_ast_node *node);
 bool					is_directory(char *path);
 t_exec_error			return_exit_status(int g_sig_offset);
 void					analize_child_status(int child_status);
+t_exec_error			prepare_command(t_shell *shell, t_ast_node *node);
+
+char					**get_paths(char **env);
 #endif

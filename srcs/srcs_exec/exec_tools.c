@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 23:45:35 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/03 15:04:46 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:45:36 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,18 @@ void	link_pipe(t_ast_node *node, t_shell *shell)
 	t_ast_node	*left;
 	t_ast_node	*right;
 	t_ast_node	*last_command;
-	int			index;
 
-	//ft_printf("linking pipe with index %d\n", shell->pipe_index);
-	index = shell->pipe_index;
 	left = node->data.pipe.left;
 	right = node->data.pipe.right;
 	if (left->type == NODE_COMMAND)
 	{
 		left->data.command.exec_data.out_type = PIPE_T;
-		left->data.command.exec_data.pipe_index_out = index;
-		//ft_printf("command %s sends out to pipe %d\n", left->data.command.command, index);	
+		left->data.command.exec_data.pipe_index_out = shell->pipe_index;
 	}
 	if (right->type == NODE_COMMAND)
 	{
 		right->data.command.exec_data.in_type = PIPE_T;
-		right->data.command.exec_data.pipe_index_in = index;
-		//ft_printf("command %s takes in from pipe %d\n", right->data.command.command, index);	
+		right->data.command.exec_data.pipe_index_in = shell->pipe_index;
 	}
 	if (left->type == NODE_PIPE)
 	{
@@ -59,15 +54,13 @@ void	link_pipe(t_ast_node *node, t_shell *shell)
 		while (last_command->type == NODE_PIPE)
 			last_command = last_command->data.pipe.right;
 		last_command->data.command.exec_data.out_type = PIPE_T;
-		last_command->data.command.exec_data.pipe_index_out = index;
-		//ft_printf("command %s sends out to pipe %d\n", last_command->data.command.command, index);	
+		last_command->data.command.exec_data.pipe_index_out = shell->pipe_index;
 	}
 }
 
 void	close_used_fds(t_shell *shell, t_ast_node *node)
 {
 	t_exec_data	*data;
-
 
 	(void)shell;
 	data = &node->data.command.exec_data;
@@ -112,6 +105,9 @@ t_shell	init_subshell(t_shell	*shell, t_ast_node *node)
 	sub_shell.dir = shell->dir;
 	sub_shell.process_count = count_pipes(node) + 1;
 	sub_shell.pipe_count = count_pipes(node);
+	if (shell->pipe_count == 1)
+		shell->process_count = 0;
+	sub_shell.pipeline = false;
 	sub_shell.pipe_index = 0;
 	sub_shell.process_index = 0;
 	sub_shell.root_node = node;
