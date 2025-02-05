@@ -6,10 +6,9 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/02 17:14:59 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:46:27 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 
@@ -23,34 +22,25 @@ t_exec_error	recur_exec(t_shell *shell, t_ast_node *node);
 	(as there is no child process needed)
 
 	If the builtin function returns EXEC_NOT_FOUND we keep going
-	-> Now we can create a fork as we will exec the system commands in a child process
+	-> Now we can create a fork as we will exec 
+	the system commands in a child process
 
 	The exec command functions handles the execution 
 	and when successful it will make the child process exit
 */
+
 t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 	pid_t			child_pid;
 	int				wait_status;
 
-	if (all_expands_handler(node, *shell->envp) != SUCCESS)
-		return (EXEC_ERR_FATAL);
-	if (create_argv_exec(node) != SUCCESS)
-		return (EXEC_ERR_FATAL);
-	if (is_directory(node->data.command.command) == true)
-	{
-		ft_putstr_fd("total error: is a directory\n", 2);
-		return (EXEC_NOT_FOUND);
-	}
-	if (set_infile_outfile(shell, node) == EXEC_ERR_FILE)
-		return (set_sig_offset(EXEC_ERR_FILE), EXEC_ERR_FILE);
-	status = builtin(node, shell, node->data.command.exec_data.out_file); 
-	if (status != EXEC_NOT_FOUND)
-	{
-		shell->process_count -= 1;
+	status = prepare_command(shell, node);
+	if (status != EXEC_SUCCESS)
 		return (status);
-	}
+	status = builtin(node, shell, node->data.command.exec_data.out_file);
+	if (status != EXEC_NOT_FOUND)
+		return (status);
 	get_signal_exec();
 	child_pid = fork();
 	if (child_pid == -1)
@@ -62,19 +52,18 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 	{
 		waitpid(child_pid, &wait_status, 0);
 		analize_child_status(wait_status);
-		shell->process_count -= 1;
 	}
 	return (return_exit_status(g_sig_offset));
 }
+
 t_exec_error	start_subshell(t_shell *shell, t_ast_node *node)
 {	
-    int     child_status;
-    t_shell subshell;
-	t_exec_error status;
-	int i;
+	int				child_status;
+	t_shell			subshell;
+	t_exec_error	status;
+	int				i;
 
-    // Initialize subshell with parent shell context
-    subshell = init_subshell(shell, node->data.subshell.command);
+	subshell = init_subshell(shell, node->data.subshell.command);
 	status = recur_exec(&subshell, node);
 	i = 0;
 	while (i < subshell.process_count)
@@ -85,48 +74,6 @@ t_exec_error	start_subshell(t_shell *shell, t_ast_node *node)
 	}
 	return (status);
 }
-// t_exec_error start_subshell(t_shell *shell, t_ast_node *node)
-// {	
-// 	int		child_status;
-// 	int		i;
-// 	t_shell	subshell;
-// 	pid_t	pid;
-
-// 	i = 0;
-// 	subshell = init_subshell(shell, node);
-// 	if (subshell.pipe_count == 0)
-// 	{
-// 		pid = fork();
-// 		if (pid == -1)
-// 			return (EXEC_ERR_FATAL);
-// 		if (pid == 0)
-// 			exit(recur_exec(&subshell, node));
-// 		waitpid(pid, &child_status, 0);
-// 		g_sig_offset = WEXITSTATUS(child_status);
-// 		return (return_status(g_sig_offset));
-// 	}
-// 	recur_exec(&subshell, node);
-// 	while (i < subshell.process_count)
-// 	{
-// 		waitpid(subshell.pid[i], &child_status, 0);
-// 		g_sig_offset = WEXITSTATUS(child_status);
-// 		i++;
-// 	}
-// 	return (return_status(g_sig_offset));
-// }
-
-// static const char *node_type_to_string(t_node_type type)
-// {
-//     switch (type)
-//     {
-//         case NODE_COMMAND:   return "NODE_COMMAND";
-//         case NODE_PIPE:      return "NODE_PIPE";
-//         case NODE_AND:       return "NODE_AND";
-//         case NODE_SUBSHELL:  return "NODE_SUBSHELL";
-//         case NODE_OR:        return "NODE_OR";
-//         default:            return "UNKNOWN_NODE_TYPE";
-//     }
-// }
 
 t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 {
@@ -160,11 +107,13 @@ t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
-	int 			i;
+	int				i;
 	int				child_status;
 
-	shell->process_count =  count_pipes(node) + 1;
 	shell->pipe_count = count_pipes(node);
+	shell->process_count = shell->pipe_count + 1;
+	if (shell->pipe_count == 1)
+		shell->process_count = 0;
 	shell->pipe_index = 0;
 	shell->process_index = 0;
 	shell->root_node = node;
@@ -175,13 +124,7 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	while (i < shell->process_count)
 	{
 		waitpid(shell->pid[i], &child_status, 0);
-		if (WIFSIGNALED(child_status))
-        {
-            if (WTERMSIG(child_status) == SIGQUIT)
-				g_sig_offset = 131;
-		}
-		else if (WIFEXITED(child_status))
-            g_sig_offset = WEXITSTATUS(child_status);
+		analize_child_status(child_status);
 		i++;
 	}
 	return (status);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_up.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:18:10 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/13 16:32:27 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/05 15:44:37 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	clean_up_end(t_shell *shell)
 {
 	free_envp(shell->envp);
 	rl_clear_history();
-	
 }
 
 void	clean_up_node(t_ast_node *node)

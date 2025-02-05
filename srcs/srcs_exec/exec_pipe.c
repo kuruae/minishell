@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/03 15:04:01 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:48:35 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,14 @@
 	-> in this case the out_type wont be PIPE_T
 	we therefore have to check if the command is a builtin
 */
-t_exec_error  start_command_pipe(t_shell *shell, t_ast_node *node)
+t_exec_error	start_command_pipe(t_shell *shell, t_ast_node *node)
 {
 	pid_t			child_pid;
+	t_exec_error	status;
 
-	if (all_expands_handler(node, *shell->envp) != SUCCESS)
-		return (EXEC_ERR_FATAL);
-	if (create_argv_exec(node) != SUCCESS)
-		return (EXEC_ERR_FATAL);
-	if (is_directory(node->data.command.command) == true)
-	{
-		ft_putstr_fd("total error: is a directory\n", 2);
-		return (EXEC_NOT_FOUND);
-	}
-	if (set_infile_outfile(shell, node) == EXEC_ERR_FILE)
-		return (set_sig_offset(EXEC_ERR_FILE), EXEC_ERR_FILE);
+	status = prepare_command(shell, node);
+	if (status != EXEC_SUCCESS)
+		return (status);
 	get_signal_exec();
 	child_pid = fork();
 	if (child_pid == -1)
@@ -46,7 +39,6 @@ t_exec_error  start_command_pipe(t_shell *shell, t_ast_node *node)
 	{
 		set_pipes(node, shell);
 		exec_command(shell, node);
-		ft_printf("Child process did not exit properly\n");
 		exit(1);
 	}
 	else
@@ -58,26 +50,6 @@ t_exec_error  start_command_pipe(t_shell *shell, t_ast_node *node)
 	}
 	return (EXEC_SUCCESS);
 }
-// t_exec_error	exec_command_pipe(t_shell *shell, t_ast_node *node)
-// {
-// 	int	index;
-
-// 	ft_printf("Exec_command_pipe functions started\n");
-// 	index = shell->process_index;
-// 	ft_printf("index initialized to %d\n", index);
-// 	shell->pid[index] = fork();
-// 	if (shell->pid[index]  == -1)
-// 		return (perror("total error: fork:"), EXEC_ERR_FATAL);
-// 	if (shell->pid[index]== 0)
-// 	{
-// 		//ft_printf("Child process started\n");
-// 		exec_command(shell, node);
-// 		//normally it should not reach here
-// 		//ft_printf("Child process did not exit properly\n");
-// 		exit(1);
-// 	}
-// 	return (EXEC_SUCCESS);
-// }
 
 t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 {
@@ -92,7 +64,7 @@ t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 		if (status == EXEC_ERR_FATAL)
 			return (status);
 	}
-	if (node->type == NODE_COMMAND)	
+	if (node->type == NODE_COMMAND)
 	{
 		status = start_command_pipe(shell, node);
 		if (status == EXEC_ERR_FATAL)
@@ -105,11 +77,10 @@ t_exec_error	init_pipeline(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
 
-	//ft_printf("initializing pipe\n");
 	status = EXEC_SUCCESS;
 	if (pipe(shell->pipes[shell->pipe_index]) == -1)
 		return (EXEC_ERR_PIPE);
-	link_pipe(node, shell); //this function sets all the data in the commands that use this pipe
+	link_pipe(node, shell);
 	shell->pipe_index++;
 	if (node->data.pipe.left->type == NODE_PIPE)
 	{
@@ -141,60 +112,14 @@ int	count_pipes(t_ast_node *node)
 	return (counter);
 }
 
-void	close_all_pipes(t_shell *shell)
-{
-	int	i;
-
-	i = 0;
-	while (i < shell->pipe_count)
-	{
-		close(shell->pipes[i][0]);
-		close(shell->pipes[i][1]);
-		i++;
-	}
-}
-
 t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 {
- 	t_exec_error	status;
+	t_exec_error	status;
 
 	shell->pipeline = true;
 	status = init_pipeline(shell, node);
 	if (status != EXEC_SUCCESS)
 		return (status);
 	status = exec_pipeline(shell, node);
-	//close_all_pipes(shell);
 	return (status);
 }
-
-// t_exec_error	start_pipe(t_shell *shell, t_ast_node *node)
-// {
-// 	t_ast_node		*command_in; //command left of the pipe
-// 	t_ast_node		*command_out; //command right of the pipe
-// 	t_exec_error	status;
-
-// 	(void)shell;
-// 	if (pipe(node->data.pipe.pipe) == -1)
-// 		return (perror("total error: pipe"), ERR_FATAL);
-// 	command_in = NULL;
-// 	command_out = NULL;
-// 	if (node->data.pipe.left->type == NODE_COMMAND)
-// 		command_in = node->data.pipe.left;
-// 	if (node->data.pipe.right->type == NODE_COMMAND)
-// 		command_out = node->data.pipe.right;
-// 	if (!command_in || !command_in)
-// 		ft_putstr_fd("total error: missing command before or after pipe\n", 2);
-// 	command_in->data.command.exec_data.out_redir = true;
-// 	command_in->data.command.exec_data.out_file = node->data.pipe.pipe[0];
-// 	command_in->data.command.exec_data.in_redir = true;
-// 	command_in->data.command.exec_data.in_file = node->data.pipe.pipe[1];
-// 	status = start_command(shell, command_in);
-// 	if (status == EXEC_ERR_FATAL)
-// 		return (EXEC_ERR_FATAL);
-// 	status = start_command(shell, command_out);
-// 	if (status == EXEC_ERR_FATAL)
-// 		return (EXEC_ERR_FATAL);
-// 	close(node->data.pipe.pipe[0]);
-// 	close(node->data.pipe.pipe[1]);
-// 	return (status);
-// }
