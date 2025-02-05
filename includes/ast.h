@@ -98,10 +98,14 @@ t_error create_argv_exec(t_ast_node *node);
 t_error	remove_quotes_handler(t_ast_node *node);
 void set_command_data(t_ast_node *node);
 char	*heredoc_handler(char *delimiter, char **env);
+char	*get_heredoc_filename(void);
+bool	is_expansion_on(char *str);
+
 char	*remove_quotes_from_string(char *str);
 unsigned int	lcg_rand(unsigned int *seed);
 void	uint_to_hex(unsigned int n, char *hex);
 bool parse_redir(t_parser *parser, t_ast_node *node);
 t_error pointer_parse_pipe(t_parser *parser, t_ast_node **left);
+
 
 #endif

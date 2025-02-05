@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 03:04:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/24 17:57:26 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/04 22:42:28 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,14 @@ static char	*process_dollar_var(const char *str, size_t *i,
 {
 	char	*expansion;
 	char	*new_result;
+	char	*tmp;
 
 	expansion = process_expansion(str, i, env);
 	if (!expansion)
 		return (free(result), NULL);
+	tmp = result;
 	new_result = ft_strjoin(result, expansion);
+	free(tmp);
 	free(expansion);
 	return (new_result);
 }
@@ -99,8 +102,11 @@ static char	*process_dollar_var(const char *str, size_t *i,
 static char	*build_expanded_str(const char *str, size_t *i, char *result)
 {
 	char	*new_result;
+	char	*tmp;
 
+	tmp = result;
 	new_result = ft_strjoinch(result, str[*i]);
+	free(tmp);
 	(*i)++;
 	return (new_result);
 }
