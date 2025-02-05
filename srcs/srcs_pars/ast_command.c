@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 00:43:04 by kuru              #+#    #+#             */
-/*   Updated: 2025/02/02 21:47:45 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 22:35:10 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,8 +141,6 @@ t_ast_node	*parse_command(t_parser *parser)
 	node->data.command.command = ft_strdup(parser->current->value);
 	paser_advance(parser);
 	if (process_command_tokens(parser, node) != SUCCESS)
-		return (err_free_and_return(parser, node));
-	if (remove_quotes_handler(node) != SUCCESS)
 		return (err_free_and_return(parser, node));
 	set_command_data(node);
 	return (node);
