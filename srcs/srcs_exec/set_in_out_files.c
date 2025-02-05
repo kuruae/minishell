@@ -6,19 +6,21 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 01:08:11 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/03 15:03:28 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 01:33:19 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	open_infile(t_ast_node	*node, t_redir *redir)
+int	open_infile(t_ast_node	*node, t_redir *redir, t_shell *shell)
 {
 	int	in_file;
 
 	//ft_printf("opening infile\n");
 
 	//ft_printf("Setting new Infile to %s\n", node->redirections->file);
+	if (node->data.command.exec_data.in_type == PIPE_T)
+		close(shell->pipes[node->data.command.exec_data.pipe_index_in][0]);
 	in_file = open(redir->file, O_RDONLY);
 	if (in_file == -1)
 		return (perror("total error:  input file"), EXEC_ERR_FILE);
@@ -29,10 +31,12 @@ int	open_infile(t_ast_node	*node, t_redir *redir)
 	return (EXEC_SUCCESS);
 }
 
-int	open_outfile(t_ast_node	*node, t_redir *redir)
+int	open_outfile(t_ast_node	*node, t_redir *redir, t_shell *shell)
 {
 	int	out_file;
-	
+
+	if (node->data.command.exec_data.out_type == PIPE_T)
+		close(shell->pipes[node->data.command.exec_data.pipe_index_out][1]);
 	if (redir->type == REDIR_APPEND)
 		out_file = open(redir->file, O_CREAT | O_RDWR | O_APPEND, 0644);
 	else
@@ -97,9 +101,9 @@ t_exec_error	set_infile_outfile(t_shell *shell, t_ast_node *node)
 	while (redir_pointer)
 	{
 		if (redir_pointer->type == REDIR_INPUT || redir_pointer->type == REDIR_HEREDOC)
-			status = open_infile(node, redir_pointer);
+			status = open_infile(node, redir_pointer, shell);
 		else if (redir_pointer->type == REDIR_OUTPUT || redir_pointer->type == REDIR_APPEND)
-			status = open_outfile(node, redir_pointer);
+			status = open_outfile(node, redir_pointer, shell);
 		if (status == EXEC_ERR_FILE)
 			return (status);
 		redir_pointer = &*redir_pointer->next;
