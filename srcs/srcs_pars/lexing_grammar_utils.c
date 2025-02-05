@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing_grammar_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 17:31:55 by emagnani          #+#    #+#             */
-/*   Updated: 2025/02/05 19:38:02 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/05 22:58:37 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,19 @@ bool	is_redir(t_token_type type)
 
 bool	is_unclosed_quote(char *str)
 {
-	int	i;
-	int	single_quote;
-	int	double_quote;
+	t_quote_depth	depth;
+	int				i;
 
+	depth.single_quotes = 0;
+	depth.double_quotes = 0;
 	i = 0;
-	single_quote = 0;
-	double_quote = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'')
-			single_quote += 1;
-		if (str[i] == '\"')
-			double_quote += 1;
+		if (str[i] == '\'' && !depth.double_quotes)
+			depth.single_quotes = !depth.single_quotes;
+		else if (str[i] == '\"' && !depth.single_quotes)
+			depth.double_quotes = !depth.double_quotes;
 		i++;
 	}
-	return (single_quote % 2 != 0 || double_quote % 2 != 0);
+	return (depth.single_quotes || depth.double_quotes);
 }
