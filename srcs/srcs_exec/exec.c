@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/02 17:14:59 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 22:44:27 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 #include "minishell.h"
 
 t_exec_error	recur_exec(t_shell *shell, t_ast_node *node);
+
+t_exec_error	prepare_command_exec(t_shell *shell, t_ast_node *node)
+{
+	if (all_expands_handler(node, *shell->envp) != SUCCESS)
+		return (EXEC_ERR_FATAL);
+	if (remove_quotes_handler(node) != SUCCESS)
+		return (EXEC_ERR_FATAL);
+	if (create_argv_exec(node) != SUCCESS)
+		return (EXEC_ERR_FATAL);
+	return (EXEC_SUCCESS);
+}
 
 /*
 	First we have to handle builtins 
@@ -34,9 +45,7 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 	pid_t			child_pid;
 	int				wait_status;
 
-	if (all_expands_handler(node, *shell->envp) != SUCCESS)
-		return (EXEC_ERR_FATAL);
-	if (create_argv_exec(node) != SUCCESS)
+	if (prepare_command_exec(shell, node) != EXEC_SUCCESS)
 		return (EXEC_ERR_FATAL);
 	if (is_directory(node->data.command.command) == true)
 	{

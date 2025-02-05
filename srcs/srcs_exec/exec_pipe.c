@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/02 02:17:58 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/05 22:44:03 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@ t_exec_error  start_command_pipe(t_shell *shell, t_ast_node *node)
 {
 	pid_t			child_pid;
 
-	if (all_expands_handler(node, *shell->envp) != SUCCESS)
-		return (EXEC_ERR_FATAL);
-	if (create_argv_exec(node) != SUCCESS)
+	if (prepare_command_exec(shell, node) != EXEC_SUCCESS)
 		return (EXEC_ERR_FATAL);
 	if (is_directory(node->data.command.command) == true)
 	{
