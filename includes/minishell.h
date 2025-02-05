@@ -69,7 +69,6 @@ typedef enum e_error
 # include "ast.h"
 # include "wildcard.h"
 
-// general functions
 int		parse_line(t_shell *shell);
 void	clean_up_end(t_shell *shell);
 void	clean_up_node(t_ast_node *node);
@@ -77,4 +76,6 @@ void	clean_up_parser(t_parser *parser);
 void	free_lexing(t_token *tokens);
 void	free_user_input(t_token *tokens, t_ast_node *ast);
 
+void	free_envp(char ***envp);
+void	clean_up_child(t_shell *shell);
 #endif

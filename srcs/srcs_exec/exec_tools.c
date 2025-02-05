@@ -6,14 +6,15 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 23:45:35 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 15:45:36 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:00:12 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exit_exec_status(t_exec_error	status)
+void	exit_exec_status(t_exec_error	status, t_shell *shell)
 {
+	clean_up_child(shell);
 	if (status == EXEC_ERR_FATAL)
 		exit(128);
 	if (status == EXEC_SUCCESS)
