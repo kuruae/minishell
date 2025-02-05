@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:10:53 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/29 03:21:28 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/05 19:49:28 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,12 @@ typedef struct s_word_props
     char    *original;        // Original word before expansion
     char    *expanded;        // Word after expansion
 } t_word_props;
+
+typedef struct s_par_counts
+{
+    int     open;
+    int     close;
+} t_par_counts;
 
 /* Lexer functions */
 

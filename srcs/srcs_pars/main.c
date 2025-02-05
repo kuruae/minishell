@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/05 17:47:01 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:01:39 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ static t_error	user_intput_routine(t_shell *shell)
 		return (CTRL_C);
 	}
 	debug_print_ast(ast, 0); // debug function
+	free_lexing(tokens);
 	add_history(shell->line);
 	append_history(1, HISTORY_FILE);
 	status = start_exec(shell, ast);
