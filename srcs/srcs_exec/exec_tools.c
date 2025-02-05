@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 23:45:35 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 18:00:12 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:47:55 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,14 @@ t_shell	init_subshell(t_shell	*shell, t_ast_node *node)
 	sub_shell.dir = shell->dir;
 	sub_shell.process_count = count_pipes(node) + 1;
 	sub_shell.pipe_count = count_pipes(node);
-	if (shell->pipe_count == 1)
-		shell->process_count = 0;
+	if (sub_shell.pipe_count == 0)
+		sub_shell.process_count = 0;
 	sub_shell.pipeline = false;
 	sub_shell.pipe_index = 0;
 	sub_shell.process_index = 0;
 	sub_shell.root_node = node;
+	sub_shell.subshell = NULL;
+	sub_shell.parent_shell = shell;
+	shell->subshell = &sub_shell;
 	return (sub_shell);
 }

@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 18:08:18 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:34:55 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	shell->process_index = 0;
 	shell->root_node = node;
 	shell->pipeline = false;
+	shell->subshell = NULL;
+	shell->parent_shell = NULL;
 	status = recur_exec(shell, node);
 	i = 0;
 	get_signal_exec();
