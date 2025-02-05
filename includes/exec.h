@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/01/13 16:50:23 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/02 17:14:37 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ t_exec_error			start_exec(t_shell *shell, t_ast_node *node);
 
 void					exec_command(t_shell *shell, t_ast_node *node);
 
-t_exec_error			set_input_output(t_shell *shell, t_ast_node *node);
+t_exec_error			set_infile_outfile(t_shell *shell, t_ast_node *node);
+void					set_pipes(t_ast_node *node, t_shell *shell);
 
 void					exit_exec_status(t_exec_error	status);
 void					link_pipe(t_ast_node *node, t_shell *shell);
@@ -78,4 +79,8 @@ t_shell					init_subshell(t_shell	*shell, t_ast_node *node);
 t_exec_error			start_pipeline(t_shell *shell, t_ast_node *node);
 int						count_pipes(t_ast_node *node);
 
+void 					close_used_pipes(t_shell *shell, t_ast_node *node);
+bool					is_directory(char *path);
+t_exec_error			return_exit_status(int g_sig_offset);
+void					analize_child_status(int child_status);
 #endif

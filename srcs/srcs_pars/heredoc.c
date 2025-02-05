@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 20:42:09 by kuru              #+#    #+#             */
-/*   Updated: 2025/01/30 18:11:12 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/05 05:20:08 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  * Creates a filename by combining HEREDOC_PREFIX with a random hex string.
  * If the generated filename already exists, recursively tries again.
  */
-static char	*get_heredoc_filename(void)
+char	*get_heredoc_filename(void)
 {
 	static unsigned int	seed = 42;
 	char				*filename;
@@ -38,7 +38,7 @@ static char	*get_heredoc_filename(void)
 	return (filename);
 }
 
-static bool	is_expansion_on(char *delemiter)
+bool	is_expansion_on(char *delemiter)
 {
 	if (!delemiter)
 		return (true);
@@ -47,37 +47,67 @@ static bool	is_expansion_on(char *delemiter)
 	return (true);
 }
 
-static void	fill_heredoc(int fd, char *delimiter, char **env)
+static char	*init_fill_heredoc(char *delimiter)
 {
-	char	*line;
-	char	*end_heredoc;
 	char	*quoteless_delimiter;
+	char	*end_heredoc;
 
 	quoteless_delimiter = remove_quotes_from_string(delimiter);
 	end_heredoc = ft_strjoin(quoteless_delimiter, "\n");
 	free(quoteless_delimiter);
 	ft_putstr_fd("heredoc> ", STDOUT_FILENO);
+	return (end_heredoc);
+}
+
+static void	write_current_line(int fd, char *line, char **env)
+{
+	char	*expanded_line;
+
+	if (is_expansion_on(NULL))
+	{
+		expanded_line = expand_env_vars(line, env);
+		write(fd, expanded_line, ft_strlen(expanded_line));
+		free(expanded_line);
+	}
+	else
+		write(fd, line, ft_strlen(line));
+}
+
+
+static void	fill_heredoc(int fd, char *delimiter, char **env, int *sig)
+{
+	char		*line;
+	char		*end_heredoc;
+
+	get_signal_heredoc();
+	end_heredoc = init_fill_heredoc(delimiter);
 	line = get_next_line(STDIN_FILENO);
 	while (line && ft_strcmp(line, end_heredoc))
 	{
 		if (g_sig_offset == 130)
-			break ;
-		if (is_expansion_on(delimiter))
-			line = expand_env_vars(line, env);
-		write(fd, line, ft_strlen(line));
+		{
+			*sig = 130;
+			free(line);
+			break;
+		}
+		write_current_line(fd, line, env);
 		ft_putstr_fd("heredoc> ", STDOUT_FILENO);
 		free(line);
 		line = get_next_line(STDIN_FILENO);
 	}
-	free(line);
-	free(end_heredoc);
+	if (line && !g_sig_offset)
+		free(line);
+	if (end_heredoc)
+		free(end_heredoc);
 }
 
 char	*heredoc_handler(char *delimiter, char **env)
 {
 	int		fd;
+	int		sig;
 	char	*heredoc_filename;
 
+	sig = 0;
 	heredoc_filename = get_heredoc_filename();
 	fd = open(heredoc_filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
@@ -85,13 +115,14 @@ char	*heredoc_handler(char *delimiter, char **env)
 		free(heredoc_filename);
 		return (NULL);
 	}
-	fill_heredoc(fd, delimiter, env);
-	close(fd);
-	if (g_sig_offset == 130)
+	fill_heredoc(fd, delimiter, env, &sig);
+	if (sig == 130)
 	{
 		unlink(heredoc_filename);
 		free(heredoc_filename);
+		close(fd);
 		return (NULL);
 	}
+	close(fd);
 	return (heredoc_filename);
 }

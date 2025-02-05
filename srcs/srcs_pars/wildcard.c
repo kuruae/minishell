@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:20:49 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/01 00:55:26 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/02 02:37:59 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@ static int	count_matching_patterns(const char *pattern)
 	if (!dir)
 		return (0);
 	count = 0;
-	entry = readdir(dir);
-	while (entry)
+	while (1)
 	{
+		entry = readdir(dir);
+		if (!entry)
+			break ;
 		if (entry->d_name[0] == '.' && pattern[0] != '.')
 			continue ;
 		if (is_pattern_matching(pattern, entry->d_name))
@@ -44,9 +46,11 @@ static void	fill_matches(char **matches, const char *pattern)
 	if (!dir)
 		return ;
 	i = 0;
-	entry = readdir(dir);
-	while (entry)
+	while (1)
 	{
+		entry = readdir(dir);
+		if (!entry)
+			break ;
 		if (entry->d_name[0] == '.' && pattern[0] != '.')
 			continue ;
 		if (is_pattern_matching(pattern, entry->d_name))

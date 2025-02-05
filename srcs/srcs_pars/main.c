@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/30 17:30:09 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/05 04:38:13 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static t_error	user_intput_routine(t_shell *shell)
 	if (!tokens)
 		return (ERR_SYNTAX);
 	ast = ast_handler(tokens, shell->envp);
-	if (g_sig_offset == 130 || !ast)
+	if (!ast)
 	{
 		free_user_input(tokens, ast);
 		return (CTRL_C);
@@ -102,7 +102,7 @@ static t_error	user_intput_routine(t_shell *shell)
 	debug_print_ast(ast, 0); // debug function
 	add_history(shell->line);
 	append_history(1, HISTORY_FILE);
-		status = start_exec(shell, ast);
+	status = start_exec(shell, ast);
 	if (status == EXEC_ERR_FATAL)
 		return (ERR_FATAL);
 	free_user_input(tokens, ast);
@@ -121,8 +121,6 @@ t_error readline_loop(t_shell *shell)
             break;
 		if (!is_line_empty(shell->line))
 		{
-			g_sig_offset = 0;
-			get_signal_exec();
 			routine_status = user_intput_routine(shell);
 			if (routine_status == ERR_FATAL)
 				return (ERR_FATAL);
