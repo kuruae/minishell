@@ -5,7 +5,6 @@
 # define HEREDOC_PREFIX "/tmp/heredoc_"
 # define HEX_MASK 0xF
 
-
 # include "minishell.h"
 
 # include "expansion.h"
@@ -15,7 +14,6 @@ typedef enum e_node_type
 {
 	NODE_COMMAND,    // Simple command
 	NODE_PIPE,       // Pipe operator (|)
-	// NODE_REDIR,      // Redirections (<, >, >>)
 	NODE_AND,        // Logical AND (&&)
 	NODE_SUBSHELL,   // Subshell
 	NODE_OR,         // Logical OR (||)
@@ -79,33 +77,39 @@ typedef struct s_ast_node
 	} data;
 } t_ast_node;
 
-bool	_parser_is_token_type_redir(t_token_type type);
-t_ast_node *create_ast_node(t_node_type type);
-void free_ast(t_ast_node *node);
-void	paser_advance(t_parser *parser);
-t_ast_node	*parse_command(t_parser *parser);
-t_ast_node	*parse_subshell(t_parser *parser);
-int	count_args(t_token *token);
-t_ast_node	*parse_pipe(t_parser *parser);
-t_ast_node	*parse_logic(t_parser *parser);
-void free_ast(t_ast_node *node);
-t_ast_node	*ast_handler(t_token *tokens, char ***env);
-void debug_print_ast(t_ast_node *node, int depth);
-t_ast_node	*err_free_and_return(t_parser *parser, t_ast_node *node);
-t_node_type	get_node_type(t_token_type token_type);
-t_error	all_expands_handler(t_ast_node *node, char **env);
-t_error create_argv_exec(t_ast_node *node);
-t_error	remove_quotes_handler(t_ast_node *node);
-void set_command_data(t_ast_node *node);
-char	*heredoc_handler(char *delimiter, char **env);
-char	*get_heredoc_filename(void);
-bool	is_expansion_on(char *str);
+/* AST Node Management */
+t_ast_node		*create_ast_node(t_node_type type);
+t_node_type		get_node_type(t_token_type token_type);
+void			free_ast(t_ast_node *node);
+void			set_command_data(t_ast_node *node);
 
-char	*remove_quotes_from_string(char *str);
+/* Parsing Functions */
+int				count_args(t_token *token);
+void			paser_advance(t_parser *parser);
+bool			parse_redir(t_parser *parser, t_ast_node *node);
+bool			_parser_is_token_type_redir(t_token_type type);
+t_ast_node		*ast_handler(t_token *tokens, char ***env);
+t_ast_node		*err_free_and_return(t_parser *parser, t_ast_node *node);
+t_ast_node		*parse_command(t_parser *parser);
+t_ast_node		*parse_logic(t_parser *parser);
+t_ast_node		*parse_pipe(t_parser *parser);
+t_ast_node		*parse_subshell(t_parser *parser);
+t_error			pointer_parse_pipe(t_parser *parser, t_ast_node **left);
+
+/* Quote and Expansion Handlers */
+t_error			all_expands_handler(t_ast_node *node, char **env);
+t_error			create_argv_exec(t_ast_node *node);
+t_error			remove_quotes_handler(t_ast_node *node);
+bool			is_expansion_on(char *delemiter);
+char			*remove_quotes_from_string(char *str);
+
+/* Heredoc Functions */
+char			*get_heredoc_filename(void);
+char			*heredoc_handler(char *delimiter, char **env);
+
+/* Debug and Utils */
+void			debug_print_ast(t_ast_node *node, int depth);
+void			uint_to_hex(unsigned int num, char *hex_str);
 unsigned int	lcg_rand(unsigned int *seed);
-void	uint_to_hex(unsigned int n, char *hex);
-bool parse_redir(t_parser *parser, t_ast_node *node);
-t_error pointer_parse_pipe(t_parser *parser, t_ast_node **left);
-
 
 #endif
