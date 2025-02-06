@@ -6,11 +6,32 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:02:26 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 17:10:20 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 01:21:15 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_exec_error	update_oldpwd(char ***envp, t_directory *dir)
+{
+	char			*arg;
+	char			**args;
+	t_exec_error	status;
+
+	(void)envp;
+	arg = ft_strjoin("OLDPWD=", dir->old_path);
+	if (!arg)
+		return (EXEC_ERR_FATAL);
+	args = malloc(sizeof(char *) * 2);
+	if (!args)
+		return (free(arg), EXEC_ERR_FATAL);
+	args[0] = arg;
+	args[1] = NULL;
+	status = ft_export(args, 1, envp);
+	free(arg);
+	free(args);
+	return (status);
+}
 
 t_exec_error	update_pwd(char ***envp, t_directory *dir)
 {
@@ -30,6 +51,7 @@ t_exec_error	update_pwd(char ***envp, t_directory *dir)
 	status = ft_export(args, 1, envp);
 	free(arg);
 	free(args);
+	status = update_oldpwd(envp, dir);
 	return (status);
 }
 
@@ -60,7 +82,7 @@ t_exec_error	get_home(char **envp, t_directory *dir, char *cache)
 	return (EXEC_ERR_NON_FATAL);
 }
 
-t_exec_error	ft_cd(char **args, int argc, t_directory *dir, char ***envp)
+t_exec_error	ft_cd(char **args, int argc, t_directory *dir, t_shell *shell)
 {
 	char	cache[MAX_PATH];
 
@@ -72,7 +94,7 @@ t_exec_error	ft_cd(char **args, int argc, t_directory *dir, char ***envp)
 	if (getcwd(cache, MAX_PATH) == NULL)
 		ft_strlcpy(cache, dir->current_path, MAX_PATH);
 	if (argc == 0)
-		return (get_home(*envp, dir, cache));
+		return (get_home(*shell->envp, dir, cache));
 	else if (chdir(args[0]) == -1)
 	{
 		if (ft_strcmp(args[0], "..") == 0)
@@ -82,5 +104,5 @@ t_exec_error	ft_cd(char **args, int argc, t_directory *dir, char ***envp)
 		}
 		return (perror("total error: cd"), EXEC_ERR_NON_FATAL);
 	}
-	return (update_t_directory(dir, cache, envp));
+	return (update_t_directory(dir, cache, shell->envp));
 }

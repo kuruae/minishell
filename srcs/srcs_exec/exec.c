@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 22:47:22 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/06 01:46:43 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,17 +121,13 @@ t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 	int				i;
 	int				child_status;
 
-	shell->pipe_count = count_pipes(node);
-	shell->process_count = count_pipes(node) + 1;
-	if (shell->pipe_count == 0)
-		shell->process_count = 0;
-	shell->pipe_index = 0;
-	shell->process_index = 0;
-	shell->root_node = node;
-	shell->pipeline = false;
-	shell->subshell = NULL;
-	shell->parent_shell = NULL;
+	init_shell(shell, node);
+	status = update_shell_level(shell);
+	if (status != EXEC_SUCCESS)
+		return (status);
 	status = recur_exec(shell, node);
+	if (status == EXEC_ERR_FATAL)
+		return (status);
 	i = 0;
 	get_signal_exec();
 	while (i < shell->process_count)

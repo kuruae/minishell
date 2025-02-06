@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:24:56 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 17:10:59 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 01:08:05 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_exec_error	builtin(t_ast_node *node, t_shell *shell, int fd_out)
 	argc = node->data.command.arg_count;
 	status = EXEC_NOT_FOUND;
 	if (ft_strcmp(command, "cd") == 0)
-		status = ft_cd(args, argc, &shell->dir, shell->envp);
+		status = ft_cd(args, argc, &shell->dir, shell);
 	else if (ft_strcmp(command, "export") == 0)
 		status = ft_export(args, argc, shell->envp);
 	else if (ft_strcmp(command, "unset") == 0)
@@ -71,7 +71,7 @@ t_exec_error	builtin(t_ast_node *node, t_shell *shell, int fd_out)
 	else if (ft_strcmp(command, "env") == 0)
 		status = ft_env(*shell->envp, argc, fd_out);
 	else if (ft_strcmp(command, "exit") == 0)
-		status = ft_exit(args, argc);
+		status = ft_exit(args, argc, shell);
 	set_sig_offset(status);
 	return (status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 22:47:01 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/06 01:41:21 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,7 @@ void					analize_child_status(int child_status);
 t_exec_error			prepare_command(t_shell *shell, t_ast_node *node);
 
 char					**get_paths(char **env);
+t_exec_error			update_env_var(char *extension, char *value, char ***envp);
+t_exec_error			update_shell_level(t_shell *shell);
+
 #endif

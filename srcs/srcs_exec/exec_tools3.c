@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 15:32:08 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 15:45:49 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 01:48:41 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,50 @@ char	**get_paths(char **env)
 		return (ft_split(ft_strdup("null"), ':'));
 	paths = ft_split(path_value, ':');
 	return (free(path_value), paths);
+}
+
+t_exec_error	update_env_var(char *extension, char *value, char ***envp)
+{
+	char			*arg;
+	char			**args;
+	t_exec_error	status;
+
+	(void)envp;
+	arg = ft_strjoin(extension, value);
+	if (!arg)
+		return (EXEC_ERR_FATAL);
+	args = malloc(sizeof(char *) * 2);
+	if (!args)
+		return (EXEC_ERR_FATAL);
+	args[0] = arg;
+	args[1] = NULL;
+	status = ft_export(args, 1, envp);
+	free(arg);
+	free(args);
+	return (status);
+}
+
+t_exec_error	update_shell_level(t_shell *shell)
+{
+	int	old_level;
+	int	new_level;
+
+	old_level = ft_atoi(getenv("SHLVL"));
+	new_level = old_level + 1;
+	shell->shell_level = new_level;
+	return (update_env_var("SHLVL=", ft_itoa(new_level), shell->envp));
+}
+
+void	init_shell(t_shell *shell, t_ast_node *node)
+{
+	shell->pipe_count = count_pipes(node);
+	shell->process_count = count_pipes(node) + 1;
+	if (shell->pipe_count == 0)
+		shell->process_count = 0;
+	shell->pipe_index = 0;
+	shell->process_index = 0;
+	shell->root_node = node;
+	shell->pipeline = false;
+	shell->subshell = NULL;
+	shell->parent_shell = NULL;
 }
