@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 01:08:11 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 00:07:58 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 21:17:17 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,31 +45,48 @@ int	open_outfile(t_ast_node	*node, t_redir *redir, t_shell *shell)
 	return (EXEC_SUCCESS);
 }
 
-void	set_pipes(t_ast_node *node, t_shell *shell)
+t_exec_error	appending_heredocs(t_redir *redir, int main_heredoc)
 {
-	t_exec_data	*data;
+	int		extra_heredoc;
+	char	*line;
 
-	data = &node->data.command.exec_data;
-	if (data->in_type == PIPE_T)
+	while (redir->next && redir->next->type == REDIR_HEREDOC)
 	{
-		if (dup2(shell->pipes[data->pipe_index_in][0], STDIN_FILENO) == -1)
+		redir = &*redir->next;
+		extra_heredoc = open(redir->file, O_RDONLY, 0644);
+		line = get_next_line(extra_heredoc);
+		while (line)
 		{
-			perror("dup2 for Pipe_IN failed");
-			exit(1);
+			ft_putstr_fd(line, main_heredoc);
+			free(line);
+			line = NULL;
+			line = get_next_line(extra_heredoc);
 		}
-		close(shell->pipes[data->pipe_index_in][0]);
-		close(shell->pipes[data->pipe_index_in][1]);
+		close(extra_heredoc);
+		line = NULL;
 	}
-	if (data->out_type == PIPE_T)
-	{
-		if (dup2(shell->pipes[data->pipe_index_out][1], STDOUT_FILENO) == -1)
-		{
-			perror("dup2 for Pipe_OUT failed");
-			exit(1);
-		}
-		close(shell->pipes[data->pipe_index_out][1]);
-		close(shell->pipes[data->pipe_index_out][0]);
-	}
+	return (EXEC_SUCCESS);
+}
+
+int	open_heredocs(t_ast_node *node, t_redir *redir, t_shell *shell)
+{
+	int				main_heredoc;
+	t_redir			*first;
+	t_exec_error	status;
+
+	if (node->data.command.exec_data.in_type == PIPE_T)
+		close(shell->pipes[node->data.command.exec_data.pipe_index_in][0]);
+	main_heredoc = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (main_heredoc == -1)
+		return (perror("total error: heredoc file"), EXEC_ERR_FILE);
+	first = &*redir;
+	status = appending_heredocs(redir, main_heredoc);
+	close (main_heredoc);
+	node->data.command.exec_data.in_type = FILE_T;
+	node->data.command.exec_data.in_file = open(first->file, O_RDONLY, 0644);
+	if (node->data.command.exec_data.in_file == -1)
+		return (perror("total error: heredoc file"), EXEC_ERR_FILE);
+	return (EXEC_SUCCESS);
 }
 
 /*
@@ -86,7 +103,6 @@ t_exec_error	set_infile_outfile(t_shell *shell, t_ast_node *node)
 	t_redir			*redir;
 
 	redir = &*node->redirections;
-	(void)shell;
 	status = EXEC_SUCCESS;
 	if (node->data.command.exec_data.in_type == STD_T)
 		node->data.command.exec_data.in_file = STDIN_FILENO;
@@ -94,12 +110,16 @@ t_exec_error	set_infile_outfile(t_shell *shell, t_ast_node *node)
 		node->data.command.exec_data.out_file = STDOUT_FILENO;
 	while (redir)
 	{
-		if (redir->type == REDIR_INPUT || redir->type == REDIR_HEREDOC)
+		if (redir->type == REDIR_INPUT)
 			status = open_infile(node, redir, shell);
+		else if (redir->type == REDIR_HEREDOC)
+		{
+			status = open_heredocs(node, redir, shell);
+			while (redir->next && redir->next->type == REDIR_HEREDOC)
+				redir = &*redir->next;
+		}
 		else if (redir->type == REDIR_OUTPUT || redir->type == REDIR_APPEND)
 			status = open_outfile(node, redir, shell);
-		if (status == EXEC_ERR_FILE)
-			return (status);
 		redir = &*redir->next;
 	}
 	return (status);

@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:07:48 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 18:21:11 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 21:18:08 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	echo_putstr_fd(char *s, int fd)
 		i++;
 	}
 }
-
 
 /*
 ** This checks if here is a "-n" flag
@@ -55,11 +54,10 @@ int	check_flag(char **args)
 	return (i);
 }
 
-
 t_exec_error	ft_echo(char **args, int argc, int fd_out)
 {
 	int	n_flag;
-	int		i;
+	int	i;
 
 	i = 0;
 	if (argc == 0)

@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/06 00:58:06 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 21:17:00 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ static t_error	user_intput_routine(t_shell *shell)
 		free_user_input(tokens, ast);
 		return (CTRL_C);
 	}
-	//debug_print_ast(ast, 0);
+	debug_print_ast(ast, 0);
 	add_history(shell->line);
 	append_history(1, HISTORY_FILE);
 	free_lexing(tokens);
@@ -139,6 +139,7 @@ t_error readline_loop(t_shell *shell)
 	g_sig_offset = 131;
 	return (CTRL_D);
 }
+
 char ***copy_env(char **envp)
 {
 	int		i;

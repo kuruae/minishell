@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 14:46:41 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 20:52:33 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ typedef struct s_ast_node	t_ast_node;
 
 t_exec_error			start_command(t_shell *shell, t_ast_node *node);
 t_exec_error			start_exec(t_shell *shell, t_ast_node *node);
-
-t_exec_error			prepare_command_exec(t_shell *shell, t_ast_node *node);
 
 void					exec_command(t_shell *shell, t_ast_node *node);
 

@@ -6,24 +6,13 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 14:53:05 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 21:13:49 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 t_exec_error	recur_exec(t_shell *shell, t_ast_node *node);
-
-t_exec_error	prepare_command_exec(t_shell *shell, t_ast_node *node)
-{
-	if (all_expands_handler(node, *shell->envp) != SUCCESS)
-		return (EXEC_ERR_FATAL);
-	if (remove_quotes_handler(node) != SUCCESS)
-		return (EXEC_ERR_FATAL);
-	if (create_argv_exec(node) != SUCCESS)
-		return (EXEC_ERR_FATAL);
-	return (EXEC_SUCCESS);
-}
 
 /*
 	First we have to handle builtins 
