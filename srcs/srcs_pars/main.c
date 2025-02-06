@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/05 18:54:02 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/05 21:47:51 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static t_error	user_intput_routine(t_shell *shell)
 	t_token			*tokens;
 	t_ast_node		*ast;
 
-	test_lexing(shell->line); // debug function
+	//test_lexing(shell->line); // debug function
 	tokens = lexing(shell->line);
 	if (!tokens)
 	{
@@ -102,7 +102,7 @@ static t_error	user_intput_routine(t_shell *shell)
 		free_user_input(tokens, ast);
 		return (CTRL_C);
 	}
-	debug_print_ast(ast, 0);
+	//debug_print_ast(ast, 0);
 	add_history(shell->line);
 	append_history(1, HISTORY_FILE);
 	free_lexing(tokens);
