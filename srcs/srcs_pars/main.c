@@ -89,6 +89,8 @@ static t_error	user_intput_routine(t_shell *shell)
 	t_token			*tokens;
 	t_ast_node		*ast;
 
+
+	//test_lexing(shell->line); // debug function
 	tokens = lexing(shell->line);
 	if (!tokens)
 	{
