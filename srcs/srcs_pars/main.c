@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/05 21:47:51 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 00:58:06 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ static t_error	user_intput_routine(t_shell *shell)
 	t_exec_error	status;
 	t_token			*tokens;
 	t_ast_node		*ast;
+
 
 	//test_lexing(shell->line); // debug function
 	tokens = lexing(shell->line);

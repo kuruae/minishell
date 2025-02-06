@@ -52,6 +52,7 @@ typedef struct s_shell
 	int			process_index;
 	t_ast_node	*root_node;
 	bool		pipeline;
+	int			shell_level;
 	t_shell		*subshell;
 	t_shell		*parent_shell;
 }	t_shell;
@@ -80,4 +81,5 @@ void	free_user_input(t_token *tokens, t_ast_node *ast);
 
 void	free_envp(char ***envp);
 void	clean_up_child(t_shell *shell);
+void	init_shell(t_shell *shell, t_ast_node *node);
 #endif
