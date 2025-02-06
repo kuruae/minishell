@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:07:48 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 17:24:45 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 18:21:11 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,18 @@ void	echo_putstr_fd(char *s, int fd)
 
 int	check_flag(char **args)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
-	j= 1;
-	while (args[i])
+	while (args[i] && args[i][0] && args[i][1])
 	{
+		j = 1;
 		if (args[i][0] && args[i][1] && args[i][0] == '-' && args[i][1] == 'n')
 		{	
 			while (args[i][j] && args[i][j] == 'n')
 				j++;
-			if (args[i][j] == '\0')
-				i++;
-			else
+			if (args[i][j] != '\0')
 				break ;
 		}
 		else
