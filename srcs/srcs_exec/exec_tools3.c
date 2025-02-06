@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 15:32:08 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 01:48:41 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 14:19:55 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,20 @@ t_exec_error	update_env_var(char *extension, char *value, char ***envp)
 
 t_exec_error	update_shell_level(t_shell *shell)
 {
-	int	old_level;
-	int	new_level;
+	int				old_level;
+	int				new_level;
+	char			*new_level_str;
+	t_exec_error	status;
 
 	old_level = ft_atoi(getenv("SHLVL"));
 	new_level = old_level + 1;
 	shell->shell_level = new_level;
-	return (update_env_var("SHLVL=", ft_itoa(new_level), shell->envp));
+	new_level_str = ft_itoa(new_level);
+	if (!new_level_str)
+		return (EXEC_ERR_FATAL);
+	status = update_env_var("SHLVL=", new_level_str, shell->envp);
+	free(new_level_str);
+	return (status);
 }
 
 void	init_shell(t_shell *shell, t_ast_node *node)
@@ -90,4 +97,5 @@ void	init_shell(t_shell *shell, t_ast_node *node)
 	shell->pipeline = false;
 	shell->subshell = NULL;
 	shell->parent_shell = NULL;
+	update_env_var("_=", "/usr/bin/env", shell->envp);
 }
