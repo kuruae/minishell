@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:25:20 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 00:57:14 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 14:36:10 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	clean_exit(int i, t_shell *shell)
 	clean_up_child(shell);
 	exit(i);
 }
-
 
 t_exec_error	ft_exit(char **args, int argc, t_shell *shell)
 {

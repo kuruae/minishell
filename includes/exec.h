@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 01:41:21 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 14:34:16 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,7 @@ t_exec_error			prepare_command(t_shell *shell, t_ast_node *node);
 char					**get_paths(char **env);
 t_exec_error			update_env_var(char *extension, char *value, char ***envp);
 t_exec_error			update_shell_level(t_shell *shell);
+void					close_redirections(t_ast_node *node);
+
 
 #endif

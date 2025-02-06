@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 01:46:43 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 14:35:04 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 		exec_command(shell, node);
 	else
 	{
+		close_redirections(node);
 		waitpid(child_pid, &wait_status, 0);
 		analize_child_status(wait_status);
 	}

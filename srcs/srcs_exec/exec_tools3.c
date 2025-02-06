@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 15:32:08 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 14:19:55 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 14:35:54 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,4 +98,12 @@ void	init_shell(t_shell *shell, t_ast_node *node)
 	shell->subshell = NULL;
 	shell->parent_shell = NULL;
 	update_env_var("_=", "/usr/bin/env", shell->envp);
+}
+
+void	close_redirections(t_ast_node *node)
+{
+	if (node->data.command.exec_data.in_type == FILE_T)
+		close(node->data.command.exec_data.in_file);
+	if (node->data.command.exec_data.out_type == FILE_T)
+		close(node->data.command.exec_data.out_file);
 }
