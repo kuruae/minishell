@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/05 18:54:02 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:13:27 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ static t_error	user_intput_routine(t_shell *shell)
 
 	test_lexing(shell->line); // debug function
 	tokens = lexing(shell->line);
+	add_history(shell->line);
+	append_history(1, HISTORY_FILE);
 	if (!tokens)
 	{
 		g_sig_offset = 2;
@@ -103,8 +105,6 @@ static t_error	user_intput_routine(t_shell *shell)
 		return (CTRL_C);
 	}
 	debug_print_ast(ast, 0);
-	add_history(shell->line);
-	append_history(1, HISTORY_FILE);
 	free_lexing(tokens);
 	status = start_exec(shell, ast);
 	if (status == EXEC_ERR_FATAL)
