@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:07:48 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 15:42:43 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:24:45 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,33 +25,55 @@ void	echo_putstr_fd(char *s, int fd)
 	}
 }
 
-bool	check_flag(char **args)
+
+/*
+** This checks if here is a "-n" flag
+** the flags can have multiple ns like "-nnnnnnnnnnnnnnn"
+** As there can be multiple -nflags, the function returnsthe amunt of -n flags
+*/
+
+int	check_flag(char **args)
 {
-	if (ft_strcmp(args[0], "-n") == 0)
-		return (true);
-	else
-		return (false);
+	int i;
+	int j;
+
+	i = 0;
+	j= 1;
+	while (args[i])
+	{
+		if (args[i][0] && args[i][1] && args[i][0] == '-' && args[i][1] == 'n')
+		{	
+			while (args[i][j] && args[i][j] == 'n')
+				j++;
+			if (args[i][j] == '\0')
+				i++;
+			else
+				break ;
+		}
+		else
+			break ;
+		i++;
+	}
+	return (i);
 }
+
 
 t_exec_error	ft_echo(char **args, int argc, int fd_out)
 {
-	bool	n_flag;
+	int	n_flag;
 	int		i;
 
 	i = 0;
 	if (argc == 0)
 		return (ft_putchar_fd('\n', fd_out), EXEC_SUCCESS);
 	n_flag = check_flag(args);
-	if (n_flag == true)
-		i++;
-	while ( i < argc && ft_strcmp(args[i], "-n") == 0)
-		i++;
+	i = i + n_flag;
 	if (i < argc)
-		ft_putstr_fd(args[i++], fd_out);
+		echo_putstr_fd(args[i++], fd_out);
 	while (i < argc)
 	{
 		ft_putchar_fd(' ', fd_out);
-		ft_putstr_fd(args[i++], fd_out);
+		echo_putstr_fd(args[i++], fd_out);
 	}
 	if (!n_flag)
 		ft_putchar_fd('\n', fd_out);
