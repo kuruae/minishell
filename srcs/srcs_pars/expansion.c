@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 03:04:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/04 22:42:28 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/06 01:16:40 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,23 @@ static char	*build_expanded_str(const char *str, size_t *i, char *result)
 	return (new_result);
 }
 
+/**
+ * Expands environment variables within a string.
+ *
+ * @param str string which can include environment variables prefixed 
+ *       by a '$' character.
+ * @param env array of environment variables in the format KEY=VALUE.
+ *
+ * iterates over the input string and updates the result 
+ * by replacing occurrences of environment variables with their
+ * corresponding values from the provided environment.
+ *  
+ * Quoted sections are taken into account to determine when expansion
+ * 	should occur.
+ *
+ * @return new allocated string with evaluated environment variables, 
+ *         or NULL if an error occurs.
+ */
 char	*expand_env_vars(const char *str, char **env)
 {
 	char			*result;

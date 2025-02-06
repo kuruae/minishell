@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:10:53 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/05 19:49:28 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/06 01:30:22 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,19 @@
 /* Token types for lexer */
 typedef enum e_token_type
 {
-    TOK_WORD,       // Regular word or command
-    TOK_OPERATOR,   // |, ||, &, &&, etc.
-    TOK_REDIR_IN,   // <
-    TOK_REDIR_OUT,  // >
-    TOK_HEREDOC,    // << (heredoc)
-    TOK_APPEND,     // >> (append)
-    TOK_PIPE,       // |
-    TOK_AND,        // &&
-    TOK_OR,         // ||
-    TOK_PAR_OPEN,   // (
-    TOK_PAR_CLOSE,  // )
-    TOK_NEWLINE,    // \n
-    TOK_EOF,        // End of input
+    TOK_WORD,
+    TOK_OPERATOR,
+    TOK_REDIR_IN,
+    TOK_REDIR_OUT,
+    TOK_HEREDOC,
+    TOK_APPEND,
+    TOK_PIPE,
+    TOK_AND,
+    TOK_OR,
+    TOK_PAR_OPEN,
+    TOK_PAR_CLOSE,
+    TOK_NEWLINE,
+    TOK_EOF,
 } t_token_type;
 
 /* Quote state for parsing */
@@ -66,24 +66,23 @@ typedef struct s_par_counts
     int     close;
 } t_par_counts;
 
-/* Lexer functions */
+/* Lexer core */
+t_token     *lexing(char *line);
+t_token     *get_all_tokens_from_word(char *line);
+t_error     grammar_handler(t_token *tokens);
 
-t_token *lexing(char *line);
-t_token *get_all_tokens_from_word(char *line);
-t_token *create_token(char *value, size_t len, t_token_type type);
-size_t	get_token_len(char *line, t_token_type type);
-void	free_tokens(t_token *tokens);
-void	add_new_token(t_token **tokens, t_token *new_token);
-int     get_tok_word_len(char *line);
-t_error verify_unclosed_quotes(t_token *tokens);
-t_error	grammar_handler(t_token *tokens);
+/* Token utils */
+t_token     *create_token(char *value, size_t len, t_token_type type);
+size_t      get_token_len(char *line, t_token_type type);
+int         get_tok_word_len(char *line);
+void        free_tokens(t_token *tokens);
+void        add_new_token(t_token **tokens, t_token *new_token);
 
 /*grammar utils functions*/
-
-bool    is_operator(t_token_type type);
-bool    is_redir(t_token_type type);
-bool    is_unclosed_quote(char *str);
-t_error is_subshell_valid(t_token *tokens);
-t_error	prev_and_after_par(t_token *current, t_token *prev);
+t_error     is_subshell_valid(t_token *tokens);
+t_error     prev_and_after_par(t_token *current, t_token *prev);
+bool        is_operator(t_token_type type);
+bool        is_redir(t_token_type type);
+bool        is_unclosed_quote(char *str);
 
 #endif

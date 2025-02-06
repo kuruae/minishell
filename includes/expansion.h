@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 02:36:00 by enzo              #+#    #+#             */
-/*   Updated: 2025/01/24 16:43:07 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/06 01:32:36 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ typedef struct quote_depth
 	int	double_quotes;
 }	t_quote_depth;
 
-bool	should_expand(t_quote_depth depth);
-char	*ft_strjoinch(char *s1, char c);
-void    update_quote_depth(t_quote_depth *depth, char c);
-t_error	start_dollar_expansion(t_ast_node *node, char **env);
-char	*expand_env_vars(const char *str, char **env);
+bool		should_expand(t_quote_depth depth);
+char		*ft_strjoinch(char *s1, char c);
+void		update_quote_depth(t_quote_depth *depth, char c);
+t_error		start_dollar_expansion(t_ast_node *node, char **env);
+char		*expand_env_vars(const char *str, char **env);
 
 #endif
