@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:07:48 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 17:05:33 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 15:42:43 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ t_exec_error	ft_echo(char **args, int argc, int fd_out)
 		return (ft_putchar_fd('\n', fd_out), EXEC_SUCCESS);
 	n_flag = check_flag(args);
 	if (n_flag == true)
+		i++;
+	while ( i < argc && ft_strcmp(args[i], "-n") == 0)
 		i++;
 	if (i < argc)
 		ft_putstr_fd(args[i++], fd_out);
