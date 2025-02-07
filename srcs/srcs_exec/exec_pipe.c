@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 21:14:54 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 20:35:15 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ t_exec_error	start_command_pipe(t_shell *shell, t_ast_node *node)
 	else
 	{
 		close_redirections(node);
-		if (node->data.command.exec_data.in_type == PIPE_T)
-			close(shell->pipes[node->data.command.exec_data.pipe_index_in][0]);
-		if (node->data.command.exec_data.out_type == PIPE_T)
-			close(shell->pipes[node->data.command.exec_data.pipe_index_out][1]);
+		if (node->u_data.s_command.exec_data.in_type == PIPE_T)
+			close(shell->pipes[node->u_data.s_command.exec_data.pipe_index_in][0]);
+		if (node->u_data.s_command.exec_data.out_type == PIPE_T)
+			close(shell->pipes[node->u_data.s_command.exec_data.pipe_index_out][1]);
 	}
 	return (EXEC_SUCCESS);
 }
@@ -57,10 +57,10 @@ t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 
 	if (node->type == NODE_PIPE)
 	{
-		status = exec_pipeline(shell, node->data.pipe.left);
+		status = exec_pipeline(shell, node->u_data.s_pipe.left);
 		if (status == EXEC_ERR_FATAL)
 			return (status);
-		status = exec_pipeline(shell, node->data.pipe.right);
+		status = exec_pipeline(shell, node->u_data.s_pipe.right);
 		if (status == EXEC_ERR_FATAL)
 			return (status);
 	}
@@ -82,15 +82,15 @@ t_exec_error	init_pipeline(t_shell *shell, t_ast_node *node)
 		return (EXEC_ERR_PIPE);
 	link_pipe(node, shell);
 	shell->pipe_index++;
-	if (node->data.pipe.left->type == NODE_PIPE)
+	if (node->u_data.s_pipe.left->type == NODE_PIPE)
 	{
-		status = init_pipeline(shell, node->data.pipe.left);
+		status = init_pipeline(shell, node->u_data.s_pipe.left);
 		if (status == EXEC_ERR_PIPE)
 			return (status);
 	}	
-	if (node->data.pipe.right->type == NODE_PIPE)
+	if (node->u_data.s_pipe.right->type == NODE_PIPE)
 	{
-		status = init_pipeline(shell, node->data.pipe.right);
+		status = init_pipeline(shell, node->u_data.s_pipe.right);
 		if (status == EXEC_ERR_PIPE)
 			return (status);
 	}
@@ -107,7 +107,7 @@ int	count_pipes(t_ast_node *node)
 	while (cursor->type == NODE_PIPE)
 	{
 		counter++;
-		cursor = &*cursor->data.pipe.left;
+		cursor = &*cursor->u_data.s_pipe.left;
 	}
 	return (counter);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_up.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:18:10 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 21:39:09 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 20:35:15 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ void	clean_up_node(t_ast_node *node)
 {
 	if (node->type == NODE_COMMAND)
 	{
-		if (node->data.command.command)
-			free(node->data.command.command);
-		if (node->data.command.args)
-			free_all(node->data.command.args);
+		if (node->u_data.s_command.command)
+			free(node->u_data.s_command.command);
+		if (node->u_data.s_command.args)
+			free_all(node->u_data.s_command.args);
 		free(node);
 		return ;
 	}

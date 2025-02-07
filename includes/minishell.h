@@ -1,19 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/07 21:01:47 by enzo              #+#    #+#             */
+/*   Updated: 2025/02/07 21:30:17 by enzo             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
 # include "libft.h"
 # include <stdio.h>
 # include <signal.h>
+# include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
+# include "error_types.h"
 # include "exec.h"
-// # include "ast.h"
 # include "colors.h"
 # include "get_signal.h"
 # include "builtin.h"
-# include <sys/wait.h>
+# include "wildcard.h"
+# include "lexing.h"
 
-// bullshit so i can work on macos
+// macos bullshit i hate readline 
 # ifdef __APPLE__
 	extern int	rl_done;
     extern void (*rl_event_hook)(void);
@@ -22,16 +37,14 @@
 	extern int	append_history (int nelements, char *filename);
 # endif
 
-// define readline prompt
-# define PROMPT cyan"petit total"magenta" > "reset
+# define PROMPT CYAN"petit total"MAGENTA" > "RESET
 
 # define HISTORY_FILE ".shell_history"
 # define HISTORY_SIZE 500
 
-// global variable
 extern int	g_sig_offset;
 
-// structs
+/* 		structs		*/
 typedef struct s_env
 {
 	char			*id;
@@ -59,21 +72,11 @@ typedef struct s_shell
 	t_shell		*parent_shell;
 }	t_shell;
 
-typedef enum e_error
-{
-	SUCCESS,
-	CTRL_D,
-	ERR_FATAL,
-	ERR_MALLOC,
-	ERR_SYNTAX,
-	FAILURE,
-	CTRL_C = 130
-}	t_error;
-
-# include "lexing.h"
+/*	these headers are lower because of circular dependencies  */
 # include "ast.h"
-# include "wildcard.h"
 
+
+/*		functions		*/
 int		parse_line(t_shell *shell);
 void	clean_up_end(t_shell *shell);
 void	clean_up_node(t_ast_node *node);

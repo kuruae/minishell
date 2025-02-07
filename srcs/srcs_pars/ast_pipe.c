@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_pipe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 01:02:05 by kuru              #+#    #+#             */
-/*   Updated: 2025/02/01 01:15:02 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/07 20:35:15 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,11 @@ t_ast_node	*parse_pipe(t_parser *parser)
 		node = create_ast_node(NODE_PIPE);
 		if (!node)
 			return (err_free_and_return(parser, left));
-		node->data.pipe.left = left;
-		node->data.pipe.right = parse_command(parser);
+		node->u_data.s_pipe.left = left;
+		node->u_data.s_pipe.right = parse_command(parser);
 		if (parser->err_status == FAILURE)
 			return (err_free_and_return(parser, node));
-		if (!node->data.pipe.right)
+		if (!node->u_data.s_pipe.right)
 			return (err_free_and_return(parser, node));
 		left = node;
 	}

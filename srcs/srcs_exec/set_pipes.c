@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_pipes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 21:16:23 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 21:17:29 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 20:35:15 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	set_pipes(t_ast_node *node, t_shell *shell)
 {
 	t_exec_data	*data;
 
-	data = &node->data.command.exec_data;
+	data = &node->u_data.s_command.exec_data;
 	if (data->in_type == PIPE_T)
 	{
 		if (dup2(shell->pipes[data->pipe_index_in][0], STDIN_FILENO) == -1)

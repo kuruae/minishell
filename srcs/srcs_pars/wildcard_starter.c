@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_starter.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 00:31:46 by kuru              #+#    #+#             */
-/*   Updated: 2025/02/01 00:31:53 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/07 20:35:15 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ static int	count_expanded_args(t_ast_node *node, int *total)
 
 	*total = 0;
 	i = 0;
-	while (i < node->data.command.arg_count)
+	while (i < node->u_data.s_command.arg_count)
 	{
-		expanded = expand_wildcard(node->data.command.args[i]);
+		expanded = expand_wildcard(node->u_data.s_command.args[i]);
 		if (!expanded)
 			return (FAILURE);
 		j = 0;
@@ -71,9 +71,9 @@ static int	expand_and_fill(t_ast_node *node, char **new_args, int *k)
 
 	i = 0;
 	*k = 0;
-	while (i < node->data.command.arg_count)
+	while (i < node->u_data.s_command.arg_count)
 	{
-		expanded = expand_wildcard(node->data.command.args[i]);
+		expanded = expand_wildcard(node->u_data.s_command.args[i]);
 		if (!expanded)
 			return (FAILURE);
 		j = 0;
@@ -106,8 +106,8 @@ t_error	start_wildcard_expansion(t_ast_node *node)
 		cleanup_args(new_args, k);
 		return (FAILURE);
 	}
-	cleanup_args(node->data.command.args, node->data.command.arg_count);
-	node->data.command.args = new_args;
-	node->data.command.arg_count = total_args;
+	cleanup_args(node->u_data.s_command.args, node->u_data.s_command.arg_count);
+	node->u_data.s_command.args = new_args;
+	node->u_data.s_command.arg_count = total_args;
 	return (SUCCESS);
 }

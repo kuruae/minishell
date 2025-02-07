@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tools.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 23:45:35 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 21:14:42 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 20:35:15 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,25 +36,25 @@ void	link_pipe(t_ast_node *node, t_shell *shell)
 	t_ast_node	*right;
 	t_ast_node	*last_command;
 
-	left = node->data.pipe.left;
-	right = node->data.pipe.right;
+	left = node->u_data.s_pipe.left;
+	right = node->u_data.s_pipe.right;
 	if (left->type == NODE_COMMAND)
 	{
-		left->data.command.exec_data.out_type = PIPE_T;
-		left->data.command.exec_data.pipe_index_out = shell->pipe_index;
+		left->u_data.s_command.exec_data.out_type = PIPE_T;
+		left->u_data.s_command.exec_data.pipe_index_out = shell->pipe_index;
 	}
 	if (right->type == NODE_COMMAND)
 	{
-		right->data.command.exec_data.in_type = PIPE_T;
-		right->data.command.exec_data.pipe_index_in = shell->pipe_index;
+		right->u_data.s_command.exec_data.in_type = PIPE_T;
+		right->u_data.s_command.exec_data.pipe_index_in = shell->pipe_index;
 	}
 	if (left->type == NODE_PIPE)
 	{
 		last_command = left;
 		while (last_command->type == NODE_PIPE)
-			last_command = last_command->data.pipe.right;
-		last_command->data.command.exec_data.out_type = PIPE_T;
-		last_command->data.command.exec_data.pipe_index_out = shell->pipe_index;
+			last_command = last_command->u_data.s_pipe.right;
+		last_command->u_data.s_command.exec_data.out_type = PIPE_T;
+		last_command->u_data.s_command.exec_data.pipe_index_out = shell->pipe_index;
 	}
 }
 
@@ -63,7 +63,7 @@ void	close_used_fds(t_shell *shell, t_ast_node *node)
 	t_exec_data	*data;
 
 	(void)shell;
-	data = &node->data.command.exec_data;
+	data = &node->u_data.s_command.exec_data;
 	if (data->in_type == FILE_T)
 		close(data->in_file);
 	if (data->out_type == FILE_T)
@@ -76,7 +76,7 @@ void	close_unused_pipes(t_ast_node *node, t_shell *shell)
 	t_exec_data	*data;
 
 	i = 0;
-	data = &node->data.command.exec_data;
+	data = &node->u_data.s_command.exec_data;
 	while (i < shell->pipe_count)
 	{
 		if (i != data->pipe_index_in && i != data->pipe_index_out)

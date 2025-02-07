@@ -6,60 +6,13 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/07 19:41:20 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/07 20:17:55 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	g_sig_offset = 0;
-
-static const char *get_token_type_str(t_token_type type)
-{
-    switch (type)
-    {
-        case TOK_WORD: return "COMMAND";
-        case TOK_PIPE: return "PIPE";
-        case TOK_REDIR_IN: return "REDIR_IN";
-        case TOK_REDIR_OUT: return "REDIR_OUT";
-        case TOK_HEREDOC: return "HEREDOC";
-        case TOK_APPEND: return "APPEND";
-        case TOK_OR: return "OR";
-        case TOK_AND: return "AND";
-		case TOK_PAR_OPEN: return "OPEN PARENTHESE";
-		case TOK_PAR_CLOSE: return "CLOSE PARENTHESE";
-        default: return "UNKNOWN";
-    }
-}
-
-int test_lexing(char *line)
-{
-    t_token *tokens;
-    t_token *current;
-    int     i;
-
-	printf("Lexing:\n");
-    tokens = lexing(line);
-    if (!tokens)
-        return (1);
-
-    current = tokens;
-    i = 0;
-    while (current)
-    {
-        printf("token[%d] = { type: %s, value: '%s' }\n",
-               i,
-               get_token_type_str(current->type),
-               current->value);
-		if (current->expands)
-			printf("expands: true\n");
-        current = current->next;
-        i++;
-    }
-
-    free_tokens(tokens);
-    return (0);
-}
 
 static bool	is_line_empty(char *line)
 {
@@ -89,8 +42,6 @@ static t_error	user_intput_routine(t_shell *shell)
 	t_token			*tokens;
 	t_ast_node		*ast;
 
-
-	//test_lexing(shell->line); // debug function
 	tokens = lexing(shell->line);
 	add_history(shell->line);
 	append_history(1, HISTORY_FILE);
@@ -100,13 +51,9 @@ static t_error	user_intput_routine(t_shell *shell)
 		return (ERR_SYNTAX);
 	}
 	ast = ast_handler(tokens, shell->envp);
-	if (!ast)
-	{
-		free_user_input(tokens, ast);
-		return (CTRL_C);
-	}
-	debug_print_ast(ast, 0);
 	free_lexing(tokens);
+	if (!ast)
+		return (free_user_input(tokens, ast), CTRL_C);
 	status = start_exec(shell, ast);
 	if (status == EXEC_ERR_FATAL)
 		return (ERR_FATAL);
@@ -114,16 +61,16 @@ static t_error	user_intput_routine(t_shell *shell)
 	return (SUCCESS);
 }
 
-t_error readline_loop(t_shell *shell)
+t_error	readline_loop(t_shell *shell)
 {
 	t_error	routine_status;
-	
+
 	init_history();
 	shell->line = readline(PROMPT);
 	while (shell->line)
 	{
 		if (!shell->line)
-            break;
+			break ;
 		if (!is_line_empty(shell->line))
 		{
 			routine_status = user_intput_routine(shell);
@@ -141,7 +88,7 @@ t_error readline_loop(t_shell *shell)
 	return (CTRL_D);
 }
 
-char ***copy_env(char **envp)
+char	***copy_env(char **envp)
 {
 	int		i;
 	char	***env_cpy;
@@ -161,38 +108,22 @@ char ***copy_env(char **envp)
 	return (env_cpy);
 }
 
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
 	t_error	status;
+
 	(void)argc;
 	(void)argv;
 	shell.exit_status = 0;
 	shell.envp = copy_env(envp);
-	shell.line = NULL; // maybe its better to copy the envp in a new table
+	shell.line = NULL;
 	get_signal_interactive();
 	status = readline_loop(&shell);
 	if (status == ERR_FATAL)
-		return(clean_up_end(&shell), EXIT_FAILURE);
+		return (clean_up_end(&shell), EXIT_FAILURE);
 	if (status == CTRL_D)
 		g_sig_offset = 131;
 	clean_up_end(&shell);
 	return (0);
 }
-/*main to test builtins*/
-
-/*
-int	main(int argc, char **argv, char **envp)
-{
-	char ***envp_cpy;
-
-	envp_cpy = copy_env(envp);
-	if (argc == 3)
-		builtin(argv[1], argv[2], STDOUT_FILENO, envp_cpy);
-	else if (argc == 2)
-		builtin(argv[1], NULL , STDOUT_FILENO, envp_cpy);
-	free_all(*envp_cpy);
-	free(envp_cpy);
-}
-*/

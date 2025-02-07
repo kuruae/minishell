@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:04:43 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 01:08:21 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 20:38:08 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "minishell.h"
 
 # define MAX_PATH 4096
-
 
 typedef struct s_ast_node	t_ast_node;
 typedef struct s_shell		t_shell;
@@ -36,6 +35,6 @@ t_exec_error	ft_unset(char **args, int argc, char **envp);
 t_exec_error	ft_cd(char **args, int argc, t_directory *dir, t_shell *shell);
 t_exec_error	ft_env(char **envp, int argc, int fd_out);
 t_exec_error	ft_exit(char **args, int argc, t_shell *shell);
-void			free_all(char **arg);\
+void			free_all(char **arg);
 void			set_sig_offset(t_exec_error status);
 #endif

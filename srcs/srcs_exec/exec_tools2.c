@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tools2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 18:39:42 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 19:18:11 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 20:35:15 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	close_used_pipes(t_shell *shell, t_ast_node *node)
 {
 	t_exec_data	*data;
 
-	data = &node->data.command.exec_data;
+	data = &node->u_data.s_command.exec_data;
 	if (data->in_type == PIPE_T)
 		close(shell->pipes[data->pipe_index_in][1]);
 	if (data->out_type == PIPE_T)
@@ -83,7 +83,7 @@ t_exec_error	prepare_command(t_shell *shell, t_ast_node *node)
 		return (EXEC_ERR_FATAL);
 	if (create_argv_exec(node) != SUCCESS)
 		return (EXEC_ERR_FATAL);
-	if (is_directory(node->data.command.command) == true)
+	if (is_directory(node->u_data.s_command.command) == true)
 	{
 		ft_putstr_fd("total error: is a directory\n", 2);
 		return (EXEC_NOT_FOUND);

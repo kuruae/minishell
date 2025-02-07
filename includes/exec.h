@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 19:05:51 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:27:18 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,33 +59,30 @@ typedef struct s_exec_dat
 typedef struct s_shell		t_shell;
 typedef struct s_ast_node	t_ast_node;
 
-t_exec_error	start_command(t_shell *shell, t_ast_node *node);
-t_exec_error	start_exec(t_shell *shell, t_ast_node *node);
+t_exec_error			start_command(t_shell *shell, t_ast_node *node);
+t_exec_error			start_exec(t_shell *shell, t_ast_node *node);
 
-void			exec_command(t_shell *shell, t_ast_node *node);
+t_exec_error			prepare_command_exec(t_shell *shell, t_ast_node *node);
 
-t_exec_error	set_infile_outfile(t_shell *shell, t_ast_node *node);
-void			set_pipes(t_ast_node *node, t_shell *shell);
+void					exec_command(t_shell *shell, t_ast_node *node);
 
-void			exit_exec_status(t_exec_error	status, t_shell *shell);
-void			link_pipe(t_ast_node *node, t_shell *shell);
-void			close_used_fds(t_shell *shell, t_ast_node *node);
-void			close_unused_pipes(t_ast_node *node, t_shell *shell);
-t_shell			init_subshell(t_shell	*shell, t_ast_node *node);
+t_exec_error			set_infile_outfile(t_shell *shell, t_ast_node *node);
+void					set_pipes(t_ast_node *node, t_shell *shell);
 
-t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node);
-int				count_pipes(t_ast_node *node);
+void					exit_exec_status(t_exec_error	status, t_shell *shell);
+void					link_pipe(t_ast_node *node, t_shell *shell);
+void					close_used_fds(t_shell *shell, t_ast_node *node);
+void					close_unused_pipes(t_ast_node *node, t_shell *shell);
+t_shell					init_subshell(t_shell	*shell, t_ast_node *node);
 
-void			close_used_pipes(t_shell *shell, t_ast_node *node);
-bool			is_directory(char *path);
-t_exec_error	return_exit_status(int g_sig_offset);
-void			analize_child_status(int child_status);
-t_exec_error	prepare_command(t_shell *shell, t_ast_node *node);
+t_exec_error			start_pipeline(t_shell *shell, t_ast_node *node);
+int						count_pipes(t_ast_node *node);
 
-char			**get_paths(char **env);
-t_exec_error	update_env_var(char *extension, char *value, char ***envp);
-t_exec_error	update_shell_level(t_shell *shell);
-void			close_redirections(t_ast_node *node);
-void			message_command_not_found(t_ast_node *node);
+void					close_used_pipes(t_shell *shell, t_ast_node *node);
+bool					is_directory(char *path);
+t_exec_error			return_exit_status(int g_sig_offset);
+void					analize_child_status(int child_status);
+t_exec_error			prepare_command(t_shell *shell, t_ast_node *node);
 
+char					**get_paths(char **env);
 #endif

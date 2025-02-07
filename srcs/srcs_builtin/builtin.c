@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:24:56 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 01:08:05 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 20:35:15 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ t_exec_error	builtin(t_ast_node *node, t_shell *shell, int fd_out)
 	char			**args;
 	int				argc;
 
-	command = node->data.command.command;
-	args = node->data.command.args;
-	argc = node->data.command.arg_count;
+	command = node->u_data.s_command.command;
+	args = node->u_data.s_command.args;
+	argc = node->u_data.s_command.arg_count;
 	status = EXEC_NOT_FOUND;
 	if (ft_strcmp(command, "cd") == 0)
 		status = ft_cd(args, argc, &shell->dir, shell);

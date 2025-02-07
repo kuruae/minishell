@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ast.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/07 20:22:21 by enzo              #+#    #+#             */
+/*   Updated: 2025/02/07 21:29:57 by enzo             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef AST_H
 # define AST_H
 
@@ -12,35 +24,35 @@
 /* Node types for the AST */
 typedef enum e_node_type
 {
-	NODE_COMMAND,    // Simple command
-	NODE_PIPE,       // Pipe operator (|)
-	NODE_AND,        // Logical AND (&&)
-	NODE_SUBSHELL,   // Subshell
-	NODE_OR,         // Logical OR (||)
-} t_node_type;
+	NODE_COMMAND,
+	NODE_PIPE,
+	NODE_AND,
+	NODE_SUBSHELL,
+	NODE_OR,
+}	t_node_type;
 
 /* Redirection types */
 typedef struct s_redir
 {
 	enum
 	{
-		REDIR_INPUT,     // <
-		REDIR_OUTPUT,    // >
-		REDIR_APPEND,    // >>
-		REDIR_HEREDOC    // <<
-	} type;
-	char			*file;  // File to redirect to/from
-	struct s_redir	*next;  // Next redirection
-	struct s_redir	*head;  // Head of the redirection list
-} t_redir;
+		REDIR_INPUT,
+		REDIR_OUTPUT,
+		REDIR_APPEND,
+		REDIR_HEREDOC
+	}	e_type;
+	char			*file;
+	struct s_redir	*next;
+	struct s_redir	*head;
+}	t_redir;
 
 typedef struct s_parser
 {
-	t_token     *current;   // Current token being processed
-	t_token     *tokens;    // All tokens
-	t_error     err_status; // Track parsing errors
+	t_token		*current;
+	t_token		*tokens;
+	t_error		err_status;
 	char		**env;
-} t_parser;
+}	t_parser;
 
 typedef struct s_sig
 {
@@ -48,10 +60,10 @@ typedef struct s_sig
 }	t_sig;
 
 /* Structure for command arguments */
-typedef struct s_ast_node 
+typedef struct s_ast_node
 {
-	t_node_type	type;  // Type of the node    
-	t_redir		*redirections;  // All nodes can have redirections
+	t_node_type	type;
+	t_redir		*redirections;
 	union
 	{
 		struct
@@ -61,25 +73,24 @@ typedef struct s_ast_node
 			char		**argv_exec;
 			int			arg_count;
 			t_exec_data	exec_data;
-		} command;
+		}	s_command;
+		struct
+		{
+			struct s_ast_node	*left;
+			struct s_ast_node	*right;
+		}	s_pipe;
+
+		struct
+		{
+			struct s_ast_node	*command;
+		}	s_subshell;
 
 		struct
 		{
 			struct s_ast_node	*left;
 			struct s_ast_node	*right;
-		} pipe;
-
-		struct
-		{
-			struct s_ast_node	*command; // a bit confusing, because this can be pipe or logical operator
-		} subshell;
-
-		struct
-		{
-			struct s_ast_node	*left;
-			struct s_ast_node	*right;
-		} logical_op;
-	} data;
+		}	s_logical_op;
+	}	u_data;
 } t_ast_node;
 
 /* AST Node Management */

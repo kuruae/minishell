@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_expand_handler.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:01:57 by emagnani          #+#    #+#             */
-/*   Updated: 2025/01/23 00:23:06 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/07 20:35:15 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,16 @@ static bool	has_dollar_expansion(t_ast_node *node)
 {
 	int	i;
 
-	if (!node->data.command.command)
+	if (!node->u_data.s_command.command)
 		return (false);
-	if (ft_strchr(node->data.command.command, '$'))
+	if (ft_strchr(node->u_data.s_command.command, '$'))
 		return (true);
-	if (node->data.command.args)
+	if (node->u_data.s_command.args)
 	{
 		i = 0;
-		while (node->data.command.args[i])
+		while (node->u_data.s_command.args[i])
 		{
-			if (ft_strchr(node->data.command.args[i], '$'))
+			if (ft_strchr(node->u_data.s_command.args[i], '$'))
 				return (true);
 			i++;
 		}
@@ -37,12 +37,12 @@ static bool	has_wildcard_expansion(t_ast_node *node)
 {
 	int	i;
 
-	if (node->data.command.args)
+	if (node->u_data.s_command.args)
 	{
 		i = 0;
-		while (node->data.command.args[i])
+		while (node->u_data.s_command.args[i])
 		{
-			if (ft_strchr(node->data.command.args[i], '*'))
+			if (ft_strchr(node->u_data.s_command.args[i], '*'))
 				return (true);
 			i++;
 		}

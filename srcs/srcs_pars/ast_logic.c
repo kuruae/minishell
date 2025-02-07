@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_logic.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 00:43:22 by kuru              #+#    #+#             */
-/*   Updated: 2025/02/01 01:16:33 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/07 20:35:15 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ t_ast_node	*parse_logic(t_parser *parser)
 		node = create_ast_node(type);
 		if (!node)
 			return (err_free_and_return(parser, left));
-		node->data.logical_op.left = left;
-		node->data.logical_op.right = parse_pipe(parser);
+		node->u_data.s_logical_op.left = left;
+		node->u_data.s_logical_op.right = parse_pipe(parser);
 		if (parser->err_status == FAILURE)
 			return (err_free_and_return(parser, node));
 		left = node;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_commands.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 19:08:53 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 20:35:15 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,15 @@ void	dup2_infile_outfile(t_ast_node *node, t_shell *shell)
 	int	out_file;
 
 	(void)shell;
-	if (node->data.command.exec_data.in_type == FILE_T)
+	if (node->u_data.s_command.exec_data.in_type == FILE_T)
 	{
-		in_file = node->data.command.exec_data.in_file;
+		in_file = node->u_data.s_command.exec_data.in_file;
 		dup2(in_file, STDIN_FILENO);
 		close(in_file);
 	}
-	if (node->data.command.exec_data.out_type == FILE_T)
+	if (node->u_data.s_command.exec_data.out_type == FILE_T)
 	{
-		out_file = node->data.command.exec_data.out_file;
+		out_file = node->u_data.s_command.exec_data.out_file;
 		dup2(out_file, STDOUT_FILENO);
 		close(out_file);
 	}
@@ -96,16 +96,16 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	if (!node || !node->data.command.command)
+	if (!node || !node->u_data.s_command.command)
 	{
 		ft_printf("Invalid node or command\n");
 		exit_exec_status(EXEC_ERR_NON_FATAL, shell);
 	}
-	argv_exec = node->data.command.argv_exec;
+	argv_exec = node->u_data.s_command.argv_exec;
 	close_unused_pipes(node, shell);
 	if (shell->pipeline == true)
 	{
-		status = builtin(node, shell, node->data.command.exec_data.out_file);
+		status = builtin(node, shell, node->u_data.s_command.exec_data.out_file);
 		if (status != EXEC_NOT_FOUND)
 			exit_exec_status(status, shell);
 	}

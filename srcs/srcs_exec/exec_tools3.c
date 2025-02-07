@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tools3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 15:32:08 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 19:06:29 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 20:35:15 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,8 @@ void	init_shell(t_shell *shell, t_ast_node *node)
 
 void	close_redirections(t_ast_node *node)
 {
-	if (node->data.command.exec_data.in_type == FILE_T)
-		close(node->data.command.exec_data.in_file);
-	if (node->data.command.exec_data.out_type == FILE_T)
-		close(node->data.command.exec_data.out_file);
+	if (node->u_data.s_command.exec_data.in_type == FILE_T)
+		close(node->u_data.s_command.exec_data.in_file);
+	if (node->u_data.s_command.exec_data.out_type == FILE_T)
+		close(node->u_data.s_command.exec_data.out_file);
 }
