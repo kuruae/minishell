@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 21:13:49 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 03:06:26 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ t_exec_error	start_subshell(t_shell *shell, t_ast_node *node)
 
 	subshell = init_subshell(shell, node);
 	status = recur_exec(&subshell, node);
+	if (status == EXEC_ERR_FATAL)
+		return (status);
 	i = 0;
 	while (i < subshell.process_count)
 	{
