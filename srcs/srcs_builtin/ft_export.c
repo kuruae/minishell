@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 16:45:22 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 21:24:49 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:30:31 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	add_var(char *var, char ***envp)
 t_exec_error	ft_export(char **args, int argc, char ***envp, int fd)
 {
 	int (i) = 0;
-	if (argc == 0)
+	if (argc == 0 || ft_strlen(args[0]) == 0)
 	{
 		while ((*envp)[i])
 		{
