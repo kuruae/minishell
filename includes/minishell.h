@@ -15,6 +15,8 @@
 
 // bullshit so i can work on macos
 # ifdef __APPLE__
+	extern int	rl_done;
+    extern void (*rl_event_hook)(void);
     extern void	rl_replace_line(const char*, int);
 	extern void	rl_clear_history (void);
 	extern int	append_history (int nelements, char *filename);

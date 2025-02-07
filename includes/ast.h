@@ -109,12 +109,14 @@ bool			is_expansion_on(char *delemiter);
 char			*remove_quotes_from_string(char *str);
 
 /* Heredoc Functions */
+bool			check_delim_match(char *input, char *delimiter);
+bool			is_expansion_on(char *delemiter);
 char			*get_heredoc_filename(void);
 char			*heredoc_handler(char *delimiter, char **env);
-
-/* Debug and Utils */
-void			debug_print_ast(t_ast_node *node, int depth);
 void			uint_to_hex(unsigned int num, char *hex_str);
 unsigned int	lcg_rand(unsigned int *seed);
+
+/* Debug */
+void			debug_print_ast(t_ast_node *node, int depth);
 
 #endif
