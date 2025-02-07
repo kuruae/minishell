@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tools2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 18:39:42 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 19:18:11 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 22:50:37 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ void	analize_child_status(int child_status)
 t_exec_error	prepare_command(t_shell *shell, t_ast_node *node)
 {
 	if (all_expands_handler(node, *shell->envp) != SUCCESS)
+		return (EXEC_ERR_FATAL);
+	if (remove_quotes_handler(node) != SUCCESS)
 		return (EXEC_ERR_FATAL);
 	if (create_argv_exec(node) != SUCCESS)
 		return (EXEC_ERR_FATAL);
