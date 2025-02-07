@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 01:08:11 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 21:17:17 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 03:08:45 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ t_exec_error	appending_heredocs(t_redir *redir, int main_heredoc)
 	{
 		redir = &*redir->next;
 		extra_heredoc = open(redir->file, O_RDONLY, 0644);
+		if (extra_heredoc == -1)
+			return (perror("total error: heredoc file"), EXEC_ERR_FILE);
 		line = get_next_line(extra_heredoc);
 		while (line)
 		{
@@ -81,6 +83,8 @@ int	open_heredocs(t_ast_node *node, t_redir *redir, t_shell *shell)
 		return (perror("total error: heredoc file"), EXEC_ERR_FILE);
 	first = &*redir;
 	status = appending_heredocs(redir, main_heredoc);
+	if (status != EXEC_SUCCESS)
+		return (status);
 	close (main_heredoc);
 	node->data.command.exec_data.in_type = FILE_T;
 	node->data.command.exec_data.in_file = open(first->file, O_RDONLY, 0644);
