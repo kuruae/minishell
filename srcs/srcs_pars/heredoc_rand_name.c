@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 19:25:35 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/07 19:28:03 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/07 19:44:24 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,19 +77,4 @@ char	*get_heredoc_filename(void)
 		return (get_heredoc_filename());
 	}
 	return (filename);
-}
-
-static void	write_current_line(int fd, char *line, char **env)
-{
-	char	*expanded_line;
-
-	if (is_expansion_on(NULL))
-	{
-		expanded_line = expand_env_vars(line, env);
-		write(fd, expanded_line, ft_strlen(expanded_line));
-		write(fd, "\n", 1);
-		free(expanded_line);
-	}
-	else
-		write(fd, line, ft_strlen(line));
 }

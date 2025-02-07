@@ -114,6 +114,7 @@ bool			is_expansion_on(char *delemiter);
 char			*get_heredoc_filename(void);
 char			*heredoc_handler(char *delimiter, char **env);
 void			uint_to_hex(unsigned int num, char *hex_str);
+void			write_current_line(int fd, char *line, char **env);
 unsigned int	lcg_rand(unsigned int *seed);
 
 /* Debug */
