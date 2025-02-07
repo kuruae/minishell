@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:00:26 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 17:09:27 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 20:45:51 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_exec_error	ft_env(char **envp, int argc, int fd_out)
 	i = 0;
 	if (argc != 0)
 	{
-		ft_putstr_fd("total error: env: don't take arguments\n", 2);
+		ft_putstr_fd("total error: env: doesn't take arguments\n", 2);
 		return (EXEC_ERR_NON_FATAL);
 	}
 	if (!envp || !(envp[i]))

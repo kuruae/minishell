@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:04:43 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 20:32:31 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 20:57:36 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ typedef struct s_directory
 t_exec_error	builtin(t_ast_node *node, t_shell *shell, int fd_out);
 t_exec_error	ft_echo(char **args, int argc, int fd_out);
 t_exec_error	ft_pwd(t_directory *dir, int fd_out);
-t_exec_error	ft_export(char **args, int argc, char ***envp);
+t_exec_error	ft_export(char **args, int argc, char ***envp, int fd);
 t_exec_error	ft_unset(char **args, int argc, char **envp);
 t_exec_error	ft_cd(char **args, int argc, t_directory *dir, t_shell *shell);
 t_exec_error	ft_env(char **envp, int argc, int fd_out);
