@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 23:45:35 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 21:37:05 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/06 21:14:42 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	exit_exec_status(t_exec_error	status, t_shell *shell)
 		exit(1);
 	if (status == EXEC_NOT_FOUND)
 		exit(127);
-	ft_printf("missing status in exit_exec_status function\n");
 	exit(1);
 }
 

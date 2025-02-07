@@ -6,7 +6,7 @@
 /*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/07 19:36:54 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/07 19:41:20 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,10 @@ t_error readline_loop(t_shell *shell)
 		shell->line = readline(PROMPT);
 	}
 	g_sig_offset = 131;
+	ft_printf("exit\n");
 	return (CTRL_D);
 }
+
 char ***copy_env(char **envp)
 {
 	int		i;

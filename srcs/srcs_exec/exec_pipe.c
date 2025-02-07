@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 22:46:58 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/06 21:14:54 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ t_exec_error	start_command_pipe(t_shell *shell, t_ast_node *node)
 	{
 		set_pipes(node, shell);
 		exec_command(shell, node);
-		exit(1);
 	}
 	else
 	{
+		close_redirections(node);
 		if (node->data.command.exec_data.in_type == PIPE_T)
 			close(shell->pipes[node->data.command.exec_data.pipe_index_in][0]);
 		if (node->data.command.exec_data.out_type == PIPE_T)

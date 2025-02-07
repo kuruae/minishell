@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 18:39:42 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 14:51:06 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 19:18:11 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ bool	is_directory(char *path)
 {
 	int	i;
 
-	if (!path)
+	if (!path || !*path)
 		return (false);
 	i = 0;
 	while (path[i + 1])
