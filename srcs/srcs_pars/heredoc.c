@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 20:42:09 by kuru              #+#    #+#             */
-/*   Updated: 2025/02/07 19:41:10 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/07 19:58:56 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,14 @@
 
 static const t_sig *const	g_sig = &(t_sig){.sig = 0};
 
-static void	check_interrupt(void)
+static int check_interrupt(void)
 {
 	if (((t_sig *)g_sig)->sig == SIGINT)
+	{
 		rl_done = 1;
+		return (1);
+	}
+	return (0);
 }
 
 static void	sigint_handler(int sig)
