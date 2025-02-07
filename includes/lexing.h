@@ -3,52 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:10:53 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/07 20:42:08 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/07 23:50:06 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXING_H
 # define LEXING_H
 
+# include "types.h"
 # include "minishell.h"
-
-/* Token types for lexer */
-typedef enum e_token_type
-{
-	TOK_WORD,
-	TOK_OPERATOR,
-	TOK_REDIR_IN,
-	TOK_REDIR_OUT,
-	TOK_HEREDOC,
-	TOK_APPEND,
-	TOK_PIPE,
-	TOK_AND,
-	TOK_OR,
-	TOK_PAR_OPEN,
-	TOK_PAR_CLOSE,
-	TOK_NEWLINE,
-	TOK_EOF,
-}	t_token_type;
-
-/* Quote state for parsing */
-typedef enum e_quote_state
-{
-	QUOTE_NONE,
-	QUOTE_SINGLE,
-	QUOTE_DOUBLE
-}	t_quote_state;
-
-/* Token structure */
-typedef struct s_token
-{
-	bool			expands;
-	char			*value;
-	t_token_type	type;
-	struct s_token	*next;
-}	t_token;
 
 typedef struct s_par_counts
 {

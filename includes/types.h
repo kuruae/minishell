@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 21:18:16 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/07 21:34:01 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/07 23:52:21 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ typedef struct s_token		t_token;
 typedef struct s_parser		t_parser;
 typedef struct s_exec_data	t_exec_data;
 typedef struct s_directory	t_directory;
+typedef struct s_quote_depth	t_quote_depth;
+typedef struct s_env			t_env;
 
 /* Shared enums */
 typedef enum e_error
@@ -35,6 +37,23 @@ typedef enum e_error
 	FAILURE,
 	CTRL_C = 130
 }	t_error;
+
+/* Quote state for parsing */
+typedef enum e_quote_state
+{
+	QUOTE_NONE,
+	QUOTE_SINGLE,
+	QUOTE_DOUBLE
+}	t_quote_state;
+
+/* Token structure */
+typedef struct s_token
+{
+	bool			expands;
+	char			*value;
+	t_token_type	type;
+	struct s_token	*next;
+}	t_token;
 
 typedef enum e_exec_error
 {

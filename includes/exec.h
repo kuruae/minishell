@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 21:27:18 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/07 23:51:17 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXEC_H
 # define EXEC_H
 
+# include "types.h"
 # include "minishell.h"
 
 # define MAX_PID 32768
@@ -24,17 +25,6 @@
 # define READ_END 0
 
 # define WRITE_END 1
-
-typedef enum s_exec_error
-{
-	EXEC_ERR_FATAL,
-	EXEC_ERR_NON_FATAL,
-	EXEC_ERR_ACCESS,
-	EXEC_ERR_FILE,
-	EXEC_SUCCESS,
-	EXEC_NOT_FOUND,
-	EXEC_ERR_PIPE
-}	t_exec_error;
 
 typedef enum s_command_redir
 {

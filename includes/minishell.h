@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 21:01:47 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/07 21:30:17 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/07 23:47:18 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,14 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# include "error_types.h"
+# include "types.h"   // Base types first
 # include "exec.h"
 # include "colors.h"
 # include "get_signal.h"
 # include "builtin.h"
 # include "wildcard.h"
-# include "lexing.h"
+# include "lexing.h"  // Now includes types.h, not circular
+# include "expansion.h"
 
 // macos bullshit i hate readline 
 # ifdef __APPLE__

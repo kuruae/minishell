@@ -6,13 +6,14 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 10:16:31 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/06 01:31:55 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/07 23:49:27 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef WILDCARD_H
 # define WILDCARD_H
 
+# include "types.h"
 # include "minishell.h"
 # include <dirent.h>
 

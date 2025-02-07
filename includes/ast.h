@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 20:22:21 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/07 21:29:57 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/07 23:50:14 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,9 @@
 # define HEREDOC_PREFIX "/tmp/heredoc_"
 # define HEX_MASK 0xF
 
+# include "types.h"
 # include "minishell.h"
-
 # include "expansion.h"
-
-/* Node types for the AST */
-typedef enum e_node_type
-{
-	NODE_COMMAND,
-	NODE_PIPE,
-	NODE_AND,
-	NODE_SUBSHELL,
-	NODE_OR,
-}	t_node_type;
 
 /* Redirection types */
 typedef struct s_redir

@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   colors.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 20:38:50 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/07 20:38:51 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/07 23:49:00 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COLORS_H
 # define COLORS_H
 
+# include "types.h"
 # include "minishell.h"
 
 # define CYAN "\033[0;36m"
