@@ -42,6 +42,11 @@ typedef struct s_parser
 	char		**env;
 } t_parser;
 
+typedef struct s_sig
+{
+	volatile sig_atomic_t	sig;
+}	t_sig;
+
 /* Structure for command arguments */
 typedef struct s_ast_node 
 {
