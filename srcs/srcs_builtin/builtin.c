@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:24:56 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 20:57:11 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:04:11 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ t_exec_error	builtin(t_ast_node *node, t_shell *shell, int fd_out)
 	char			**args;
 	int				argc;
 
+	ft_printf("builtin function started \n");
 	command = node->data.command.command;
 	args = node->data.command.args;
 	argc = node->data.command.arg_count;

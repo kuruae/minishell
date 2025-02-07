@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 16:45:22 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 20:59:41 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:24:49 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ int	check_var(char *var)
 	}
 	if (i == 0)
 		return (-1);
-	if (!var[i])
-		return (0);
 	return (i);
 }
 

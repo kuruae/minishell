@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 15:32:08 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 19:06:29 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:05:36 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_exec_error	update_env_var(char *extension, char *value, char ***envp)
 		return (EXEC_ERR_FATAL);
 	args[0] = arg;
 	args[1] = NULL;
-	status = ft_export(args, 1, envp);
+	status = ft_export(args, 1, envp, 1);
 	free(arg);
 	free(args);
 	return (status);
