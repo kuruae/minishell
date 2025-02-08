@@ -27,25 +27,95 @@ endif
 
 ######### DIRECTORIES ########
 
-SRCS_EXEC_DIR = srcs/srcs_exec
-SRCS_PARS_DIR = srcs/srcs_pars
-SRCS_BUILTIN_DIR = srcs/srcs_builtin
+SRCS_DIR = srcs
+SRCS_EXEC_DIR = $(SRCS_DIR)/exec
+SRCS_PARS_DIR = $(SRCS_DIR)/parsing
+SRCS_BUILTIN_DIR = $(SRCS_DIR)/builtin
+SRCS_MAIN_DIR = $(SRCS_DIR)/main
+SRCS_SIGNALS_DIR = $(SRCS_DIR)/signals
 OBJ_DIR = objs
 INCLUDE_DIR = includes
 INCLUDE_DIRS = -I$(INCLUDE_DIR) -I$(LIBFT_PATH)/includes
 
 ######### FILES ########
-## source files from all directories
-SRC_FILES = $(wildcard $(SRCS_EXEC_DIR)/*.c) \
-            $(wildcard $(SRCS_PARS_DIR)/*.c) \
-            $(wildcard $(SRCS_BUILTIN_DIR)/*.c)
+## Builtin source files
+SRCS_BUILTIN = $(addprefix $(SRCS_BUILTIN_DIR)/, \
+    builtin.c \
+    ft_cd.c \
+    ft_echo.c \
+    ft_env.c \
+    ft_exit.c \
+    ft_export.c \
+    ft_pwd.c \
+    ft_unset.c)
+
+## Exec source files
+SRCS_EXEC = $(addprefix $(SRCS_EXEC_DIR)/, \
+    command_tools.c \
+    exec_commands.c \
+    exec_pipe.c \
+    exec_tools.c \
+    exec_tools2.c \
+    exec_tools3.c \
+    exec.c \
+    set_in_out_files.c \
+    set_pipes.c)
+
+## Main source files
+SRCS_MAIN = $(addprefix $(SRCS_MAIN_DIR)/, \
+    clean_up.c \
+    free_tokens_and_ast.c \
+    main.c)
+
+## AST source files
+SRCS_AST = $(addprefix $(SRCS_PARS_DIR)/ast/, \
+    ast_argv_exec.c \
+    ast_command.c \
+    ast_expand_handler.c \
+    ast_free.c \
+    ast_logic.c \
+    ast_pipe.c \
+    ast_redir.c \
+    ast_remove_quotes.c \
+    ast_subshell.c \
+    ast_utils.c \
+    ast.c)
+
+## Expansions source files
+SRCS_EXPANSIONS = $(addprefix $(SRCS_PARS_DIR)/expansions/, \
+    expansion_quote_utils.c \
+    expansion_start.c \
+    expansion.c \
+    wildcard_starter.c \
+    wildcard_utils.c \
+    wildcard.c)
+
+## Heredoc source files
+SRCS_HEREDOC = $(addprefix $(SRCS_PARS_DIR)/heredoc/, \
+    heredoc_rand_name.c \
+    heredoc_utils.c \
+    heredoc.c)
+
+## Lexing source files
+SRCS_LEXING = $(addprefix $(SRCS_PARS_DIR)/lexing/, \
+    lexing_grammar_subshells.c \
+    lexing_grammar_utils.c \
+    lexing_grammar.c \
+    lexing_token_utils.c \
+    lexing_utils.c \
+    lexing.c)
+
+## Signals source files
+SRCS_SIGNALS = $(addprefix $(SRCS_SIGNALS_DIR)/, \
+    get_signal_handlers.c \
+    get_signal.c)
+
+## Combine all source files
+SRC_FILES = $(SRCS_BUILTIN) $(SRCS_EXEC) $(SRCS_MAIN) $(SRCS_AST) \
+            $(SRCS_EXPANSIONS) $(SRCS_HEREDOC) $(SRCS_LEXING) $(SRCS_SIGNALS)
 
 ## object files
 OBJ_FILES = $(patsubst %.c,$(OBJ_DIR)/%.o,$(notdir $(SRC_FILES)))
-
-##
-TOTAL_FILES := $(words $(SRC_FILES))
-CURRENT_FILE = 1
 
 ######### LIBRARIES ########
 
@@ -101,7 +171,15 @@ $(NAME_SANITIZE): $(OBJ_FILES) $(LIBFT)
 	@printf "$(GREEN)$(CHECK) $(NAME) with sanitizer successfully compiled!$(RESET)\n"
 	@printf "$(YELLOW)$(ARROW) Run with: ./$(NAME_SANITIZE)$(RESET)\n"
 
-$(OBJ_DIR)/%.o: $(SRCS_PARS_DIR)/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRCS_MAIN_DIR)/%.c | $(OBJ_DIR)
+	@$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c $< -o $@
+	@$(call progress_bar_parsing)
+
+$(OBJ_DIR)/%.o: $(SRCS_SIGNALS_DIR)/%.c | $(OBJ_DIR)
+	@$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c $< -o $@
+	@$(call progress_bar_parsing)
+
+$(OBJ_DIR)/%.o: $(SRCS_PARS_DIR)/*/%.c | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c $< -o $@
 	@$(call progress_bar_parsing)
 

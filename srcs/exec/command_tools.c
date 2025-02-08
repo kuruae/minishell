@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_tools.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 15:03:43 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 16:38:06 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:50:49 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ bool	is_neutral_char(t_ast_node *node)
 t_exec_error	prepare_command(t_shell *shell, t_ast_node *node)
 {
 	if (all_expands_handler(node, *shell->envp) != SUCCESS)
+		return (EXEC_ERR_FATAL);
+	if (remove_quotes_handler(node) != SUCCESS)
 		return (EXEC_ERR_FATAL);
 	if (create_argv_exec(node) != SUCCESS)
 		return (EXEC_ERR_FATAL);
