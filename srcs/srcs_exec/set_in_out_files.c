@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 01:08:11 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 03:08:45 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:41:43 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@ int	open_infile(t_ast_node	*node, t_redir *redir, t_shell *shell)
 {
 	int	in_file;
 
-	if (node->data.command.exec_data.in_type == PIPE_T)
-		close(shell->pipes[node->data.command.exec_data.pipe_index_in][0]);
+	if (node->u_data.s_command.exec_data.in_type == PIPE_T)
+		close(shell->pipes[node->u_data.s_command.exec_data.pipe_index_in][0]);
 	in_file = open(redir->file, O_RDONLY);
 	if (in_file == -1)
 		return (perror("total error:  input file"), EXEC_ERR_FILE);
-	if (node->data.command.exec_data.in_file != STDIN_FILENO)
-		close(node->data.command.exec_data.in_file);
-	node->data.command.exec_data.in_type = FILE_T;
-	node->data.command.exec_data.in_file = in_file;
+	if (node->u_data.s_command.exec_data.in_file != STDIN_FILENO)
+		close(node->u_data.s_command.exec_data.in_file);
+	node->u_data.s_command.exec_data.in_type = FILE_T;
+	node->u_data.s_command.exec_data.in_file = in_file;
 	return (EXEC_SUCCESS);
 }
 
@@ -32,16 +32,16 @@ int	open_outfile(t_ast_node	*node, t_redir *redir, t_shell *shell)
 {
 	int	out_file;
 
-	if (node->data.command.exec_data.out_type == PIPE_T)
-		close(shell->pipes[node->data.command.exec_data.pipe_index_out][1]);
+	if (node->u_data.s_command.exec_data.out_type == PIPE_T)
+		close(shell->pipes[node->u_data.s_command.exec_data.pipe_index_out][1]);
 	if (redir->type == REDIR_APPEND)
 		out_file = open(redir->file, O_CREAT | O_RDWR | O_APPEND, 0644);
 	else
 		out_file = open(redir->file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (out_file == -1)
 		return (perror("total error: output file"), EXEC_ERR_FILE);
-	node->data.command.exec_data.out_type = FILE_T;
-	node->data.command.exec_data.out_file = out_file;
+	node->u_data.s_command.exec_data.out_type = FILE_T;
+	node->u_data.s_command.exec_data.out_file = out_file;
 	return (EXEC_SUCCESS);
 }
 
@@ -76,8 +76,8 @@ int	open_heredocs(t_ast_node *node, t_redir *redir, t_shell *shell)
 	t_redir			*first;
 	t_exec_error	status;
 
-	if (node->data.command.exec_data.in_type == PIPE_T)
-		close(shell->pipes[node->data.command.exec_data.pipe_index_in][0]);
+	if (node->u_data.s_command.exec_data.in_type == PIPE_T)
+		close(shell->pipes[node->u_data.s_command.exec_data.pipe_index_in][0]);
 	main_heredoc = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (main_heredoc == -1)
 		return (perror("total error: heredoc file"), EXEC_ERR_FILE);
@@ -86,9 +86,9 @@ int	open_heredocs(t_ast_node *node, t_redir *redir, t_shell *shell)
 	if (status != EXEC_SUCCESS)
 		return (status);
 	close (main_heredoc);
-	node->data.command.exec_data.in_type = FILE_T;
-	node->data.command.exec_data.in_file = open(first->file, O_RDONLY, 0644);
-	if (node->data.command.exec_data.in_file == -1)
+	node->u_data.s_command.exec_data.in_type = FILE_T;
+	node->u_data.s_command.exec_data.in_file = open(first->file, O_RDONLY, 0644);
+	if (node->u_data.s_command.exec_data.in_file == -1)
 		return (perror("total error: heredoc file"), EXEC_ERR_FILE);
 	return (EXEC_SUCCESS);
 }
@@ -108,10 +108,10 @@ t_exec_error	set_infile_outfile(t_shell *shell, t_ast_node *node)
 
 	redir = &*node->redirections;
 	status = EXEC_SUCCESS;
-	if (node->data.command.exec_data.in_type == STD_T)
-		node->data.command.exec_data.in_file = STDIN_FILENO;
-	if (node->data.command.exec_data.out_type == STD_T)
-		node->data.command.exec_data.out_file = STDOUT_FILENO;
+	if (node->u_data.s_command.exec_data.in_type == STD_T)
+		node->u_data.s_command.exec_data.in_file = STDIN_FILENO;
+	if (node->u_data.s_command.exec_data.out_type == STD_T)
+		node->u_data.s_command.exec_data.out_file = STDOUT_FILENO;
 	while (redir)
 	{
 		if (redir->type == REDIR_INPUT)

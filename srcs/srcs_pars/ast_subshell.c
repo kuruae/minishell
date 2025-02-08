@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_subshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 01:01:55 by kuru              #+#    #+#             */
-/*   Updated: 2025/02/01 01:09:47 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/08 16:40:54 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ t_ast_node	*parse_subshell(t_parser *parser)
 	node = create_ast_node(NODE_SUBSHELL);
 	if (!node)
 		return (NULL);
-	node->data.subshell.command = parse_logic(parser);
-	if (!node->data.subshell.command)
+	node->u_data.s_subshell.command = parse_logic(parser);
+	if (!node->u_data.s_subshell.command)
 		return (err_free_and_return(parser, node));
 	if (!parser->current || parser->current->type != TOK_PAR_CLOSE)
 		return (err_free_and_return(parser, node));

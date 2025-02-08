@@ -61,25 +61,25 @@ typedef struct s_ast_node
 			char		**argv_exec;
 			int			arg_count;
 			t_exec_data	exec_data;
-		} command;
+		} s_command;
 
 		struct
 		{
 			struct s_ast_node	*left;
 			struct s_ast_node	*right;
-		} pipe;
+		} s_pipe;
 
 		struct
 		{
 			struct s_ast_node	*command; // a bit confusing, because this can be pipe or logical operator
-		} subshell;
+		} s_subshell;
 
 		struct
 		{
 			struct s_ast_node	*left;
 			struct s_ast_node	*right;
-		} logical_op;
-	} data;
+		} s_logical_op;
+	} u_data;
 } t_ast_node;
 
 /* AST Node Management */

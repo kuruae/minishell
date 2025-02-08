@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 03:06:26 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:40:54 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 	status = prepare_command(shell, node);
 	if (status != EXEC_SUCCESS)
 		return (status);
-	status = builtin(node, shell, node->data.command.exec_data.out_file);
+	status = builtin(node, shell, node->u_data.s_command.exec_data.out_file);
 	if (status != EXEC_NOT_FOUND)
 		return (status);
 	get_signal_exec();
@@ -88,20 +88,20 @@ t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 		return (start_pipeline(shell, node));
 	else if (node->type == NODE_AND)
 	{
-		status = recur_exec(shell, node->data.logical_op.left);
+		status = recur_exec(shell, node->u_data.s_logical_op.left);
 		if (status == EXEC_ERR_FATAL)
 			return (status);
-		return (recur_exec(shell, node->data.logical_op.right));
+		return (recur_exec(shell, node->u_data.s_logical_op.right));
 	}
 	else if (node->type == NODE_OR)
 	{
-		status = recur_exec(shell, node->data.logical_op.left);
+		status = recur_exec(shell, node->u_data.s_logical_op.left);
 		if (status == EXEC_SUCCESS)
 			return (status);
-		return (recur_exec(shell, node->data.logical_op.right));
+		return (recur_exec(shell, node->u_data.s_logical_op.right));
 	}
 	else if (node->type == NODE_SUBSHELL)
-		return (start_subshell(shell, node->data.subshell.command));
+		return (start_subshell(shell, node->u_data.s_subshell.command));
 	else
 		ft_printf("this version only suports pipes and commands\n");
 	return (EXIT_SUCCESS);
