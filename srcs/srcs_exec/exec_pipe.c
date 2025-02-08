@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 21:14:54 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:09:43 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ t_exec_error	start_command_pipe(t_shell *shell, t_ast_node *node)
 
 	status = prepare_command(shell, node);
 	if (status != EXEC_SUCCESS)
+	{
+		close_used_pipes(shell, node);
 		return (status);
+	}
 	get_signal_exec();
 	child_pid = fork();
 	if (child_pid == -1)
@@ -43,12 +46,17 @@ t_exec_error	start_command_pipe(t_shell *shell, t_ast_node *node)
 	else
 	{
 		close_redirections(node);
-		if (node->data.command.exec_data.in_type == PIPE_T)
-			close(shell->pipes[node->data.command.exec_data.pipe_index_in][0]);
-		if (node->data.command.exec_data.out_type == PIPE_T)
-			close(shell->pipes[node->data.command.exec_data.pipe_index_out][1]);
+		close_used_pipes(shell, node);
 	}
 	return (EXEC_SUCCESS);
+}
+
+void	close_pipes(t_shell *shell, t_ast_node *node)
+{
+	if (node->data.command.exec_data.in_type == PIPE_T)
+			close(shell->pipes[node->data.command.exec_data.pipe_index_in][0]);
+	if (node->data.command.exec_data.out_type == PIPE_T)
+			close(shell->pipes[node->data.command.exec_data.pipe_index_out][1]);
 }
 
 t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
