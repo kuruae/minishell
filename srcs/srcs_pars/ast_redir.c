@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_redir.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 00:43:44 by kuru              #+#    #+#             */
-/*   Updated: 2025/02/07 04:48:54 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/07 20:24:23 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ static t_redir	*init_redir_type(t_redir *redir, t_token *token,
 									char *file, char **env)
 {
 	if (token->type == TOK_REDIR_IN)
-		redir->type = REDIR_INPUT;
+		redir->e_type = REDIR_INPUT;
 	else if (token->type == TOK_REDIR_OUT)
-		redir->type = REDIR_OUTPUT;
+		redir->e_type = REDIR_OUTPUT;
 	else if (token->type == TOK_APPEND)
-		redir->type = REDIR_APPEND;
+		redir->e_type = REDIR_APPEND;
 	else if (token->type == TOK_HEREDOC)
 	{
-		redir->type = REDIR_HEREDOC;
+		redir->e_type = REDIR_HEREDOC;
 		redir->file = heredoc_handler(file, env);
 		if (!redir->file)
 			return (NULL);
@@ -51,7 +51,7 @@ static t_redir	*create_redir_node(t_token *token, char *file, char **env)
 		free(redir);
 		return (NULL);
 	}
-	if (redir->type != REDIR_HEREDOC)
+	if (redir->e_type != REDIR_HEREDOC)
 		redir->file = ft_strdup(file);
 	redir->next = NULL;
 	redir->head = redir;

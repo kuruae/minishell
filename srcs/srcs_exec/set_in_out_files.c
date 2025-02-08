@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_in_out_files.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 01:08:11 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 16:41:43 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:52:16 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	open_outfile(t_ast_node	*node, t_redir *redir, t_shell *shell)
 
 	if (node->u_data.s_command.exec_data.out_type == PIPE_T)
 		close(shell->pipes[node->u_data.s_command.exec_data.pipe_index_out][1]);
-	if (redir->type == REDIR_APPEND)
+	if (redir->e_type == REDIR_APPEND)
 		out_file = open(redir->file, O_CREAT | O_RDWR | O_APPEND, 0644);
 	else
 		out_file = open(redir->file, O_CREAT | O_RDWR | O_TRUNC, 0644);
@@ -50,7 +50,7 @@ t_exec_error	appending_heredocs(t_redir *redir, int main_heredoc)
 	int		extra_heredoc;
 	char	*line;
 
-	while (redir->next && redir->next->type == REDIR_HEREDOC)
+	while (redir->next && redir->next->e_type == REDIR_HEREDOC)
 	{
 		redir = &*redir->next;
 		extra_heredoc = open(redir->file, O_RDONLY, 0644);
@@ -114,15 +114,15 @@ t_exec_error	set_infile_outfile(t_shell *shell, t_ast_node *node)
 		node->u_data.s_command.exec_data.out_file = STDOUT_FILENO;
 	while (redir)
 	{
-		if (redir->type == REDIR_INPUT)
+		if (redir->e_type == REDIR_INPUT)
 			status = open_infile(node, redir, shell);
-		else if (redir->type == REDIR_HEREDOC)
+		else if (redir->e_type == REDIR_HEREDOC)
 		{
 			status = open_heredocs(node, redir, shell);
-			while (redir->next && redir->next->type == REDIR_HEREDOC)
+			while (redir->next && redir->next->e_type == REDIR_HEREDOC)
 				redir = &*redir->next;
 		}
-		else if (redir->type == REDIR_OUTPUT || redir->type == REDIR_APPEND)
+		else if (redir->e_type == REDIR_OUTPUT || redir->e_type == REDIR_APPEND)
 			status = open_outfile(node, redir, shell);
 		redir = &*redir->next;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 00:43:04 by kuru              #+#    #+#             */
-/*   Updated: 2025/02/08 16:38:06 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:53:31 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,28 +39,28 @@ static t_error	init_empty_command(t_ast_node *node)
  */
 static t_error	process_single_arg(t_parser *parser, t_ast_node **node)
 {
-	char	**new_args;
+	char	**n_args;
 	char	*new_arg;
 	int		i;
 
 	if (!parser->current || parser->current->type != TOK_WORD)
 		return (SUCCESS);
-	new_args = malloc(sizeof(char *) * ((*node)->u_data.s_command.arg_count + 2));
-	if (!new_args)
+	n_args = malloc(sizeof(char *) * ((*node)->u_data.s_command.arg_count + 2));
+	if (!n_args)
 		return (ERR_MALLOC);
 	i = 0;
 	while (i < (*node)->u_data.s_command.arg_count)
 	{
-		new_args[i] = (*node)->u_data.s_command.args[i];
+		n_args[i] = (*node)->u_data.s_command.args[i];
 		i++;
 	}
 	new_arg = ft_strdup(parser->current->value);
 	if (!new_arg)
-		return (free(new_args), ERR_MALLOC);
-	new_args[i] = new_arg;
-	new_args[i + 1] = NULL;
+		return (free(n_args), ERR_MALLOC);
+	n_args[i] = new_arg;
+	n_args[i + 1] = NULL;
 	free((*node)->u_data.s_command.args);
-	(*node)->u_data.s_command.args = new_args;
+	(*node)->u_data.s_command.args = n_args;
 	(*node)->u_data.s_command.arg_count++;
 	paser_advance(parser);
 	return (SUCCESS);

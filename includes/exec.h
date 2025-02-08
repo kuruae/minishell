@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 15:16:18 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:49:48 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,6 @@
 # define READ_END 0
 
 # define WRITE_END 1
-
-typedef enum s_exec_error
-{
-	EXEC_ERR_FATAL,
-	EXEC_ERR_NON_FATAL,
-	EXEC_ERR_ACCESS,
-	EXEC_ERR_FILE,
-	EXEC_SUCCESS,
-	EXEC_NOT_FOUND,
-	EXEC_ERR_PIPE,
-	EXEC_NEUTRAL
-}	t_exec_error;
 
 typedef enum s_command_redir
 {

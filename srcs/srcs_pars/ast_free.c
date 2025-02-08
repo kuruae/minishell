@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_free.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:35:28 by emagnani          #+#    #+#             */
-/*   Updated: 2025/02/08 16:40:54 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:53:50 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	free_redir(t_ast_node *node)
 	while (redir)
 	{
 		next = redir->next;
-		if (redir->type == REDIR_HEREDOC)
+		if (redir->e_type == REDIR_HEREDOC)
 			unlink(redir->file);
 		if (redir->file)
 			free(redir->file);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_argv_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 00:56:57 by kuru              #+#    #+#             */
-/*   Updated: 2025/02/08 16:38:06 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:53:15 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ static void	cleanup_argv_exec(char **argv, int count)
 
 static t_error	copy_command_to_argv(t_ast_node *node)
 {
-	node->u_data.s_command.argv_exec[0] = ft_strdup(node->u_data.s_command.command);
+	node->u_data.s_command.argv_exec[0]
+		= ft_strdup(node->u_data.s_command.command);
 	if (!node->u_data.s_command.argv_exec[0])
 	{
 		free(node->u_data.s_command.argv_exec);
@@ -69,6 +70,7 @@ t_error	create_argv_exec(t_ast_node *node)
 	if (node->u_data.s_command.args)
 		if (copy_args_to_argv(node, i) != SUCCESS)
 			return (ERR_MALLOC);
-	node->u_data.s_command.argv_exec[node->u_data.s_command.arg_count + 1] = NULL;
+	node->u_data.s_command.argv_exec
+	[node->u_data.s_command.arg_count + 1] = NULL;
 	return (SUCCESS);
 }

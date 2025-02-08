@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:07:48 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 21:18:08 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 20:18:43 by enzo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	check_flag(char **args)
 	{
 		j = 1;
 		if (args[i][0] && args[i][1] && args[i][0] == '-' && args[i][1] == 'n')
-		{	
+		{
 			while (args[i][j] && args[i][j] == 'n')
 				j++;
 			if (args[i][j] != '\0')

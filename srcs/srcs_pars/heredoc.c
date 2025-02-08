@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 20:42:09 by kuru              #+#    #+#             */
-/*   Updated: 2025/02/07 19:58:56 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:55:46 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static const t_sig *const	g_sig = &(t_sig){.sig = 0};
 
-static int check_interrupt(void)
+static int	check_interrupt(void)
 {
 	if (((t_sig *)g_sig)->sig == SIGINT)
 	{
