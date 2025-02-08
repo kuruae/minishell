@@ -6,7 +6,7 @@
 /*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 20:42:09 by kuru              #+#    #+#             */
-/*   Updated: 2025/02/08 16:55:46 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:17:27 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	read_loop(int fd, char *delim, char **env)
 			free(line);
 			break ;
 		}
-		write_current_line(fd, line, env);
+		write_current_line(fd, line, env, delim);
 		free(line);
 	}
 	return (0);

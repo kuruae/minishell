@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 17:35:28 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/07 19:44:28 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/08 17:16:07 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ bool	check_delim_match(char *input, char *delimiter)
 	return (match);
 }
 
-void	write_current_line(int fd, char *line, char **env)
+void	write_current_line(int fd, char *line, char **env, char *del)
 {
 	char	*expanded_line;
 
-	if (is_expansion_on(NULL))
+	if (is_expansion_on(del))
 	{
 		expanded_line = expand_env_vars(line, env);
 		write(fd, expanded_line, ft_strlen(expanded_line));
@@ -44,5 +44,8 @@ void	write_current_line(int fd, char *line, char **env)
 		free(expanded_line);
 	}
 	else
+	{
 		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+	}
 }
