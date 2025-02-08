@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tools2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 18:39:42 by jbaumfal          #+#    #+#             */
 /*   Updated: 2025/02/08 16:11:02 by jbaumfal         ###   ########.fr       */
