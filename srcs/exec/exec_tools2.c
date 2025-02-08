@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tools2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 18:39:42 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 16:51:15 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/08 19:09:23 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,16 @@ void	analize_child_status(int child_status)
 		g_sig_offset = WEXITSTATUS(child_status);
 }
 
-void	message_command_not_found(t_ast_node *node)
+void	print_error(char *situation, char *suspect, char *error)
 {
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(node->u_data.s_command.command, STDERR_FILENO);
-	ft_putstr_fd(": command not found\n", STDERR_FILENO);
+	ft_putstr_fd("total error: ", STDERR_FILENO);
+	if (situation)
+	{
+		ft_putstr_fd(situation, STDERR_FILENO);
+		ft_putstr_fd(":", STDERR_FILENO);
+	}
+	ft_printf("'");
+	ft_putstr_fd(suspect, STDERR_FILENO);
+	ft_putstr_fd("': ", STDERR_FILENO);
+	ft_putendl_fd(error, STDERR_FILENO);
 }

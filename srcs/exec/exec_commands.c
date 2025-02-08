@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 17:02:17 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 19:04:43 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	}
 	status = try_com(argv_exec, shell, node);
 	if (status == EXEC_NOT_FOUND)
-		message_command_not_found(node);
+		print_error(NULL, argv_exec[0], "command not found");
 	close_redirections(node);
 	exit_exec_status(status, shell);
 }
