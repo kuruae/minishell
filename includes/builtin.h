@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:04:43 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 18:22:29 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 19:11:53 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 
 typedef struct s_ast_node	t_ast_node;
 typedef struct s_shell		t_shell;
-
 typedef struct s_directory
 {
 	char	current_path[MAX_PATH];
@@ -37,6 +36,6 @@ t_exec_error	ft_env(char **envp, int argc, int fd_out);
 t_exec_error	ft_exit(char **args, int argc, t_shell *shell);
 void			free_all(char **arg);
 void			set_sig_offset(t_exec_error status);
-bool	ft_is_num(char *str);
+bool			ft_is_num(char *str);
 
 #endif
