@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_remove_quotes.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 16:05:23 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/01 18:21:40 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:38:06 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,21 +65,21 @@ t_error	remove_quotes_handler(t_ast_node *node)
 	int		i;
 	char	*quoteless;
 
-	quoteless = remove_quotes_from_string(node->data.command.command);
+	quoteless = remove_quotes_from_string(node->u_data.s_command.command);
 	if (!quoteless)
 		return (ERR_MALLOC);
-	free(node->data.command.command);
-	node->data.command.command = quoteless;
-	if (node->data.command.args)
+	free(node->u_data.s_command.command);
+	node->u_data.s_command.command = quoteless;
+	if (node->u_data.s_command.args)
 	{
 		i = 0;
-		while (i < node->data.command.arg_count)
+		while (i < node->u_data.s_command.arg_count)
 		{
-			quoteless = remove_quotes_from_string(node->data.command.args[i]);
+			quoteless = remove_quotes_from_string(node->u_data.s_command.args[i]);
 			if (!quoteless)
 				return (ERR_MALLOC);
-			free(node->data.command.args[i]);
-			node->data.command.args[i] = quoteless;
+			free(node->u_data.s_command.args[i]);
+			node->u_data.s_command.args[i] = quoteless;
 			i++;
 		}
 	}

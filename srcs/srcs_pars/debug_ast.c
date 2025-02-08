@@ -78,26 +78,26 @@ void debug_print_ast(t_ast_node *node, int depth)
     {
         case NODE_COMMAND:
             print_indent(depth);
-            printf("Command: '%s'\n", node->data.command.command ?
-                   node->data.command.command : "(null)");
+            printf("Command: '%s'\n", node->u_data.s_command.command ?
+                   node->u_data.s_command.command : "(null)");
             
             // Print args array
-            if (node->data.command.args)
+            if (node->u_data.s_command.args)
             {
                 print_indent(depth + 1);
-                printf("Args (%d): ", node->data.command.arg_count);
-                for (int i = 0; i < node->data.command.arg_count; i++)
-                    printf("'%s' ", node->data.command.args[i]);
+                printf("Args (%d): ", node->u_data.s_command.arg_count);
+                for (int i = 0; i < node->u_data.s_command.arg_count; i++)
+                    printf("'%s' ", node->u_data.s_command.args[i]);
                 printf("\n");
             }
             
             // Print argv_exec array
-            if (node->data.command.argv_exec)
+            if (node->u_data.s_command.argv_exec)
             {
                 print_indent(depth + 1);
                 printf("Argv_exec: ");
-                for (int i = 0; node->data.command.argv_exec[i]; i++)
-                    printf("'%s' ", node->data.command.argv_exec[i]);
+                for (int i = 0; node->u_data.s_command.argv_exec[i]; i++)
+                    printf("'%s' ", node->u_data.s_command.argv_exec[i]);
                 printf("\n");
             }
             
@@ -116,17 +116,17 @@ void debug_print_ast(t_ast_node *node, int depth)
                 print_redirections(node->redirections, depth + 1);
             print_indent(depth);  // These indentations should be adjusted
             printf("└─ Left:\n");
-            debug_print_ast(node->data.pipe.left, depth + 2);
+            debug_print_ast(node->u_data.s_pipe.left, depth + 2);
             print_indent(depth);  // to maintain consistent visual hierarchy
             printf("└─ Right:\n");
-            debug_print_ast(node->data.pipe.right, depth + 2);
+            debug_print_ast(node->u_data.s_pipe.right, depth + 2);
             break;
 
         case NODE_SUBSHELL:
             printf("Subshell\n");
             if (node->redirections)
                 print_redirections(node->redirections, depth + 1);
-            debug_print_ast(node->data.subshell.command, depth + 1);
+            debug_print_ast(node->u_data.s_subshell.command, depth + 1);
             break;
 
         case NODE_AND:
@@ -135,10 +135,10 @@ void debug_print_ast(t_ast_node *node, int depth)
                 print_redirections(node->redirections, depth + 1);
             print_indent(depth);
             printf("└─ Left:\n");
-            debug_print_ast(node->data.logical_op.left, depth + 2);
+            debug_print_ast(node->u_data.s_logical_op.left, depth + 2);
             print_indent(depth);
             printf("└─ Right:\n");
-            debug_print_ast(node->data.logical_op.right, depth + 2);
+            debug_print_ast(node->u_data.s_logical_op.right, depth + 2);
             break;
 
         case NODE_OR:
@@ -147,10 +147,10 @@ void debug_print_ast(t_ast_node *node, int depth)
                 print_redirections(node->redirections, depth + 1);
             print_indent(depth);
             printf("└─ Left:\n");
-            debug_print_ast(node->data.logical_op.left, depth + 2);
+            debug_print_ast(node->u_data.s_logical_op.left, depth + 2);
             print_indent(depth);
             printf("└─ Right:\n");
-            debug_print_ast(node->data.logical_op.right, depth + 2);
+            debug_print_ast(node->u_data.s_logical_op.right, depth + 2);
             break;
     }
 }

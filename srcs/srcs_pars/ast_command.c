@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 00:43:04 by kuru              #+#    #+#             */
-/*   Updated: 2025/02/05 22:35:10 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/08 16:38:06 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static t_error	init_empty_command(t_ast_node *node)
 {
-	node->data.command.command = ft_strdup("");
-	if (!node->data.command.command)
+	node->u_data.s_command.command = ft_strdup("");
+	if (!node->u_data.s_command.command)
 		return (ERR_MALLOC);
-	node->data.command.args = NULL;
-	node->data.command.arg_count = 0;
+	node->u_data.s_command.args = NULL;
+	node->u_data.s_command.arg_count = 0;
 	set_command_data(node);
 	return (SUCCESS);
 }
@@ -45,13 +45,13 @@ static t_error	process_single_arg(t_parser *parser, t_ast_node **node)
 
 	if (!parser->current || parser->current->type != TOK_WORD)
 		return (SUCCESS);
-	new_args = malloc(sizeof(char *) * ((*node)->data.command.arg_count + 2));
+	new_args = malloc(sizeof(char *) * ((*node)->u_data.s_command.arg_count + 2));
 	if (!new_args)
 		return (ERR_MALLOC);
 	i = 0;
-	while (i < (*node)->data.command.arg_count)
+	while (i < (*node)->u_data.s_command.arg_count)
 	{
-		new_args[i] = (*node)->data.command.args[i];
+		new_args[i] = (*node)->u_data.s_command.args[i];
 		i++;
 	}
 	new_arg = ft_strdup(parser->current->value);
@@ -59,9 +59,9 @@ static t_error	process_single_arg(t_parser *parser, t_ast_node **node)
 		return (free(new_args), ERR_MALLOC);
 	new_args[i] = new_arg;
 	new_args[i + 1] = NULL;
-	free((*node)->data.command.args);
-	(*node)->data.command.args = new_args;
-	(*node)->data.command.arg_count++;
+	free((*node)->u_data.s_command.args);
+	(*node)->u_data.s_command.args = new_args;
+	(*node)->u_data.s_command.arg_count++;
 	paser_advance(parser);
 	return (SUCCESS);
 }
@@ -138,7 +138,7 @@ t_ast_node	*parse_command(t_parser *parser)
 			return (err_free_and_return(parser, node));
 		return (node);
 	}
-	node->data.command.command = ft_strdup(parser->current->value);
+	node->u_data.s_command.command = ft_strdup(parser->current->value);
 	paser_advance(parser);
 	if (process_command_tokens(parser, node) != SUCCESS)
 		return (err_free_and_return(parser, node));

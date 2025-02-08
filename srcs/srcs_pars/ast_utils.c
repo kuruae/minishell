@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:09:16 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/03 15:02:16 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:41:43 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_ast_node	*create_ast_node(t_node_type type)
 		return (NULL);
 	node->type = type;
 	node->redirections = NULL;
-	ft_memset(&node->data, 0, sizeof(node->data));
+	ft_memset(&node->u_data, 0, sizeof(node->u_data));
 	return (node);
 }
 
@@ -53,10 +53,10 @@ t_node_type	get_node_type(t_token_type token_type)
 
 void	set_command_data(t_ast_node *node)
 {
-	node->data.command.exec_data.in_type = STD_T;
-	node->data.command.exec_data.out_type = STD_T;
-	node->data.command.exec_data.in_file = STDIN_FILENO;
-	node->data.command.exec_data.out_file = STDOUT_FILENO;
-	node->data.command.exec_data.pipe_index_in = -1;
-	node->data.command.exec_data.pipe_index_out = -1;
+	node->u_data.s_command.exec_data.in_type = STD_T;
+	node->u_data.s_command.exec_data.out_type = STD_T;
+	node->u_data.s_command.exec_data.in_file = STDIN_FILENO;
+	node->u_data.s_command.exec_data.out_file = STDOUT_FILENO;
+	node->u_data.s_command.exec_data.pipe_index_in = -1;
+	node->u_data.s_command.exec_data.pipe_index_out = -1;
 }

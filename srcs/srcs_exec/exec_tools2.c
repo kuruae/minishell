@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tools2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 18:39:42 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 16:11:02 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:38:06 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	close_used_pipes(t_shell *shell, t_ast_node *node)
 {
 	t_exec_data	*data;
 
-	data = &node->data.command.exec_data;
+	data = &node->u_data.s_command.exec_data;
 	if (data->in_type == PIPE_T)
 		close(shell->pipes[data->pipe_index_in][0]);
 	if (data->out_type == PIPE_T)
@@ -52,6 +52,6 @@ void	analize_child_status(int child_status)
 void	message_command_not_found(t_ast_node *node)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(node->data.command.command, STDERR_FILENO);
+	ft_putstr_fd(node->u_data.s_command.command, STDERR_FILENO);
 	ft_putstr_fd(": command not found\n", STDERR_FILENO);
 }

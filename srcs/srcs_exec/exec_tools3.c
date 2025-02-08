@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 15:32:08 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 21:05:36 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:38:06 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,8 @@ void	init_shell(t_shell *shell, t_ast_node *node)
 
 void	close_redirections(t_ast_node *node)
 {
-	if (node->data.command.exec_data.in_type == FILE_T)
-		close(node->data.command.exec_data.in_file);
-	if (node->data.command.exec_data.out_type == FILE_T)
-		close(node->data.command.exec_data.out_file);
+	if (node->u_data.s_command.exec_data.in_type == FILE_T)
+		close(node->u_data.s_command.exec_data.in_file);
+	if (node->u_data.s_command.exec_data.out_type == FILE_T)
+		close(node->u_data.s_command.exec_data.out_file);
 }

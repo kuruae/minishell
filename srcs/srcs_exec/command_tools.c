@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 15:03:43 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 16:06:21 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:38:06 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ bool	is_neutral_char(t_ast_node *node)
 {
 	char	*command;
 
-	command = node->data.command.command;
+	command = node->u_data.s_command.command;
 	if (ft_strlen(command) == 1)
 	{
 		if (command[0] == '!' || command[0] == '#' || command[0] == ':')
@@ -59,7 +59,7 @@ t_exec_error	prepare_command(t_shell *shell, t_ast_node *node)
 		return (EXEC_ERR_FATAL);
 	if (create_argv_exec(node) != SUCCESS)
 		return (EXEC_ERR_FATAL);
-	if (is_directory(node->data.command.command) == true)
+	if (is_directory(node->u_data.s_command.command) == true)
 	{
 		ft_putstr_fd("total error: is a directory\n", 2);
 		return (EXEC_NOT_FOUND);
