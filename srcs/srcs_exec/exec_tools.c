@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tools.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 23:45:35 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 16:51:00 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:09:50 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ void	link_pipe(t_ast_node *node, t_shell *shell)
 		while (last_command->type == NODE_PIPE)
 			last_command = last_command->u_data.s_pipe.right;
 		last_command->u_data.s_command.exec_data.out_type = PIPE_T;
-		last_command->u_data.s_command.exec_data.pipe_index_out = shell->pipe_index;
+		last_command->u_data.s_command.exec_data
+			.pipe_index_out = shell->pipe_index;
 	}
 }
 

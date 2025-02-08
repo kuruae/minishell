@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 16:50:55 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:08:10 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,6 @@ t_exec_error	start_command_pipe(t_shell *shell, t_ast_node *node)
 		close_used_pipes(shell, node);
 	}
 	return (EXEC_SUCCESS);
-}
-
-void	close_pipes(t_shell *shell, t_ast_node *node)
-{
-	if (node->u_data.s_command.exec_data.in_type == PIPE_T)
-			close(shell->pipes[node->u_data.s_command.exec_data.pipe_index_in][0]);
-	if (node->u_data.s_command.exec_data.out_type == PIPE_T)
-			close(shell->pipes[node->u_data.s_command.exec_data.pipe_index_out][1]);
 }
 
 t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)

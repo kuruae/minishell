@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_in_out_files.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 01:08:11 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 16:52:16 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:12:08 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,11 @@ int	open_heredocs(t_ast_node *node, t_redir *redir, t_shell *shell)
 	int				main_heredoc;
 	t_redir			*first;
 	t_exec_error	status;
+	t_exec_data		*data;
 
-	if (node->u_data.s_command.exec_data.in_type == PIPE_T)
-		close(shell->pipes[node->u_data.s_command.exec_data.pipe_index_in][0]);
+	data = &node->u_data.s_command.exec_data;
+	if (data->in_type == PIPE_T)
+		close(shell->pipes[data->pipe_index_in][0]);
 	main_heredoc = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (main_heredoc == -1)
 		return (perror("total error: heredoc file"), EXEC_ERR_FILE);
@@ -86,9 +88,9 @@ int	open_heredocs(t_ast_node *node, t_redir *redir, t_shell *shell)
 	if (status != EXEC_SUCCESS)
 		return (status);
 	close (main_heredoc);
-	node->u_data.s_command.exec_data.in_type = FILE_T;
-	node->u_data.s_command.exec_data.in_file = open(first->file, O_RDONLY, 0644);
-	if (node->u_data.s_command.exec_data.in_file == -1)
+	data->in_type = FILE_T;
+	data->in_file = open(first->file, O_RDONLY, 0644);
+	if (data->in_file == -1)
 		return (perror("total error: heredoc file"), EXEC_ERR_FILE);
 	return (EXEC_SUCCESS);
 }

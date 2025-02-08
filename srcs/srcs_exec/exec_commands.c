@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_commands.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:28:49 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 16:50:13 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:02:17 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,9 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 {
 	char			**argv_exec;
 	t_exec_error	status;
+	int				outfile;
 
+	outfile = node->u_data.s_command.exec_data.out_file;
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	if (!node || !node->u_data.s_command.command)
@@ -105,7 +107,7 @@ void	exec_command(t_shell *shell, t_ast_node *node)
 	close_unused_pipes(node, shell);
 	if (shell->pipeline == true)
 	{
-		status = builtin(node, shell, node->u_data.s_command.exec_data.out_file);
+		status = builtin(node, shell, outfile);
 		if (status != EXEC_NOT_FOUND)
 			exit_exec_status(status, shell);
 	}
