@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 16:49:48 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/08 18:58:29 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,6 @@ t_exec_error	update_env_var(char *extension, char *value, char ***envp);
 t_exec_error	update_shell_level(t_shell *shell);
 void			close_redirections(t_ast_node *node);
 void			message_command_not_found(t_ast_node *node);
+void			print_error(char *situation, char *suspect, char *error);
 
 #endif

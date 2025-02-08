@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 16:45:22 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 18:29:40 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 19:00:30 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ t_exec_error	ft_export(char **args, int argc, char ***envp, int fd)
 	while (args[i])
 	{
 		if (check_var(args[i]) == -1)
-			ft_putstr_fd("export: not a valid identifier\n", 2);
+			print_error("export", args[i], "not a valid identifier");
 		else if (check_var(args[i]) == 0)
 			;
 		else if (find_var(args[i], *envp) != NULL)
