@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 20:22:21 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/08 17:06:23 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:15:13 by emagnani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ bool			is_expansion_on(char *delemiter);
 char			*get_heredoc_filename(void);
 char			*heredoc_handler(char *delimiter, char **env);
 void			uint_to_hex(unsigned int num, char *hex_str);
-void			write_current_line(int fd, char *line, char **env);
+void			write_current_line(int fd, char *line, char **env, char *del);
 unsigned int	lcg_rand(unsigned int *seed);
 
 /* Debug */
