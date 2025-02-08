@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 16:45:22 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 21:30:31 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 18:29:40 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,15 @@ int	check_var(char *var)
 {
 	int	i;
 
+	i = 0;
+	if (ft_is_num(var) == 1 || ft_isdigit(var[0]) == 1)
+		return (-1);
+	while (var[i] && var[i] != '=')
+	{
+		if (ft_isalnum(var[i]) == 0 && var[i] != '_')
+			return (-1);
+		i++;
+	}
 	i = 0;
 	while (var[i])
 	{
@@ -94,7 +103,7 @@ t_exec_error	ft_export(char **args, int argc, char ***envp, int fd)
 	while (args[i])
 	{
 		if (check_var(args[i]) == -1)
-			ft_putstr_fd("export: no valid identifier\n", 2);
+			ft_putstr_fd("export: not a valid identifier\n", 2);
 		else if (check_var(args[i]) == 0)
 			;
 		else if (find_var(args[i], *envp) != NULL)

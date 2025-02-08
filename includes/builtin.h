@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:04:43 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 16:49:13 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/08 18:22:29 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,6 @@ t_exec_error	ft_env(char **envp, int argc, int fd_out);
 t_exec_error	ft_exit(char **args, int argc, t_shell *shell);
 void			free_all(char **arg);
 void			set_sig_offset(t_exec_error status);
+bool	ft_is_num(char *str);
+
 #endif
