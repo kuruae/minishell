@@ -6,14 +6,13 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:04:43 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 23:48:55 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/08 01:57:28 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTIN_H
 # define BUILTIN_H
 
-# include "types.h"
 # include "minishell.h"
 
 # define MAX_PATH 4096

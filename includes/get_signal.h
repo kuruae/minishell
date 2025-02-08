@@ -6,14 +6,13 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 14:55:12 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 23:49:15 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/08 01:57:54 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_SIGNAL_H
 # define GET_SIGNAL_H
 
-# include "types.h"
 # include "minishell.h"
 
 int		get_signal_interactive(void);

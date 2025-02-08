@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 21:01:47 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/07 23:47:18 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/08 02:07:23 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,14 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# include "types.h"   // Base types first
+# include "types.h"
 # include "exec.h"
 # include "colors.h"
 # include "get_signal.h"
 # include "builtin.h"
+# include "lexing.h"
+# include "ast.h"
 # include "wildcard.h"
-# include "lexing.h"  // Now includes types.h, not circular
-# include "expansion.h"
-
-// macos bullshit i hate readline 
-# ifdef __APPLE__
-	extern int	rl_done;
-    extern void (*rl_event_hook)(void);
-    extern void	rl_replace_line(const char*, int);
-	extern void	rl_clear_history (void);
-	extern int	append_history (int nelements, char *filename);
-# endif
 
 # define PROMPT CYAN"petit total"MAGENTA" > "RESET
 
@@ -72,10 +63,6 @@ typedef struct s_shell
 	t_shell		*subshell;
 	t_shell		*parent_shell;
 }	t_shell;
-
-/*	these headers are lower because of circular dependencies  */
-# include "ast.h"
-
 
 /*		functions		*/
 int		parse_line(t_shell *shell);

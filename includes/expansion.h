@@ -6,14 +6,13 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 02:36:00 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/07 23:49:10 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/08 01:57:48 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPANSION_H
 # define EXPANSION_H
 
-# include "types.h"
 # include "ast.h"
 
 typedef struct quote_depth

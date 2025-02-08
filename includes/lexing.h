@@ -6,15 +6,22 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:10:53 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/07 23:50:06 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/08 02:04:50 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXING_H
 # define LEXING_H
 
-# include "types.h"
 # include "minishell.h"
+
+typedef struct s_token
+{
+	bool			expands;
+	char			*value;
+	t_token_type	type;
+	struct s_token	*next;
+}	t_token;
 
 typedef struct s_par_counts
 {

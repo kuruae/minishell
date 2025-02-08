@@ -6,7 +6,7 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 20:22:21 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/07 23:50:14 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/08 02:05:21 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 # define HEREDOC_PREFIX "/tmp/heredoc_"
 # define HEX_MASK 0xF
 
-# include "types.h"
 # include "minishell.h"
+
 # include "expansion.h"
 
 /* Redirection types */
@@ -69,19 +69,17 @@ typedef struct s_ast_node
 			struct s_ast_node	*left;
 			struct s_ast_node	*right;
 		}	s_pipe;
-
 		struct
 		{
 			struct s_ast_node	*command;
 		}	s_subshell;
-
 		struct
 		{
 			struct s_ast_node	*left;
 			struct s_ast_node	*right;
 		}	s_logical_op;
 	}	u_data;
-} t_ast_node;
+}	t_ast_node;
 
 /* AST Node Management */
 t_ast_node		*create_ast_node(t_node_type type);
