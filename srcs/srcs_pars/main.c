@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:59:17 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/07 20:17:55 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/08 02:22:22 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_sig_offset = 0;
+int					g_sig_offset = 0;
+static const char	*g_prompt = CYAN "petit total" MAGENTA " > " RESET;
 
 static bool	is_line_empty(char *line)
 {
@@ -25,17 +26,6 @@ static bool	is_line_empty(char *line)
 	return (true);
 }
 
-static void	init_history(void)
-{
-	int	file;
-
-	file = open(HISTORY_FILE, O_CREAT | O_RDWR, 0644);
-	stifle_history(HISTORY_SIZE);
-	history_truncate_file(HISTORY_FILE, HISTORY_SIZE);
-	read_history(HISTORY_FILE);
-	close(file);
-}
-
 static t_error	user_intput_routine(t_shell *shell)
 {
 	t_exec_error	status;
@@ -44,7 +34,6 @@ static t_error	user_intput_routine(t_shell *shell)
 
 	tokens = lexing(shell->line);
 	add_history(shell->line);
-	append_history(1, HISTORY_FILE);
 	if (!tokens)
 	{
 		g_sig_offset = 2;
@@ -65,8 +54,7 @@ t_error	readline_loop(t_shell *shell)
 {
 	t_error	routine_status;
 
-	init_history();
-	shell->line = readline(PROMPT);
+	shell->line = readline(g_prompt);
 	while (shell->line)
 	{
 		if (!shell->line)
@@ -81,7 +69,7 @@ t_error	readline_loop(t_shell *shell)
 		}
 		free(shell->line);
 		get_signal_interactive();
-		shell->line = readline(PROMPT);
+		shell->line = readline(g_prompt);
 	}
 	g_sig_offset = 131;
 	ft_printf("exit\n");
@@ -120,6 +108,7 @@ int	main(int argc, char **argv, char **envp)
 	shell.line = NULL;
 	get_signal_interactive();
 	status = readline_loop(&shell);
+	rl_clear_history();
 	if (status == ERR_FATAL)
 		return (clean_up_end(&shell), EXIT_FAILURE);
 	if (status == CTRL_D)

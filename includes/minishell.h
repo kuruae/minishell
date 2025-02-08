@@ -6,13 +6,14 @@
 /*   By: kuru <kuru@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 21:01:47 by enzo              #+#    #+#             */
-/*   Updated: 2025/02/08 02:07:23 by kuru             ###   ########.fr       */
+/*   Updated: 2025/02/08 02:15:43 by kuru             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+/*		includes 	*/
 # include "libft.h"
 # include <stdio.h>
 # include <signal.h>
@@ -20,6 +21,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+/*		shell's headers		*/
 # include "types.h"
 # include "exec.h"
 # include "colors.h"
@@ -28,8 +30,6 @@
 # include "lexing.h"
 # include "ast.h"
 # include "wildcard.h"
-
-# define PROMPT CYAN"petit total"MAGENTA" > "RESET
 
 # define HISTORY_FILE ".shell_history"
 # define HISTORY_SIZE 500
