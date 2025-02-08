@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:02:26 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 01:21:15 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:05:23 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_exec_error	update_oldpwd(char ***envp, t_directory *dir)
 		return (free(arg), EXEC_ERR_FATAL);
 	args[0] = arg;
 	args[1] = NULL;
-	status = ft_export(args, 1, envp);
+	status = ft_export(args, 1, envp, 1);
 	free(arg);
 	free(args);
 	return (status);
@@ -48,7 +48,7 @@ t_exec_error	update_pwd(char ***envp, t_directory *dir)
 		return (EXEC_ERR_FATAL);
 	args[0] = arg;
 	args[1] = NULL;
-	status = ft_export(args, 1, envp);
+	status = ft_export(args, 1, envp, 1);
 	free(arg);
 	free(args);
 	status = update_oldpwd(envp, dir);

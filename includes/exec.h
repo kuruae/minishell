@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 19:05:51 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/08 15:16:18 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ typedef enum s_exec_error
 	EXEC_ERR_FILE,
 	EXEC_SUCCESS,
 	EXEC_NOT_FOUND,
-	EXEC_ERR_PIPE
+	EXEC_ERR_PIPE,
+	EXEC_NEUTRAL
 }	t_exec_error;
 
 typedef enum s_command_redir
@@ -53,8 +54,6 @@ typedef struct s_exec_dat
 	int				pipe_index_out;
 	int				*status;
 }	t_exec_data;
-
-
 
 typedef struct s_shell		t_shell;
 typedef struct s_ast_node	t_ast_node;

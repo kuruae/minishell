@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 16:45:22 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/05 17:10:45 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:30:31 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ int	check_var(char *var)
 	}
 	if (i == 0)
 		return (-1);
-	if (!var[i])
-		return (0);
 	return (i);
 }
 
@@ -80,13 +78,19 @@ int	add_var(char *var, char ***envp)
 	return (EXIT_SUCCESS);
 }
 
-t_exec_error	ft_export(char **args, int argc, char ***envp)
+t_exec_error	ft_export(char **args, int argc, char ***envp, int fd)
 {
-	int		i;
-
-	i = 0;
-	if (argc == 0)
+	int (i) = 0;
+	if (argc == 0 || ft_strlen(args[0]) == 0)
+	{
+		while ((*envp)[i])
+		{
+			ft_putstr_fd("export ", fd);
+			ft_putstr_fd((*envp)[i++], fd);
+			ft_putchar_fd('\n', fd);
+		}
 		return (EXEC_SUCCESS);
+	}
 	while (args[i])
 	{
 		if (check_var(args[i]) == -1)
