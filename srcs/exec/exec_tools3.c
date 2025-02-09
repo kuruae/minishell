@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tools3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 15:32:08 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 16:51:25 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/09 17:05:25 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	**get_paths(char **env)
 		i++;
 	}
 	if (!path_value)
-		return (ft_split(ft_strdup("null"), ':'));
+		return (ft_split("null", ':'));
 	paths = ft_split(path_value, ':');
 	return (free(path_value), paths);
 }
