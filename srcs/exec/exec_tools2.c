@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 18:39:42 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 19:09:23 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/09 15:57:47 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	print_error(char *situation, char *suspect, char *error)
 	if (situation)
 	{
 		ft_putstr_fd(situation, STDERR_FILENO);
-		ft_putstr_fd(":", STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
 	}
 	ft_printf("'");
 	ft_putstr_fd(suspect, STDERR_FILENO);
