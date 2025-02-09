@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:02:26 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 21:05:23 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/09 19:17:06 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,8 @@ t_exec_error	ft_cd(char **args, int argc, t_directory *dir, t_shell *shell)
 			if (chdir(dir->old_path) == -1)
 				return (perror("total error: cd"), EXEC_ERR_NON_FATAL);
 		}
-		return (perror("total error: cd"), EXEC_ERR_NON_FATAL);
+		return (print_error("cd", args[0], "No such file or directory"),
+			EXEC_ERR_NON_FATAL);
 	}
 	return (update_t_directory(dir, cache, shell->envp));
 }
