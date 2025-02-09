@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:45:13 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/09 16:11:33 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/09 18:19:28 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ bool	check_var_unset(char *var)
 	int	i;
 
 	i = 0;
+	if (ft_strlen(var) == 0)
+		return (true);
 	if (ft_is_num(var) == 1 || ft_isdigit(var[0]) == 1)
 		return (false);
 	while (var[i])
