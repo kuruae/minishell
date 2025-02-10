@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 16:45:22 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 19:00:30 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:13:48 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ int	check_var(char *var)
 
 	i = 0;
 	if (ft_is_num(var) == 1 || ft_isdigit(var[0]) == 1)
+	{
+		g_sig_offset = 1;
 		return (-1);
+	}
 	while (var[i] && var[i] != '=')
 	{
 		if (ft_isalnum(var[i]) == 0 && var[i] != '_')
@@ -89,21 +92,20 @@ int	add_var(char *var, char ***envp)
 
 t_exec_error	ft_export(char **args, int argc, char ***envp, int fd)
 {
-	int (i) = 0;
+	t_exec_error	status;
+	int				i;
+
+	status = EXEC_SUCCESS;
+	i = 0;
 	if (argc == 0 || ft_strlen(args[0]) == 0)
-	{
-		while ((*envp)[i])
-		{
-			ft_putstr_fd("export ", fd);
-			ft_putstr_fd((*envp)[i++], fd);
-			ft_putchar_fd('\n', fd);
-		}
-		return (EXEC_SUCCESS);
-	}
+		return (print_export_env(*envp, fd));
 	while (args[i])
 	{
 		if (check_var(args[i]) == -1)
+		{
 			print_error("export", args[i], "not a valid identifier");
+			status = EXEC_ERR_NON_FATAL;
+		}
 		else if (check_var(args[i]) == 0)
 			;
 		else if (find_var(args[i], *envp) != NULL)
@@ -112,5 +114,5 @@ t_exec_error	ft_export(char **args, int argc, char ***envp, int fd)
 			add_var(args[i], envp);
 		i++;
 	}
-	return (EXEC_SUCCESS);
+	return (status);
 }

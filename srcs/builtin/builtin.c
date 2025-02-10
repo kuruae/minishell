@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:24:56 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/09 18:58:54 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:14:03 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,21 @@ void	free_all(char **arg)
 	while (arg[i])
 		free(arg[i++]);
 	free (arg);
+}
+
+t_exec_error	print_export_env(char **envp, int fd)
+{
+	int		i;
+
+	i = 0;
+	while (envp[i])
+	{
+		ft_putstr_fd("export ", fd);
+		ft_putstr_fd(envp[i], fd);
+		ft_putchar_fd('\n', fd);
+		i++;
+	}
+	return (EXEC_SUCCESS);
 }
 
 /*

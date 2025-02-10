@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 16:51:48 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/10 16:11:47 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,13 @@ t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 	return (EXIT_SUCCESS);
 }
 
+/*
+	This function cn be seen as he mainfunction of the execution.
+	
+	- We start by initializing the shell structure with the standard values
+		- most of these values will be modified later but this way we avoid errors
+	- Then i update the shell level
+*/
 t_exec_error	start_exec(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;

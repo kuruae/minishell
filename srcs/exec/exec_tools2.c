@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 18:39:42 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/09 15:57:47 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/10 16:47:43 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ t_exec_error	return_exit_status(int g_sig_offset)
 	if (g_sig_offset == 0)
 		return (EXEC_SUCCESS);
 	if (g_sig_offset == 1)
+		return (EXEC_ERR_NON_FATAL);
+	if (g_sig_offset == 2)
 		return (EXEC_ERR_NON_FATAL);
 	if (g_sig_offset == 126)
 		return (EXEC_ERR_ACCESS);

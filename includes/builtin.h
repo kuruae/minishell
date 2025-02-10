@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:04:43 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/09 18:59:03 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:15:20 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,5 @@ void			free_all(char **arg);
 void			set_sig_offset(t_exec_error status);
 bool			ft_is_num(char *str);
 
+t_exec_error	print_export_env(char **envp, int fd);
 #endif

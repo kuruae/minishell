@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 15:32:08 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/09 17:05:25 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:13:39 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,10 @@ t_exec_error	update_env_var(char *extension, char *value, char ***envp)
 	free(args);
 	return (status);
 }
+/*
+	- This function is used to update the SHLLVL variabe in the environment
+	- This environment variable is used to keep track of the current shell level
+*/
 
 t_exec_error	update_shell_level(t_shell *shell)
 {
