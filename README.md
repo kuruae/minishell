@@ -56,11 +56,11 @@ Key characteristics:
 Example AST structure for ``(ls | wc) && make re:``
 
 ```
-          AND_NODE
+          NODE_AND
          /        \
-   SUBSHELL_NODE   CMD_NODE
+   NODE_SUBSHELL   NODE_COMMAND
      /      \         |
- PIPE_NODE  ...     "make re"
+ NODE_PIPE  ...     "make re"
   /     \
 ls     wc
 ```
