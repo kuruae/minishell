@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@42.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:00:26 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 20:45:51 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/16 04:51:10 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
+/*
+	This function is used to imitate the real env call in bash.
+
+	- First we check the number of arguments given (only 0 arguments is allowed).
+	- If no argument is given we print the whole environment.
+*/
 
 t_exec_error	ft_env(char **envp, int argc, int fd_out)
 {

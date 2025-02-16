@@ -3,15 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@42.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:25:20 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/06 14:36:10 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/16 04:54:17 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+
+
+/*
+	This function is used to check if the given string is a number.
+
+	- First we check if the string is empty or only contains whitespaces.
+	- Then we check if the first character is a '-' or '+'
+	- Then we check if the rest of the string only contains digits.
+*/
 bool	ft_is_num(char *str)
 {
 	int	i;
@@ -35,6 +44,18 @@ void	clean_exit(int i, t_shell *shell)
 	clean_up_child(shell);
 	exit(i);
 }
+
+/*
+	This function is used to imitate the real exit call in bash.
+
+	- First we check the number of arguments given (only 0 or 1 argument is allowed).
+	- If no argument is given we exit the shell with the status 0.
+	- If an argument is given we exit the shell with the given status.
+	- If the argument is not a number we exit the shell with the status 2.
+		- If the number is bigger than 255 or negative we take the modulo 256. (As in the real bash shell)
+
+	- Whenever we exit we also put the string exit and make sure the exit is clean (no leaks)
+*/
 
 t_exec_error	ft_exit(char **args, int argc, t_shell *shell)
 {

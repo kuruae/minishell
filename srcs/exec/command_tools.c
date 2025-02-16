@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_tools.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@42.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 15:03:43 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 17:50:49 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/16 05:06:22 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,20 @@ bool	is_neutral_char(t_ast_node *node)
 	}
 	return (false);
 }
+
+
+/*
+	This is the function that we call whenever we start the execution of a command
+	- First we handle all the expansions in the command 
+		(THis is is important as the expands can be changed during a command line (for example with an export command))
+	- Then we handle the quotes (in the same way like the real bash shell)
+	- The function create_argv_exec is used as prior the argv does not include the command itself
+		- the execve funtion needs the command as the first argument
+	- Then we check if the command is a directory (in that case we return an error)
+	- We also check if the command is "neutral" (to ignore it)
+		- special characters like "!" or "#" that arent a command in our bash but also doesnt return an error in the real bash
+	- The last step of the preperation is to set the infile and outfile for the command
+*/
 
 t_exec_error	prepare_command(t_shell *shell, t_ast_node *node)
 {

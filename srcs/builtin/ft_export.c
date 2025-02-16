@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@42.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 16:45:22 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/10 17:13:48 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/16 04:56:31 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,17 @@ int	add_var(char *var, char ***envp)
 	*envp = new_envp;
 	return (EXIT_SUCCESS);
 }
+
+
+/*
+	This function is used to imitate the real export call in bash.
+	- First we check the number of arguments given (if there is no argument we print the whole environment).
+	- Then we check argument by argument if it is a valid identifier.
+		- If it is not we print an error message.
+		- If the argument is a valid identifier we check if it is already in the environment.
+			- If it is we replace the variable.
+			- If it is not we add the variable to the environment.
+*/
 
 t_exec_error	ft_export(char **args, int argc, char ***envp, int fd)
 {
