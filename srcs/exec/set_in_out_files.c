@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 01:08:11 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 17:12:08 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/21 22:30:08 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,12 @@ t_exec_error	appending_heredocs(t_redir *redir, int main_heredoc)
 	return (EXEC_SUCCESS);
 }
 
+
+/*
+	This function is launched when there is one or  multiple heredocs in the command line
+	
+*/
+
 int	open_heredocs(t_ast_node *node, t_redir *redir, t_shell *shell)
 {
 	int				main_heredoc;
@@ -96,12 +102,11 @@ int	open_heredocs(t_ast_node *node, t_redir *redir, t_shell *shell)
 }
 
 /*
-	in this function i now set all redirections liked to a command node
+	in this function i now set all redirections linked to a command node
 	
 	as there can be multiple ones i do this in a while loop
 	as soon as there is an error the loop stops and the folowing 
 	redirections arent considered
-	
 */
 t_exec_error	set_infile_outfile(t_shell *shell, t_ast_node *node)
 {

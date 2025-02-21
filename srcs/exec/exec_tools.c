@@ -6,11 +6,19 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 23:45:35 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 17:09:50 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/21 19:48:56 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/*
+	This function is used in the child processes
+		As we cant we exit return values of the functions from the child process in the parrent 
+		we have to use the exit status.
+	We try to use the exit status numbers just like in the real bash (exmple: NOT FOUND = 126)
+		-> we will later be able to access the exit code with the waitpid function in the parrent process
+*/
 
 void	exit_exec_status(t_exec_error	status, t_shell *shell)
 {
@@ -29,6 +37,13 @@ void	exit_exec_status(t_exec_error	status, t_shell *shell)
 		exit(127);
 	exit(1);
 }
+
+/*
+	In the link pipe function we make sure that the new pipe we created is reachable / registered in the other parts of the AST tree that need them
+		-> precisely those are the command nodes that are connected to the pipe node
+	- First we the a pipeline with multiple pipes the node to the left of a pipe  can also be a pipe
+		-> to get the previous command we will therefor look for the right node of that pipe to the left
+*/
 
 void	link_pipe(t_ast_node *node, t_shell *shell)
 {
@@ -51,7 +66,7 @@ void	link_pipe(t_ast_node *node, t_shell *shell)
 	if (left->type == NODE_PIPE)
 	{
 		last_command = left;
-		while (last_command->type == NODE_PIPE)
+		if (last_command->type == NODE_PIPE)
 			last_command = last_command->u_data.s_pipe.right;
 		last_command->u_data.s_command.exec_data.out_type = PIPE_T;
 		last_command->u_data.s_command.exec_data
@@ -95,6 +110,7 @@ void	close_unused_pipes(t_ast_node *node, t_shell *shell)
 		i++;
 	}
 }
+
 
 t_shell	init_subshell(t_shell	*shell, t_ast_node *node)
 {

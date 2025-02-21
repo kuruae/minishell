@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/10 16:11:47 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/21 21:23:17 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,20 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 	return (return_exit_status(g_sig_offset));
 }
 
+/*
+	This function is called when a part of the command line is in brackets
+		-> this part of the command line will be executed in a subshell
+			-> we will give it a new sell structure
+			-> then we will start the execution of this subshell as it is a command line by itself
+	
+
+	EXAMPLE: export VAR=11 && (env | grep VAR)
+			-> the part in brackets will be executed in a subshell as if there was the command line env | grep VAR
+			after the subshell launched all its execution it waits fr all the child processes to finish
+			- once terminated it will return the exit status of the last child process to the parent shell
+
+*/
+
 t_exec_error	start_subshell(t_shell *shell, t_ast_node *node)
 {	
 	int				child_status;
@@ -78,6 +92,25 @@ t_exec_error	start_subshell(t_shell *shell, t_ast_node *node)
 	return (return_exit_status(g_sig_offset));
 }
 
+
+/*
+	In this function we travel throught the whole AST tree (recursively) nde by node to then start the execution of them
+	-> for every node the function will be recalled
+		-> we check the type of the node and call the corresponding function
+		
+		- NODE_COMMAND: we start the command execution (start_command)
+		- PIPE(|): we start the pipeline execution (start_pipeline)
+			-> this will execute the whole pipeline, therefore the recursive eecution can stop here
+		- AND(&&): we first start the execution of the left node and then the right node
+			-> if the left nod has a fatal error we stop the execution directly
+		- OR(||): we first start the execution of the left node and in case of an non fatal error the right node afterwards
+			-> if the left node was successful or there was a fatal error we stop the execution directly
+		- SUBSHELL((brackets)): the execution of a subshell is handled in a seperate function (start_subshell)
+
+		IMPORTANT: unlik the real bash , with this structure we cant handle commands that connect subshells with pipes
+			- in our subject subshells (brackets) were only demanded for logical operators
+*/
+
 t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
@@ -96,14 +129,12 @@ t_exec_error	recur_exec(t_shell *shell, t_ast_node *node)
 	else if (node->type == NODE_OR)
 	{
 		status = recur_exec(shell, node->u_data.s_logical_op.left);
-		if (status == EXEC_SUCCESS)
+		if (status == EXEC_SUCCESS || status == EXEC_ERR_FATAL)
 			return (status);
 		return (recur_exec(shell, node->u_data.s_logical_op.right));
 	}
 	else if (node->type == NODE_SUBSHELL)
 		return (start_subshell(shell, node->u_data.s_subshell.command));
-	else
-		ft_printf("this version only suports pipes and commands\n");
 	return (EXIT_SUCCESS);
 }
 
