@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@42.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:29:09 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/21 21:23:17 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/22 16:06:36 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,24 +71,31 @@ t_exec_error	start_command(t_shell *shell, t_ast_node *node)
 
 */
 
+void			free_subshell(t_shell *shell)
+{
+	free(shell);
+}
+
+
 t_exec_error	start_subshell(t_shell *shell, t_ast_node *node)
 {	
 	int				child_status;
-	t_shell			subshell;
+	t_shell			*subshell;
 	t_exec_error	status;
 	int				i;
 
 	subshell = init_subshell(shell, node);
-	status = recur_exec(&subshell, node);
+	status = recur_exec(subshell, node);
 	if (status == EXEC_ERR_FATAL)
-		return (status);
+		return (free(subshell), status);
 	i = 0;
-	while (i < subshell.process_count)
+	while (i < subshell->process_count)
 	{
-		waitpid(subshell.pid[i], &child_status, 0);
+		waitpid(subshell->pid[i], &child_status, 0);
 		analize_child_status(child_status);
 		i++;
 	}
+	free(subshell);
 	return (return_exit_status(g_sig_offset));
 }
 

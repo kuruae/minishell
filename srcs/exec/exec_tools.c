@@ -6,7 +6,7 @@
 /*   By: jbaumfal <jbaumfal@42.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 23:45:35 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/22 14:12:00 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/22 15:56:53 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,24 +112,27 @@ void	close_unused_pipes(t_ast_node *node, t_shell *shell)
 }
 
 
-t_shell	init_subshell(t_shell	*shell, t_ast_node *node)
+t_shell	*init_subshell(t_shell	*shell, t_ast_node *node)
 {
-	t_shell	sub_shell;
+	t_shell	*sub_shell;
 
-	sub_shell.envp = shell->envp;
-	sub_shell.exit_status = 0;
-	sub_shell.line = NULL;
-	sub_shell.dir = shell->dir;
-	sub_shell.pipe_count = count_pipes(node);
-	sub_shell.process_count = count_pipes(node) + 1;
-	if (sub_shell.pipe_count == 0)
-		sub_shell.process_count = 0;
-	sub_shell.pipeline = false;
-	sub_shell.pipe_index = 0;
-	sub_shell.process_index = 0;
-	sub_shell.root_node = node;
-	sub_shell.subshell = NULL;
-	sub_shell.parent_shell = shell;
-	shell->subshell = &sub_shell;
+	sub_shell = malloc (sizeof(t_shell));
+	if (!sub_shell)
+		return (NULL);
+	sub_shell->envp = shell->envp;
+	sub_shell->exit_status = 0;
+	sub_shell->line = NULL;
+	sub_shell->dir = shell->dir;
+	sub_shell->pipe_count = count_pipes(node);
+	sub_shell->process_count = count_pipes(node) + 1;
+	if (sub_shell->pipe_count == 0)
+		sub_shell->process_count = 0;
+	sub_shell->pipeline = false;
+	sub_shell->pipe_index = 0;
+	sub_shell->process_index = 0;
+	sub_shell->root_node = node;
+	sub_shell->subshell = NULL;
+	sub_shell->parent_shell = shell;
+	shell->subshell = sub_shell;
 	return (sub_shell);
 }

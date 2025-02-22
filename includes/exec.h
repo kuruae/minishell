@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@42.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:25:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 18:58:29 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/22 15:51:14 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void			exit_exec_status(t_exec_error	status, t_shell *shell);
 void			link_pipe(t_ast_node *node, t_shell *shell);
 void			close_used_fds(t_shell *shell, t_ast_node *node);
 void			close_unused_pipes(t_ast_node *node, t_shell *shell);
-t_shell			init_subshell(t_shell	*shell, t_ast_node *node);
+t_shell			*init_subshell(t_shell	*shell, t_ast_node *node);
 
 t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node);
 int				count_pipes(t_ast_node *node);
