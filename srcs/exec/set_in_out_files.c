@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_in_out_files.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@42.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 01:08:11 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/21 22:30:08 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/22 13:57:44 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,14 @@ t_exec_error	appending_heredocs(t_redir *redir, int main_heredoc)
 /*
 	This function is launched when there is one or  multiple heredocs in the command line
 	
+	One Heredoc:
+		- If there is only one heredoc we can simply just use the existing file as the in_file
+	Multiple Heredoc:
+		- The fact that there can be multiple heredocs linked to one command makes this function more complex
+		- when there are multiple heredocs the idea is to start with the first heredoc and append all the following heredocs to the first one
+		
+		-> We therefore use the first heredoc as the "main_heredoc" and append all the following heredocs to this one
+		-> once we have appended all the heredocs we can close the main_heredoc and open it again in read mode
 */
 
 int	open_heredocs(t_ast_node *node, t_redir *redir, t_shell *shell)
