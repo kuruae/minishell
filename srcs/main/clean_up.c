@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_up.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@42.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:18:10 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 16:50:07 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/22 16:11:20 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,9 @@ void	clean_up_child(t_shell *shell)
 	parrent_shell = shell;
 	free_envp(parrent_shell->envp);
 	while (parrent_shell->parent_shell)
+	{
 		parrent_shell = parrent_shell->parent_shell;
+		free(parrent_shell->subshell);
+	}
 	free_ast(parrent_shell->root_node);
 }

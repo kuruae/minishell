@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@42.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:24:56 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/09 18:58:54 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/16 04:39:12 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,28 @@ void	free_all(char **arg)
 }
 
 /*
-This function is for the builtin commands.
-I compare each builtin with the command given in the node.
-Once I find a match I call the corresponding function.
-If no match is found I return EXEC_NOT_FOUND.
+	This function we need for the case of launching the export command without args.
+	In this case we print the whole environment with the export prefix. (Just like the real Bash shell)
+*/
+
+t_exec_error	print_export_env(char **envp, int fd)
+{
+	int		i;
+
+	i = 0;
+	while (envp[i])
+	{
+		ft_putstr_fd("export ", fd);
+		ft_putstr_fd(envp[i], fd);
+		ft_putchar_fd('\n', fd);
+		i++;
+	}
+	return (EXEC_SUCCESS);
+}
+
+/*
+	This function is used to set the exit status according to the status of the builtin execution.
+	We set the vallue according to the the status in the real bash shell.
 */
 
 void	set_sig_offset(t_exec_error status)
@@ -46,6 +64,14 @@ void	set_sig_offset(t_exec_error status)
 	if (status == EXEC_NOT_FOUND)
 		g_sig_offset = 127;
 }
+
+
+/*
+This function is for the builtin commands.
+I compare each builtin with the command given in the node.
+Once I find a match I call the corresponding function.
+If no match is found I return EXEC_NOT_FOUND.
+*/
 
 t_exec_error	builtin(t_ast_node *node, t_shell *shell, int fd_out)
 {

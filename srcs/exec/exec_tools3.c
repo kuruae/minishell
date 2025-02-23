@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tools3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@42.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 15:32:08 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/09 17:05:25 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/22 13:51:43 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,11 @@ t_exec_error	update_env_var(char *extension, char *value, char ***envp)
 	free(args);
 	return (status);
 }
+/*
+	- This function is used to update the SHLLVL variabe in the environment
+		-> its a variable that increases everytime you open a shell in  a shell
+		-> it is used to keep track of the depth of the shell
+*/
 
 t_exec_error	update_shell_level(t_shell *shell)
 {

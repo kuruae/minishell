@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@42.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:45:13 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/09 18:28:40 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/16 04:59:52 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
+/*
+	This is the function where we set if a argument is a valid identifier for the environment
+	- in bash this is not the case when
+		- the first character is a digit
+		- the string contains a character that is not a letter, a digit or an underscore
+*/
 
 bool	check_var_unset(char *var)
 {
@@ -58,6 +66,14 @@ t_exec_error	remove_var(char	*var, char **envp)
 	return (EXEC_SUCCESS);
 }
 
+
+/*
+	This function is used to imitate the real unset call in bash.
+	- As there can be multiple arguments we check them one by one
+		- If the argument is not a valid identifier we print an error message.
+		- If the argument is a valid identifier we remove the variable from the environment.
+*/
+
 t_exec_error	ft_unset(char **args, int argc, char **envp)
 {
 	int		i;
@@ -70,6 +86,7 @@ t_exec_error	ft_unset(char **args, int argc, char **envp)
 		if (!check_var_unset(args[i]))
 		{
 			print_error("unset", args[i], "not a valid identifier");
+			g_sig_offset = 1;
 			return (EXEC_ERR_NON_FATAL);
 		}
 		if (remove_var(args[i++], envp) == EXEC_ERR_FATAL)

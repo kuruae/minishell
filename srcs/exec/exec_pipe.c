@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@42.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:59:51 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 17:08:10 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/16 05:24:57 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,6 @@
 	as we can not launch the builtins in the parents anymore.
 
 	We can therefore start directly with a child process
-
-	The only exeption is when the command is the last in the pipeline
-	-> in this case the out_type wont be PIPE_T
-	we therefore have to check if the command is a builtin
 */
 t_exec_error	start_command_pipe(t_shell *shell, t_ast_node *node)
 {
@@ -73,6 +69,13 @@ t_exec_error	exec_pipeline(t_shell *shell, t_ast_node *node)
 	return (status);
 }
 
+/*
+	This is the function to initialize the pipeline
+		- The function is recursive and goes through the whole pipeline
+		- For every pipe node the pipe is set with the pipe function
+		- then we use the link_pipe function to link the pipes
+*/
+
 t_exec_error	init_pipeline(t_shell *shell, t_ast_node *node)
 {
 	t_exec_error	status;
@@ -111,6 +114,12 @@ int	count_pipes(t_ast_node *node)
 	}
 	return (counter);
 }
+
+/*
+	Here we start the pipeline
+		- we first launch the initialization of the pipeline 
+		- then we start the execution of the pipeline
+*/
 
 t_exec_error	start_pipeline(t_shell *shell, t_ast_node *node)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzo <enzo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@42.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:07:48 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/07 20:18:43 by enzo             ###   ########.fr       */
+/*   Updated: 2025/02/16 04:50:52 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ void	echo_putstr_fd(char *s, int fd)
 }
 
 /*
-** This checks if here is a "-n" flag
-** the flags can have multiple ns like "-nnnnnnnnnnnnnnn"
-** As there can be multiple -nflags, the function returnsthe amunt of -n flags
+	- This checks if here is a "-n" flag
+		-the flags can have multiple ns like "-nnnnnnnnnnnnnnn"
+	- As there can be multiple -nflags, the function returnsthe amount of -n flags
 */
 
 int	check_flag(char **args)
@@ -53,6 +53,13 @@ int	check_flag(char **args)
 	}
 	return (i);
 }
+
+/*
+	- This function is used to imitate the real echo call in bash.
+	- We check if there is a "-n" flag and if there is we dont print a newline at the end.
+		- We also check the ammount of -n flags, as we have to skip those arguments.
+	- We print the arguments given to the function.
+*/
 
 t_exec_error	ft_echo(char **args, int argc, int fd_out)
 {

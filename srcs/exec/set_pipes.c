@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   set_pipes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emagnani <emagnani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@42.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 21:16:23 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/08 16:52:23 by emagnani         ###   ########.fr       */
+/*   Updated: 2025/02/22 13:58:36 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
+/*
+	Here we set the pipes for the command node (Function is called just before executing the command)
+	- if the command node has a pipe in we set the pipe in
+	- if the command node has a pipe out we set the pipe out
+*/
 
 void	set_pipes(t_ast_node *node, t_shell *shell)
 {

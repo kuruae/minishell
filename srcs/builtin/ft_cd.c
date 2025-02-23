@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbaumfal <jbaumfal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbaumfal <jbaumfal@42.com>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:02:26 by jbaumfal          #+#    #+#             */
-/*   Updated: 2025/02/09 19:17:06 by jbaumfal         ###   ########.fr       */
+/*   Updated: 2025/02/16 04:48:48 by jbaumfal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,18 @@ t_exec_error	get_home(char **envp, t_directory *dir, char *cache)
 	ft_putstr_fd("total error: cd: no home variable", 2);
 	return (EXEC_ERR_NON_FATAL);
 }
+
+
+/*
+	This function is use to imitate the real cd call in bash.
+
+	- First we check the number of arguments given (only 0 or 1 argument is allowed).
+	- If no argument is given we change the directory to the home directory.
+	- If an argument is given we change the directory to the given argument.
+	- If the argument is ".." and doesnt work automaticaly (in case of deleted directory)
+			-> we change the directory to the previous directory, that we have saved in the dir structure.
+	- at the end of the function we update the old_path and current_path in the dir structure.
+*/
 
 t_exec_error	ft_cd(char **args, int argc, t_directory *dir, t_shell *shell)
 {
