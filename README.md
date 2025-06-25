@@ -53,7 +53,7 @@ Key characteristics:
 
  - **Redirections** are then applied individually to each command in a pipeline and follow a left-to-right execution order. To do so, each command group has a linked list of redirections, correctly handling various chains of them.
 
-Example AST structure for ``(ls | wc) && make re:``
+Example AST structure for ``(ls | wc) && make re`` :
 
 ```
           NODE_AND
